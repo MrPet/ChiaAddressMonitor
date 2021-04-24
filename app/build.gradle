@@ -1,0 +1,101 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'com.mikepenz.aboutlibraries.plugin'
+    id 'checkstyle'
+    id 'pmd'
+}
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId "ninja.bored.chiapublicaddressmonitor"
+        minSdkVersion 24
+        targetSdkVersion 30
+        versionCode 13
+        versionName "0.975"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        setProperty("archivesBaseName", "chia-address-monitor-$versionName")
+    }
+
+    buildTypes {
+        Properties properties = new Properties()
+        def propertiesFile = project.rootProject.file('local.properties')
+        if (propertiesFile.exists()) {
+            properties.load(propertiesFile.newDataInputStream())
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            try {
+                buildConfigField "String", "CHIA_EXPLORER_API_KEY", properties.getProperty('CHIA_EXPLORER_API_KEY')
+            }
+            catch (ex) {
+                throw new InvalidUserDataException("You should define CHIA_EXPLORER_API_KEY in local.properties. Put CHIA_EXPLORER_API_KEY=\"YOUR KEY\" in it.")
+            }
+
+        }
+
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-DEBUG'
+            try {
+                buildConfigField "String", "CHIA_EXPLORER_API_KEY",  properties.getProperty('CHIA_EXPLORER_API_KEY')
+            }
+            catch (ex) {
+                throw new InvalidUserDataException("You should define CHIA_EXPLORER_API_KEY in local.properties. Put CHIA_EXPLORER_API_KEY=\"YOUR KEY\" in it.")
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    def room_version = "2.3.0"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+
+    implementation 'org.immutables:gson:2.8.9-ea-1'
+
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
+    implementation "com.mikepenz:aboutlibraries-core:$latest_about_libs_release"
+    implementation "com.mikepenz:aboutlibraries:$latest_about_libs_release"
+
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3"
+
+    implementation 'com.afollestad.material-dialogs:core:3.3.0'
+    implementation 'com.afollestad.material-dialogs:input:3.3.0'
+
+
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0-alpha05'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
+}

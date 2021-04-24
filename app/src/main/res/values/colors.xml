@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="chia">#3AAC59</color>
+    <color name="chia_variant">#216032</color>
+
+    <color name="chia_secondary">#0A3838</color>
+    <color name="chia_secondary_variant">#136161</color>
+</resources>
