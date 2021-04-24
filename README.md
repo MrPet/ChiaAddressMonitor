@@ -1,4 +1,5 @@
 [![Android CI](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/android.yml/badge.svg)](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/android.yml)
+[![Scan with Detekt](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/detekt-analysis.yml/badge.svg)](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/detekt-analysis.yml)
 # ChiaAddressMonitor
 
 With this widget, you can always check your address balance. If you are like me you always like to know if your farm was lucky in the last hours.
