@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
-import java.util.*
+import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 class ChiaWidgetRoomsDatabaseTest : TestCase() {
@@ -26,11 +26,11 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(
             context, ChiaWidgetRoomsDatabase::class.java
-                                         ).build()
+        ).build()
 
-        widgetDataDao = db.WidgetDataDao()
-        widgetSettingsDao = db.WidgetSettingsDao()
-        widgetSettingsAndDataDao = db.WidgetSettingsAndDataDao()
+        widgetDataDao = db.getWidgetDataDao()
+        widgetSettingsDao = db.getWidgetSettingsDao()
+        widgetSettingsAndDataDao = db.getWidgetSettingsAndDataDao()
     }
 
     @After
@@ -55,7 +55,7 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         assertEquals(
             "After Inserting the returned data should be equal to the inserted",
             widgetData, savedWidgetData
-                    )
+        )
     }
 
     @Test
@@ -76,7 +76,7 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         assertEquals(
             "After Inserting the returned data should be equal to the inserted",
             widgetData, savedWidgetData
-                    )
+        )
 
         val newWidgetData = WidgetData(testAddress, newTestAmount, newTestDate)
 
@@ -88,8 +88,7 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         assertEquals(
             "New loaded WidgetData must be the same als the updated",
             newWidgetData, newSavedWidgetData
-                    )
-
+        )
     }
 
     @Test
@@ -107,7 +106,7 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         assertEquals(
             "After Inserting the returned data should be equal to the inserted",
             savedWidgetData, widgetData
-                    )
+        )
 
         savedWidgetData?.let {
             widgetDataDao.delete(savedWidgetData)
@@ -116,7 +115,6 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         val savedWidgetDataAfterDelete = widgetDataDao.getByAddress(testAddress)
 
         assertNull("After Delete no data should be returned", savedWidgetDataAfterDelete)
-
     }
 
     @Test
@@ -133,7 +131,7 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         assertEquals(
             "Saved WidgetSettings are the same as the inserted",
             savedWidgetSettings, widgetSettings
-                    )
+        )
     }
 
     @Test
@@ -150,7 +148,7 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         assertEquals(
             "Saved WidgetSettings are the same as the inserted",
             savedWidgetSettings, widgetSettings
-                    )
+        )
 
         val newAddress = "xch1xntpeve6yjnadgjsyhc2szvjw07xt6mkv7d2v3qfvsvj097sywls7m6k2v"
         val newWidgetSettings = WidgetSettings(widgetID, newAddress)
@@ -158,7 +156,7 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         assertNotEquals(
             "New WidgetSettings are not the same as the saved",
             newWidgetSettings, savedWidgetSettings
-                       )
+        )
 
         widgetSettingsDao.insertUpdate(newWidgetSettings)
 
@@ -166,9 +164,8 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         assertEquals(
             "New WidgetSettings are the same as the new saved",
             newSavedWidgetSettings, newWidgetSettings
-                    )
+        )
     }
-
 
     @Test
     fun writeAndReadDeleteWidgetSettings() = runBlocking {
@@ -184,15 +181,13 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
         assertEquals(
             "Saved WidgetSettings are the same as the inserted",
             savedWidgetSettings, widgetSettings
-                    )
+        )
 
         widgetSettingsDao.delete(widgetSettings)
 
         assertNull(
             "After delete we cannot find any widgetSettings",
             widgetSettingsDao.getByID(widgetID)
-                  )
+        )
     }
-
-
 }

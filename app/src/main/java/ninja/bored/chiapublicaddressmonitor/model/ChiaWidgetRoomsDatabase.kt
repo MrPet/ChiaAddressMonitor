@@ -1,8 +1,12 @@
 package ninja.bored.chiapublicaddressmonitor.model
 
 import android.content.Context
-import androidx.room.*
-import java.util.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
+import java.util.Date
 
 class WidgetDatabaseConverter {
     @TypeConverter
@@ -16,13 +20,12 @@ class WidgetDatabaseConverter {
     }
 }
 
-
 @Database(entities = [WidgetSettings::class, WidgetData::class], version = 3)
 @TypeConverters(WidgetDatabaseConverter::class)
 abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
-    abstract fun WidgetSettingsDao(): WidgetSettingsDao
-    abstract fun WidgetDataDao(): WidgetDataDao
-    abstract fun WidgetSettingsAndDataDao(): WidgetSettingsAndDataDao
+    abstract fun getWidgetSettingsDao(): WidgetSettingsDao
+    abstract fun getWidgetDataDao(): WidgetDataDao
+    abstract fun getWidgetSettingsAndDataDao(): WidgetSettingsAndDataDao
 
     companion object {
         @Volatile
@@ -34,13 +37,10 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                     instance = Room.databaseBuilder(
                         context,
                         ChiaWidgetRoomsDatabase::class.java, "chia-address-widget-db"
-                                                   ).build()
+                    ).build()
                 }
                 return instance
             }
         }
-
     }
-
 }
-

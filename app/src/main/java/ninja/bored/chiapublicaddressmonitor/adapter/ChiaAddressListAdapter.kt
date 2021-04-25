@@ -28,7 +28,6 @@ class ChiaAddressListAdapter(private val widgetSettingsAmdData: List<WidgetSetti
 
     override fun getItemCount() = widgetSettingsAmdData.count()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChiaAddressListViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.recycler_item_chia_address_list, parent, false)
@@ -55,7 +54,7 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
                 R.string.recycler_item_amount_and_date,
                 widgetSettingsAndData.widgetData.chiaAmount,
                 localDateFormat.format(widgetSettingsAndData.widgetData.updateDate)
-                                                                )
+            )
         } else {
             itemAmountAndDateTextView?.text = context?.getString(R.string.loading)
         }
@@ -74,14 +73,14 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
                     intent.putExtra(
                         Constants.ADDRESS_EXTRA,
                         widgetSettingsAndData.widgetData.chiaAddress
-                                   )
+                    )
 
                     val successCallback: PendingIntent = PendingIntent.getBroadcast(
                         context,
                         0,
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT
-                                                                                   )
+                    )
 
                     appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
                 } else {
@@ -89,10 +88,9 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
                         context,
                         R.string.launcher_does_not_allow_widget_from_app,
                         Toast.LENGTH_LONG
-                                  ).show()
+                    ).show()
                 }
             }
         }
     }
 }
-

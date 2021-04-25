@@ -23,7 +23,6 @@ import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettings
 import kotlin.coroutines.CoroutineContext
 
-
 class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
 
     companion object {
@@ -47,7 +46,7 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         appWidgetID = intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID
-                                            ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
         chiaAddressEditText = findViewById(R.id.chiaAddressEditText)
     }
@@ -58,14 +57,14 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         val context = this
 
         launch {
-            val widgetCurrentSettings = widgetDB?.WidgetSettingsDao()?.getByID(
+            val widgetCurrentSettings = widgetDB?.getWidgetSettingsDao()?.getByID(
                 appWidgetID
-                                                                              )
+            )
             if (widgetCurrentSettings != null) {
                 chiaAddressEditText?.setText(widgetCurrentSettings.chiaAddress)
             } else {
 
-                val savedWidgetData = widgetDB?.WidgetDataDao()?.getAll()
+                val savedWidgetData = widgetDB?.getWidgetDataDao()?.getAll()
                 val savedAddresses = savedWidgetData?.map { it.chiaAddress }
 
                 Log.d(TAG, "savedAddresses: $savedAddresses")
@@ -73,7 +72,7 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
                 val adapter = ArrayAdapter(
                     context,
                     android.R.layout.simple_list_item_1, savedAddresses.orEmpty()
-                                          )
+                )
                 chiaAddressEditText?.threshold = 1
                 chiaAddressEditText?.setAdapter(adapter)
                 chiaAddressEditText?.showDropDown()
@@ -112,12 +111,13 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         super.onDestroy()
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun saveSettings(view: View?) {
-        if (chiaAddressEditText != null) {
-            val chiaAddress = chiaAddressEditText?.text.toString()
+        chiaAddressEditText?.let {
+            val chiaAddress = it.text.toString()
             if (Slh.isChiaAddressValid(chiaAddress.trim())) {
                 val widgetSettings = WidgetSettings(appWidgetID, chiaAddress)
-                val chiaWidgetSettingsDao = widgetDB?.WidgetSettingsDao()
+                val chiaWidgetSettingsDao = widgetDB?.getWidgetSettingsDao()
                 launch {
                     chiaWidgetSettingsDao?.insertUpdate(widgetSettings)
                     updateAppWidget(appWidgetID, widgetSettings)
@@ -135,12 +135,12 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         RemoteViews(this.packageName, R.layout.chia_public_address_widget).also { views ->
 
             Log.d("Hans", "getting data")
-            val dataDao = widgetDB?.WidgetDataDao()
+            val dataDao = widgetDB?.getWidgetDataDao()
             var widgetData = dataDao?.getByAddress(widgetSettings.chiaAddress)
             if (widgetData == null) {
                 widgetData = Slh.receiveWidgetDataFromApi(
                     widgetSettings.chiaAddress
-                                                         )
+                )
 
                 if (widgetData != null) {
                     dataDao?.insertUpdate(widgetData)
@@ -154,7 +154,7 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
                     context,
                     appWidgetID,
                     appWidgetManager
-                                        )
+                )
             }
         }
     }
@@ -167,5 +167,4 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         setResult(RESULT_OK, resultValue)
         finish()
     }
-
 }

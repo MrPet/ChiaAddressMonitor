@@ -34,7 +34,7 @@ android {
                 buildConfigField "String", "CHIA_EXPLORER_API_KEY", properties.getProperty('CHIA_EXPLORER_API_KEY')
             }
             catch (ex) {
-                throw new InvalidUserDataException("You should define CHIA_EXPLORER_API_KEY in local.properties. Put CHIA_EXPLORER_API_KEY=\"YOUR KEY\" in it.")
+                throw new InvalidUserDataException("You should define CHIA_EXPLORER_API_KEY in local.properties. Put CHIA_EXPLORER_API_KEY=\"YOUR KEY\" in it. Receive chia explorer key: https://www.chiaexplorer.com/pro/login", ex)
             }
 
         }
@@ -46,7 +46,7 @@ android {
                 buildConfigField "String", "CHIA_EXPLORER_API_KEY",  properties.getProperty('CHIA_EXPLORER_API_KEY')
             }
             catch (ex) {
-                throw new InvalidUserDataException("You should define CHIA_EXPLORER_API_KEY in local.properties. Put CHIA_EXPLORER_API_KEY=\"YOUR KEY\" in it.")
+                throw new InvalidUserDataException("You should define CHIA_EXPLORER_API_KEY in local.properties. Put CHIA_EXPLORER_API_KEY=\"YOUR KEY\" in it. Receive chia explorer key: https://www.chiaexplorer.com/pro/login", ex)
             }
         }
     }

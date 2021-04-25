@@ -15,7 +15,6 @@ import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettings
 
-
 class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
 
     private var addressFromReceive: String? = null
@@ -27,23 +26,30 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.d(TAG, "onReceive")
         addressFromReceive = intent?.extras?.getString(Constants.ADDRESS_EXTRA)
-        val receivedAppWidgetID = intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
+        val receivedAppWidgetID =
+            intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID)
         Log.d(TAG, "receivedAppWidgetID $receivedAppWidgetID")
         val receivedAddress = addressFromReceive
         Log.d(TAG, "receivedAddress $receivedAddress")
-        if (context != null && receivedAppWidgetID != null && receivedAppWidgetID != INVALID_APPWIDGET_ID && receivedAddress != null) {
-            val database = ChiaWidgetRoomsDatabase.getInstance(context)
-            val widgetSettings = WidgetSettings(receivedAppWidgetID, receivedAddress)
-            val widgetSettingsDao = database.WidgetSettingsDao()
-            GlobalScope.launch {
-                widgetSettingsDao.insertUpdate(widgetSettings)
-                val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-                onUpdate(context, appWidgetManager, intArrayOf(receivedAppWidgetID))
+        context?.let {
+            if (
+                receivedAppWidgetID != null &&
+                receivedAppWidgetID != INVALID_APPWIDGET_ID &&
+                receivedAddress != null
+            ) {
+                val database = ChiaWidgetRoomsDatabase.getInstance(context)
+                val widgetSettings = WidgetSettings(receivedAppWidgetID, receivedAddress)
+                val widgetSettingsDao = database.getWidgetSettingsDao()
+                GlobalScope.launch {
+                    widgetSettingsDao.insertUpdate(widgetSettings)
+                    val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
+                    onUpdate(context, appWidgetManager, intArrayOf(receivedAppWidgetID))
+                }
+                Toast.makeText(context, R.string.chia_widget_added, Toast.LENGTH_LONG).show()
+            } else {
+                // doesn't concern me
+                super.onReceive(context, intent)
             }
-            Toast.makeText(context, R.string.chia_widget_added, Toast.LENGTH_LONG).show()
-        } else {
-            // doesn't concern me
-            super.onReceive(context, intent)
         }
     }
 
@@ -53,7 +59,7 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
             val database = ChiaWidgetRoomsDatabase.getInstance(context)
             appWidgetIds?.forEach {
                 GlobalScope.launch {
-                    val widgetSettingsDao = database.WidgetSettingsDao()
+                    val widgetSettingsDao = database.getWidgetSettingsDao()
                     val widgetSettingsToDelete = widgetSettingsDao.getByID(it)
                     if (widgetSettingsToDelete != null) {
                         widgetSettingsDao.delete(widgetSettingsToDelete)
@@ -67,14 +73,14 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
         context: Context?,
         appWidgetManager: AppWidgetManager?,
         appWidgetIds: IntArray?
-                         ) {
+    ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         if (context != null) {
 
             val database = ChiaWidgetRoomsDatabase.getInstance(context)
             appWidgetIds?.forEach { appWidgetId ->
                 GlobalScope.launch {
-                    val widgetSettingsDao = database.WidgetSettingsDao()
+                    val widgetSettingsDao = database.getWidgetSettingsDao()
                     val widgetSettings: WidgetSettings?
                     val chiaAddress = addressFromReceive
 
@@ -87,12 +93,12 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
                     }
 
                     widgetSettings?.let {
-                        val dataDao = database.WidgetDataDao()
+                        val dataDao = database.getWidgetDataDao()
 
                         RemoteViews(
                             context.packageName,
                             R.layout.chia_public_address_widget
-                                   ).apply {
+                        ).apply {
 
                             val allViews = this
 
@@ -106,12 +112,12 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
                                         context,
                                         appWidgetId,
                                         appWidgetManager
-                                                            )
+                                    )
                                 } else {
                                     allViews.setTextViewText(
                                         R.id.chiaAmountHolder,
                                         context.getText(R.string.loading)
-                                                            )
+                                    )
                                     appWidgetManager?.updateAppWidget(appWidgetId, allViews)
                                 }
                             }
@@ -127,14 +133,12 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
                                     context,
                                     appWidgetId,
                                     appWidgetManager
-                                                        )
+                                )
                             }
                         }
                     }
                 }
-
             }
         }
     }
 }
-

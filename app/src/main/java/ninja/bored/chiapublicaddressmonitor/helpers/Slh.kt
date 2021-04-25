@@ -170,7 +170,7 @@ object Slh {
         context: Context,
         database: ChiaWidgetRoomsDatabase
     ) {
-        val widgetDataDao = database.WidgetDataDao()
+        val widgetDataDao = database.getWidgetDataDao()
         val allViews = RemoteViews(context.packageName, R.layout.chia_public_address_widget)
         val appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
 

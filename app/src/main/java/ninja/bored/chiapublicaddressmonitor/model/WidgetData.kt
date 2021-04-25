@@ -1,15 +1,21 @@
 package ninja.bored.chiapublicaddressmonitor.model
 
-import androidx.room.*
-import java.util.*
-
+import androidx.room.ColumnInfo
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Entity
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.PrimaryKey
+import androidx.room.Query
+import java.util.Date
 
 @Entity(tableName = "widget_data")
 data class WidgetData(
     @PrimaryKey val chiaAddress: String,
     @ColumnInfo(name = "chia_amount") val chiaAmount: Double,
     @ColumnInfo(name = "update_date") val updateDate: Date
-                     )
+)
 
 @Dao
 interface WidgetDataDao {

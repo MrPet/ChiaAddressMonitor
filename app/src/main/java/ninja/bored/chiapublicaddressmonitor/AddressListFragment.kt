@@ -1,5 +1,3 @@
-@file:Suppress("SpellCheckingInspection", "SpellCheckingInspection", "SpellCheckingInspection")
-
 package ninja.bored.chiapublicaddressmonitor
 
 import android.appwidget.AppWidgetManager
@@ -29,7 +27,6 @@ import ninja.bored.chiapublicaddressmonitor.adapter.ChiaAddressListAdapter
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
-
 // https://developer.android.com/guide/topics/appwidgets/#Pinning
 
 /**
@@ -46,9 +43,10 @@ class AddressListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-                             ): View? {
+    ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_address_list, container, false)
     }
@@ -66,7 +64,7 @@ class AddressListFragment : Fragment() {
                             (addressListRecycler?.adapter as ChiaAddressListAdapter).getData(),
                             context,
                             db
-                                      )
+                        )
                         swipeRefreshLayout.isRefreshing = false
                     }
                 }
@@ -80,7 +78,7 @@ class AddressListFragment : Fragment() {
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
                     target: RecyclerView.ViewHolder
-                                   ): Boolean {
+                ): Boolean {
                     // this method is called
                     // when the item is moved.
                     return false
@@ -97,11 +95,10 @@ class AddressListFragment : Fragment() {
                     val appWidgetManager = AppWidgetManager.getInstance(context)
                     if (toDeleteWidgetSettings == null || appWidgetManager.getAppWidgetIds(
                             ComponentName(context, ChiaPublicAddressWidgetReceiver::class.java)
-                                                                                          )
-                            ?.contains(toDeleteWidgetSettings.widgetID) == false
+                        )?.contains(toDeleteWidgetSettings.widgetID) == false
                     ) {
-                        val deleteWidgetDataDao = database?.WidgetDataDao()
-                        val deleteWidgetSettings = database?.WidgetSettingsDao()
+                        val deleteWidgetDataDao = database?.getWidgetDataDao()
+                        val deleteWidgetSettings = database?.getWidgetSettingsDao()
                         lifecycleScope.launch {
                             toDeleteWidgetData?.let {
                                 deleteWidgetDataDao?.delete(toDeleteWidgetData)
@@ -121,17 +118,16 @@ class AddressListFragment : Fragment() {
                                     toDeleteWidgetSettings?.let {
                                         deleteWidgetSettings?.insertUpdate(
                                             toDeleteWidgetSettings
-                                                                          )
+                                        )
                                     }
                                 }
-                            }.show()
+                            }
+                            .show()
                     } else {
                         // cannot delete still have widget
                         Toast.makeText(
-                            context,
-                            R.string.cannot_delete_still_widget,
-                            Toast.LENGTH_LONG
-                                      ).show()
+                            context, R.string.cannot_delete_still_widget, Toast.LENGTH_LONG
+                        ).show()
                         listAdapter.notifyItemChanged(position)
                     }
                 }
@@ -139,15 +135,11 @@ class AddressListFragment : Fragment() {
 
             val layoutManager = LinearLayoutManager(context)
             val dividerItemDecoration = DividerItemDecoration(
-                context,
-                layoutManager.orientation
-                                                             )
+                context, layoutManager.orientation
+            )
 
             addressListRecycler?.addItemDecoration(dividerItemDecoration)
             addressListRecycler?.layoutManager = layoutManager
-
-
-            //setUpRoomsToRecyclerListener();
         }
     }
 
@@ -161,9 +153,8 @@ class AddressListFragment : Fragment() {
         this.context?.let { context ->
             MaterialDialog(context).show {
                 input(
-                    hintRes = R.string.public_address_hint,
-                    waitForPositiveButton = false
-                     ) { dialog, text ->
+                    hintRes = R.string.public_address_hint, waitForPositiveButton = false
+                ) { dialog, text ->
                     val textString = text.toString()
                     val inputField = dialog.getInputField()
                     if (Slh.isChiaAddressValid(textString)) {
@@ -172,9 +163,10 @@ class AddressListFragment : Fragment() {
                         inputField.error = getString(R.string.chia_address_input_error_wrong)
                         dialog.setActionButtonEnabled(WhichButton.POSITIVE, false)
                     }
-
                 }
-                positiveButton(R.string.add_address) { dialog -> getDataAndSaveAddress(dialog.getInputField().text.toString()) }
+                positiveButton(R.string.add_address) { dialog ->
+                    getDataAndSaveAddress(dialog.getInputField().text.toString())
+                }
             }
         }
     }
@@ -184,7 +176,7 @@ class AddressListFragment : Fragment() {
         if (context != null) {
             this.lifecycleScope.launch {
                 loadingSpinner?.visibility = View.VISIBLE
-                val dataDao = database?.WidgetDataDao()
+                val dataDao = database?.getWidgetDataDao()
                 val widgetData = Slh.receiveWidgetDataFromApi(address)
 
                 if (widgetData != null) {
@@ -203,9 +195,8 @@ class AddressListFragment : Fragment() {
     }
 
     private fun setUpRoomsToRecyclerListener() {
-        database?.WidgetSettingsAndDataDao()?.loadAll()
-            ?.observe(viewLifecycleOwner) {
-                addressListRecycler?.adapter = ChiaAddressListAdapter(it)
-            }
+        database?.getWidgetSettingsAndDataDao()?.loadAll()?.observe(viewLifecycleOwner) {
+            addressListRecycler?.adapter = ChiaAddressListAdapter(it)
+        }
     }
 }

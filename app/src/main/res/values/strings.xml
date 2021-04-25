@@ -23,7 +23,9 @@
     <string name="cannot_delete_still_widget">This address cannot be removed, there is still a widget depending on it</string>
     <string name="launcher_does_not_allow_widget_from_app">Your launcher does not provide widget pinning from app.</string>
     <string name="licenses">License info</string>
-
+    <string name="chia_address_list_description">Your list of chia addresses</string>
+    <string name="connectionProblems">Error connecting to Server, please check your internet connection or try again later.</string>
+    <string name="progress_bar">Progressbar … loading</string>
 
     <!-- custom lib -->
     <string name="define_plu_chia_explorer" tools:keep="@string/define_plu_chia_explorer">year;owner</string>
@@ -33,9 +35,6 @@
     <string name="library_chia_explorer_libraryDescription" tools:keep="@string/library_chia_explorer_libraryDescription">Browse and search the Chia blockchain™ with historic data charts.</string>
     <string name="library_chia_explorer_libraryVersion" tools:keep="@string/library_chia_explorer_libraryVersion">0.1</string>
     <string name="library_chia_explorer_libraryWebsite" tools:keep="@string/library_chia_explorer_libraryWebsite">https://www.chiaexplorer.com/api/v0.1</string>
-    <string name="chia_address_list_description">Your list of chia addresses</string>
-    <string name="connectionProblems">Error connecting to Server, please check your internet connection or try again later.</string>
-    <string name="progress_bar">Progressbar … loading</string>
 
 
 </resources>

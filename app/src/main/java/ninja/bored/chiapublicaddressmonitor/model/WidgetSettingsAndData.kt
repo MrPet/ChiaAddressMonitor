@@ -11,10 +11,19 @@ data class WidgetSettingsAndData(
 
     @Embedded
     val widgetData: WidgetData?
-                                )
+)
 
 @Dao
 interface WidgetSettingsAndDataDao {
-    @Query("SELECT * FROM widget_data AS wd LEFT JOIN widget_settings AS ws  ON ws.chia_address = wd.chiaAddress GROUP BY wd.chiaAddress ORDER by wd.chiaAddress")
+    @Query(
+        """
+        SELECT * 
+        FROM widget_data AS wd 
+        LEFT JOIN widget_settings AS ws 
+        ON ws.chia_address = wd.chiaAddress 
+        GROUP BY wd.chiaAddress 
+        ORDER by wd.chiaAddress
+        """
+    )
     fun loadAll(): LiveData<List<WidgetSettingsAndData>>
 }
