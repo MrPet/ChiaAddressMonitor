@@ -17,7 +17,7 @@ This is a beta version and is developed in my free time, please keep that in min
 ## Development 
 Code contributions are very welcome. 
 
-#### Getting started
+### Getting started
 Everything should work out of the box if you use android studio. You only need a chiaexplorer apo token https://www.chiaexplorer.com/pro/login . Your need to add following line to your local.properties file:
 
 ## Spelling / Translations
@@ -31,10 +31,10 @@ CHIA_EXPLORER_API_KEY="Your Chia explorer Api Key"
 ```
 
 ## Bug Reports / Feature requests
-####Found a Bug?
+### Found a Bug?
 Please report it as detailed as Possible, with android version and launcher used. A screenshot will help to reproduce and fix the bug.
 
-####Is a feature missing?
+### Is a feature missing?
 Please open a new issue, try to be as specific as possible.  
 
 ## Show your appreciation
