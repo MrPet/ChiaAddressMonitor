@@ -18,7 +18,7 @@ This is a beta version and is developed in my free time, please keep that in min
 Code contributions are very welcome. 
 
 ### Getting started
-Everything should work out of the box if you use android studio. You only need a chiaexplorer apo token https://www.chiaexplorer.com/pro/login . Your need to add following line to your local.properties file:
+Everything should work out of the box if you use android studio. You only need a [chiaexplorer api token](https://www.chiaexplorer.com/pro/login). Your need to add following line to your local.properties file:
 
 ## Spelling / Translations
 
