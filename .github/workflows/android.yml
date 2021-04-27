@@ -51,8 +51,6 @@ jobs:
           alias: ${{ secrets.ANDROID_SIGN_ALIAS }}
           keyStorePassword: ${{ secrets.ANDROID_SING_PASS }}
           keyPassword: ${{ secrets.ANDROID_SING_KEY_PASS }}
-          env:
-            BUILD_TOOLS_VERSION: "30.0.2"
           - uses: actions/upload-artifact@master
             with:
               name: release.apk
