@@ -32,10 +32,10 @@ CHIA_EXPLORER_API_KEY="Your Chia explorer Api Key"
 
 ## Bug Reports / Feature requests
 ### Found a Bug?
-Please report it as detailed as Possible, with android version and launcher used. A screenshot will help to reproduce and fix the bug.
+Please [report](https://github.com/MrPet/ChiaAddressMonitor/issues) it as detailed as Possible, with android version and launcher used. A screenshot will help to reproduce and fix the bug.
 
 ### Is a feature missing?
-Please open a new issue, try to be as specific as possible.  
+Please [open a new issue](https://github.com/MrPet/ChiaAddressMonitor/issues), try to be as specific as possible.  
 
 ## Show your appreciation
 If you like the widget and would like to contribute in a other way, you can leave a positive review on google play and / or tell your fellow farmers about it.

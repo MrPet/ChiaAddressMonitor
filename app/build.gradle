@@ -3,9 +3,17 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'com.mikepenz.aboutlibraries.plugin'
-    id 'checkstyle'
-    id 'pmd'
 }
+
+static def generateVersionCode() {
+    def result = "git rev-list HEAD --count".execute().text.trim() //unix
+    if(result.empty) result = "PowerShell -Command git rev-list HEAD --count".execute().text.trim() //windows
+    if(result.empty) throw new RuntimeException("Could not generate versioncode on this platform? Cmd output: ${result.text}")
+    return result.toInteger()
+}
+
+def majorVersion = 0
+def minorVersion = 9
 
 android {
     compileSdkVersion 30
@@ -14,8 +22,8 @@ android {
         applicationId "ninja.bored.chiapublicaddressmonitor"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 13
-        versionName "0.975"
+        versionCode generateVersionCode()
+        versionName "${majorVersion}.${minorVersion}.${generateVersionCode()}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         setProperty("archivesBaseName", "chia-address-monitor-$versionName")
     }

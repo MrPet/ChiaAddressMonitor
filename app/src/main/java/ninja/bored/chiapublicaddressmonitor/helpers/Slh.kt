@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.RemoteViews
 import android.widget.Toast
 import com.google.gson.Gson
+import com.google.gson.JsonParseException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ninja.bored.chiapublicaddressmonitor.MainActivity
 import ninja.bored.chiapublicaddressmonitor.R
@@ -85,7 +86,7 @@ object Slh {
                                     )
                                 )
                             }
-                        } catch (e: Throwable) {
+                        } catch (e: JsonParseException) {
                             // not good something bad happened
                             Log.e(TAG, "ERROR in api response: $e")
                             continuation.resumeWith(Result.success(null))
