@@ -59,6 +59,10 @@ object NotificationHelper {
             .setContentTitle(contentTitle)
             .setContentText(contentText)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(contentText)
+            )
             .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(context)) {

@@ -29,13 +29,13 @@
 
     <string name="balance_positive_changed_channel_name">Received Chia</string>
     <string name="balance_positive_changed_channel_description">You received Chia, that is amazing</string>
-    <string name="address_balance_changed_notification_header">Your received %,.2f Chia</string>
-    <string name="address_balance_changed_notification_text">Your balance for %s changed from %,.2f to %,.2f </string>
+    <string name="address_balance_changed_notification_header">Your received %,.2f XCH</string>
+    <string name="address_balance_changed_notification_text">Your balance for %s changed from %,.2f XCH to %,.2f XCH</string>
 
     <string name="balance_negative_changed_channel_name">Sent Chia</string>
     <string name="balance_negative_changed_channel_description">You sent some Chia, bought more space for your space farm?</string>
-    <string name="address_balance_changed_negative_notification_header">Your sent %,.2f Chia</string>
-    <string name="address_balance_changed_negative_notification_text">Your balance for %s changed from %,.2f to %,.2f </string>
+    <string name="address_balance_changed_negative_notification_header">Your sent %,.2f XCH</string>
+    <string name="address_balance_changed_negative_notification_text">Your balance for %s changed from %,.2f XCH to %,.2f XCH </string>
 
     <!-- custom lib -->
     <string name="define_plu_chia_explorer" tools:keep="@string/define_plu_chia_explorer">year;owner</string>
