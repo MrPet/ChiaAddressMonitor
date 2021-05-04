@@ -64,6 +64,7 @@ object NotificationHelper {
                 NotificationCompat.BigTextStyle()
                     .bigText(contentText)
             )
+            .setColor(context.getColor(R.color.chia))
             .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(context)) {
@@ -84,18 +85,22 @@ object NotificationHelper {
             oldChiaAmount != null &&
             newWidgetData.chiaAmount != oldChiaAmount
         ) {
+            val addressStringOrSynonym = when (addressSettings.chiaAddressSynonym) {
+                null -> newWidgetData.chiaAddress
+                else -> addressSettings.chiaAddressSynonym
+            }
             if (newWidgetData.chiaAmount > oldChiaAmount) {
                 sendNotification(
                     Constants.NOTIFICATION_CHANNEL_POSITIVE_CHANGE,
                     context.getString(
                         R.string.address_balance_changed_notification_header,
-                        (newWidgetData.chiaAmount - oldChiaAmount)
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount - oldChiaAmount)
                     ),
                     context.getString(
                         R.string.address_balance_changed_notification_text,
-                        newWidgetData.chiaAddress,
-                        oldChiaAmount,
-                        newWidgetData.chiaAmount
+                        addressStringOrSynonym,
+                        Slh.formatChiaDecimal(oldChiaAmount),
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount)
                     ),
                     Constants.NOTIFICATION_ID_POSITIVE_CHANGE,
                     context
@@ -105,13 +110,13 @@ object NotificationHelper {
                     Constants.NOTIFICATION_CHANNEL_NEGATIVE_CHANGE,
                     context.getString(
                         R.string.address_balance_changed_negative_notification_header,
-                        newWidgetData.chiaAmount
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount)
                     ),
                     context.getString(
                         R.string.address_balance_changed_negative_notification_text,
-                        newWidgetData.chiaAddress,
-                        oldChiaAmount,
-                        newWidgetData.chiaAmount
+                        addressStringOrSynonym,
+                        Slh.formatChiaDecimal(oldChiaAmount),
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount)
                     ),
                     Constants.NOTIFICATION_ID_NEGATIVE_CHANGE,
                     context

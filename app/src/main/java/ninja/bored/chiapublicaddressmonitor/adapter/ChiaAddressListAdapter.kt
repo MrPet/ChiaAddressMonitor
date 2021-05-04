@@ -18,6 +18,7 @@ import ninja.bored.chiapublicaddressmonitor.AddressDetailsFragment
 import ninja.bored.chiapublicaddressmonitor.ChiaPublicAddressWidgetReceiver
 import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
+import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
 import java.text.DateFormat
 
@@ -60,7 +61,7 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
         if (widgetSettingsAndData.widgetData?.updateDate != null) {
             itemAmountAndDateTextView?.text = context?.getString(
                 R.string.recycler_item_amount_and_date,
-                widgetSettingsAndData.widgetData.chiaAmount,
+                Slh.formatChiaDecimal(widgetSettingsAndData.widgetData.chiaAmount),
                 localDateFormat.format(widgetSettingsAndData.widgetData.updateDate)
             )
         } else {
