@@ -45,6 +45,10 @@
     <string name="library_chia_explorer_libraryDescription" tools:keep="@string/library_chia_explorer_libraryDescription">Browse and search the Chia blockchain™ with historic data charts.</string>
     <string name="library_chia_explorer_libraryVersion" tools:keep="@string/library_chia_explorer_libraryVersion">0.1</string>
     <string name="library_chia_explorer_libraryWebsite" tools:keep="@string/library_chia_explorer_libraryWebsite">https://www.chiaexplorer.com/api/v0.1</string>
+    <string name="notification_activate_for_address">Enable notifications for this address</string>
+    <string name="chia_address_synonym_hint">Chia address synonym</string>
+    <string name="saved_address_settings">Saved address settings</string>
+    <string name="add_widget_to_dashboard">Add this address as widget</string>
 
 
 </resources>

@@ -8,25 +8,29 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import ninja.bored.chiapublicaddressmonitor.AddressDetailsFragment
 import ninja.bored.chiapublicaddressmonitor.ChiaPublicAddressWidgetReceiver
 import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
 import java.text.DateFormat
 
-class ChiaAddressListAdapter(private val widgetSettingsAmdData: List<WidgetSettingsAndData>) :
+class ChiaAddressListAdapter(private val widgetSettingsAndData: List<WidgetSettingsAndData>) :
     RecyclerView.Adapter<ChiaAddressListViewHolder>() {
 
     override fun onBindViewHolder(holder: ChiaAddressListViewHolder, position: Int) {
-        holder.bindData(widgetSettingsAmdData[position])
+        holder.bindData(widgetSettingsAndData[position])
     }
 
-    fun getData() = widgetSettingsAmdData
+    fun getData() = widgetSettingsAndData
 
-    override fun getItemCount() = widgetSettingsAmdData.count()
+    override fun getItemCount() = widgetSettingsAndData.count()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChiaAddressListViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -35,7 +39,7 @@ class ChiaAddressListAdapter(private val widgetSettingsAmdData: List<WidgetSetti
     }
 
     fun getDataFromPosition(position: Int): WidgetSettingsAndData {
-        return widgetSettingsAmdData[position]
+        return widgetSettingsAndData[position]
     }
 }
 
@@ -44,6 +48,10 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
     private var itemAmountAndDateTextView: TextView? =
         itemView.findViewById(R.id.recyclerItemAmountAndDate)
     private var chiaAddressTextView: TextView? = itemView.findViewById(R.id.recyclerItemChiaAddress)
+    private var recyclerItemHeader: TextView? = itemView.findViewById(R.id.recyclerItemHeader)
+    private var addWidgetButton: ImageButton? = itemView.findViewById(R.id.addWidgetButton)
+    private var notificationImageView: ImageView? =
+        itemView.findViewById(R.id.notificationsIconImageView)
 
     fun bindData(widgetSettingsAndData: WidgetSettingsAndData) {
         chiaAddressTextView?.text = widgetSettingsAndData.widgetData?.chiaAddress
@@ -59,10 +67,31 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
             itemAmountAndDateTextView?.text = context?.getString(R.string.loading)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && widgetSettingsAndData.widgetData?.chiaAddress != null) {
+        widgetSettingsAndData.widgetData?.let {
             itemView.setOnClickListener {
-                val clickContext = itemView.context
+                val newFragment =
+                    AddressDetailsFragment.newInstance(widgetSettingsAndData.widgetData.chiaAddress)
+                val transaction =
+                    (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.nav_host_fragment, newFragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
+        }
 
+        widgetSettingsAndData.addressSettings?.chiaAddressSynonym?.let {
+            recyclerItemHeader?.text = widgetSettingsAndData.addressSettings.chiaAddressSynonym
+        }
+
+        if (widgetSettingsAndData.addressSettings?.showNotification == true) {
+            notificationImageView?.setImageResource(R.drawable.baseline_notifications_active_24)
+        } else {
+            notificationImageView?.setImageResource(R.drawable.baseline_notifications_off_24)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && widgetSettingsAndData.widgetData?.chiaAddress != null) {
+            addWidgetButton?.setOnClickListener {
+                val clickContext = itemView.context
                 val appWidgetManager: AppWidgetManager =
                     clickContext.getSystemService(AppWidgetManager::class.java)
                 val myProvider =

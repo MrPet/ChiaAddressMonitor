@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import ninja.bored.chiapublicaddressmonitor.R
+import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 
 object NotificationHelper {
@@ -70,46 +71,51 @@ object NotificationHelper {
         }
     }
 
-    fun checkIfNecessaryAndSendNotification(
+    suspend fun checkIfNecessaryAndSendNotification(
         oldChiaAmount: Double?,
         newWidgetData: WidgetData,
         context: Context
     ) {
-        oldChiaAmount?.let {
-            if (newWidgetData.chiaAmount != oldChiaAmount) {
-                if (newWidgetData.chiaAmount > oldChiaAmount) {
-                    sendNotification(
-                        Constants.NOTIFICATION_CHANNEL_POSITIVE_CHANGE,
-                        context.getString(
-                            R.string.address_balance_changed_notification_header,
-                            (newWidgetData.chiaAmount - oldChiaAmount)
-                        ),
-                        context.getString(
-                            R.string.address_balance_changed_notification_text,
-                            newWidgetData.chiaAddress,
-                            oldChiaAmount,
-                            newWidgetData.chiaAmount
-                        ),
-                        Constants.NOTIFICATION_ID_POSITIVE_CHANGE,
-                        context
-                    )
-                } else {
-                    sendNotification(
-                        Constants.NOTIFICATION_CHANNEL_NEGATIVE_CHANGE,
-                        context.getString(
-                            R.string.address_balance_changed_negative_notification_header,
-                            newWidgetData.chiaAmount
-                        ),
-                        context.getString(
-                            R.string.address_balance_changed_negative_notification_text,
-                            newWidgetData.chiaAddress,
-                            oldChiaAmount,
-                            newWidgetData.chiaAmount
-                        ),
-                        Constants.NOTIFICATION_ID_NEGATIVE_CHANGE,
-                        context
-                    )
-                }
+        val database = ChiaWidgetRoomsDatabase.getInstance(context)
+        val addressSettingsDao = database.getAddressSettingsDao()
+        val addressSettings = addressSettingsDao.getByAddress(newWidgetData.chiaAddress)
+
+        if (addressSettings?.showNotification == true &&
+            oldChiaAmount != null &&
+            newWidgetData.chiaAmount != oldChiaAmount
+        ) {
+            if (newWidgetData.chiaAmount > oldChiaAmount) {
+                sendNotification(
+                    Constants.NOTIFICATION_CHANNEL_POSITIVE_CHANGE,
+                    context.getString(
+                        R.string.address_balance_changed_notification_header,
+                        (newWidgetData.chiaAmount - oldChiaAmount)
+                    ),
+                    context.getString(
+                        R.string.address_balance_changed_notification_text,
+                        newWidgetData.chiaAddress,
+                        oldChiaAmount,
+                        newWidgetData.chiaAmount
+                    ),
+                    Constants.NOTIFICATION_ID_POSITIVE_CHANGE,
+                    context
+                )
+            } else {
+                sendNotification(
+                    Constants.NOTIFICATION_CHANNEL_NEGATIVE_CHANGE,
+                    context.getString(
+                        R.string.address_balance_changed_negative_notification_header,
+                        newWidgetData.chiaAmount
+                    ),
+                    context.getString(
+                        R.string.address_balance_changed_negative_notification_text,
+                        newWidgetData.chiaAddress,
+                        oldChiaAmount,
+                        newWidgetData.chiaAmount
+                    ),
+                    Constants.NOTIFICATION_ID_NEGATIVE_CHANGE,
+                    context
+                )
             }
         }
     }

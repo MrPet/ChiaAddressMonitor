@@ -51,7 +51,7 @@ object Slh {
 
         suspendCancellableCoroutine { continuation ->
             val request = Request.Builder()
-                .url(Constants.BASE_API_URL + address)
+                .url(Constants.BASE_API_URL + address.trim())
                 .addHeader(
                     Constants.CHIA_EXPLORER_API_KEY_HEADER_NAME,
                     Constants.CHIA_EXPLORER_API_KEY

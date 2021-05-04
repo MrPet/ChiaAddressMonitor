@@ -3,8 +3,8 @@ package ninja.bored.chiapublicaddressmonitor.helpers
 import ninja.bored.chiapublicaddressmonitor.BuildConfig
 
 object Constants {
+    const val defaultUpdateTime: Int = 3600
     const val NOTIFICATION_CHANNEL_POSITIVE_CHANGE: String = "positiveChange"
-
     // for updating the notifications
     const val NOTIFICATION_ID_POSITIVE_CHANGE: Int = 13371
     const val NOTIFICATION_ID_NEGATIVE_CHANGE: Int = 13372
