@@ -3,6 +3,12 @@ package ninja.bored.chiapublicaddressmonitor.helpers
 import ninja.bored.chiapublicaddressmonitor.BuildConfig
 
 object Constants {
+    const val NOTIFICATION_CHANNEL_POSITIVE_CHANGE: String = "positiveChange"
+
+    // for updating the notifications
+    const val NOTIFICATION_ID_POSITIVE_CHANGE: Int = 13371
+    const val NOTIFICATION_ID_NEGATIVE_CHANGE: Int = 13372
+    const val NOTIFICATION_CHANNEL_NEGATIVE_CHANGE: String = "negativeChange"
     const val ADDRESS_NOT_FOUND_HTTP_CODE: Int = 404
     const val NET_BALANCE_DIVIDER: Double = 1000000000000.0
     const val ADDRESS_EXTRA: String = "CHIA_ADDRESS"
