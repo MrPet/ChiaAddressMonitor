@@ -47,12 +47,11 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID
         ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
-
-        chiaAddressEditText = findViewById(R.id.chiaAddressEditText)
     }
 
     override fun onResume() {
         super.onResume()
+        chiaAddressEditText = findViewById(R.id.chiaAddressEditText)
 
         widgetDB = ChiaWidgetRoomsDatabase.getInstance(this)
         val context = this
