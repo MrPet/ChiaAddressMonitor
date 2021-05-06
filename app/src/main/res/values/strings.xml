@@ -9,7 +9,7 @@
     <string name="public_address_hint">Public address (xch…)</string>
     <string name="chia_widget_config_description">This widget will periodically check the balance of the public address.</string>
     <string name="save_widget_settings">Save</string>
-    <string name="chia_address_input_error_wrong">The address seems to be wrong, please check your input</string>
+    <string name="chia_address_input_error_wrong">The address seems to be wrong, please check your input. You can find your address in the "Wallet" tab of your Chia UI</string>
     <string name="recycler_item_amount_and_date">%s XCH @%s</string>
     <string name="recycler_item_chia_address">Chia address</string>
     <string name="loading">Loading …</string>
