@@ -75,7 +75,6 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
                 )
                 chiaAddressEditText?.threshold = 1
                 chiaAddressEditText?.setAdapter(adapter)
-                chiaAddressEditText?.showDropDown()
                 chiaAddressEditText?.setOnFocusChangeListener { v, hasFocus ->
                     if (hasFocus) {
                         v?.let {
