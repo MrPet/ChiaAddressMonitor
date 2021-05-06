@@ -47,18 +47,19 @@ object Slh {
     /**
      * gets Address data from chiaexplorer.com
      */
-    suspend fun receiveWidgetDataFromApi(address: String): WidgetData? {
+    suspend fun receiveWidgetDataFromApi(address: String): WidgetData? =
 
-        val request = Request.Builder()
-            .url(Constants.BASE_API_URL + address)
-            .addHeader(
-                Constants.CHIA_EXPLORER_API_KEY_HEADER_NAME,
-                Constants.CHIA_EXPLORER_API_KEY
-            )
-            .build()
+        suspendCancellableCoroutine { continuation ->
+            val request = Request.Builder()
+                .url(Constants.BASE_API_URL + address)
+                .addHeader(
+                    Constants.CHIA_EXPLORER_API_KEY_HEADER_NAME,
+                    Constants.CHIA_EXPLORER_API_KEY
+                )
+                .build()
 
-        val client = OkHttpClient.Builder().build()
-        return suspendCancellableCoroutine { continuation ->
+            val client = OkHttpClient.Builder().build()
+
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     Log.e(TAG, e.toString())
@@ -98,7 +99,6 @@ object Slh {
                 }
             })
         }
-    }
 
     fun parseApiResponseToWidgetData(
         address: String,

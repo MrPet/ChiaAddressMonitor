@@ -13,7 +13,7 @@ static def generateVersionCode() {
 }
 
 def majorVersion = 0
-def minorVersion = 9
+def minorVersion = 98
 
 android {
     compileSdkVersion 30

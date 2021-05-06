@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.mikepenz.aboutlibraries.LibsBuilder
+import ninja.bored.chiapublicaddressmonitor.helpers.NotificationHelper
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,6 +14,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        NotificationHelper.createNotificationChannels(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

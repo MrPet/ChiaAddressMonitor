@@ -11,6 +11,7 @@ import android.widget.Toast
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
+import ninja.bored.chiapublicaddressmonitor.helpers.NotificationHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettings
@@ -48,6 +49,10 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
                 Toast.makeText(context, R.string.chia_widget_added, Toast.LENGTH_LONG).show()
             } else {
                 // doesn't concern me
+                if (receivedAppWidgetID != null && receivedAppWidgetID != INVALID_APPWIDGET_ID) {
+                    val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
+                    onUpdate(context, appWidgetManager, intArrayOf(receivedAppWidgetID))
+                }
                 super.onReceive(context, intent)
             }
         }
@@ -75,61 +80,33 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
         appWidgetIds: IntArray?
     ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
-        if (context != null) {
-
+        context?.let {
+            NotificationHelper.createNotificationChannels(context)
             val database = ChiaWidgetRoomsDatabase.getInstance(context)
-            appWidgetIds?.forEach { appWidgetId ->
-                GlobalScope.launch {
-                    val widgetSettingsDao = database.getWidgetSettingsDao()
-                    val widgetSettings: WidgetSettings?
-                    val chiaAddress = addressFromReceive
+            appWidgetManager?.let {
+                appWidgetIds?.forEach { appWidgetId ->
+                    GlobalScope.launch {
+                        val widgetSettingsDao = database.getWidgetSettingsDao()
+                        val widgetSettings: WidgetSettings?
+                        val chiaAddress = addressFromReceive
 
-                    if (chiaAddress != null) {
-                        // we come from app and have already the address, but no widget settings
-                        widgetSettings = WidgetSettings(appWidgetId, chiaAddress)
-                        widgetSettingsDao.insertUpdate(widgetSettings)
-                    } else {
-                        widgetSettings = widgetSettingsDao.getByID(appWidgetId)
-                    }
+                        if (chiaAddress != null) {
+                            // we come from app and have already the address, but no widget settings
+                            widgetSettings = WidgetSettings(appWidgetId, chiaAddress)
+                            widgetSettingsDao.insertUpdate(widgetSettings)
+                        } else {
+                            widgetSettings = widgetSettingsDao.getByID(appWidgetId)
+                        }
 
-                    widgetSettings?.let {
-                        val dataDao = database.getWidgetDataDao()
-
-                        RemoteViews(
-                            context.packageName,
-                            R.layout.chia_public_address_widget
-                        ).apply {
-
-                            val allViews = this
-
-                            GlobalScope.launch {
-                                val oldWidgetData = dataDao.getByAddress(widgetSettings.chiaAddress)
-                                Log.d(TAG, "got widgetData $oldWidgetData")
-                                if (oldWidgetData != null) {
-                                    Slh.updateWithWidgetData(
-                                        oldWidgetData,
-                                        allViews,
-                                        context,
-                                        appWidgetId,
-                                        appWidgetManager
-                                    )
-                                } else {
-                                    allViews.setTextViewText(
-                                        R.id.chiaAmountHolder,
-                                        context.getText(R.string.loading)
-                                    )
-                                    appWidgetManager?.updateAppWidget(appWidgetId, allViews)
-                                }
-                            }
-
-                            val newWidgetData =
-                                Slh.receiveWidgetDataFromApi(widgetSettings.chiaAddress)
-
-                            newWidgetData?.let {
-                                dataDao.insertUpdate(it)
-                                Slh.updateWithWidgetData(
-                                    it,
+                        widgetSettings?.let {
+                            RemoteViews(
+                                context.packageName,
+                                R.layout.chia_public_address_widget
+                            ).apply {
+                                val allViews = this
+                                loadAllWidgetDataAndSyncFromApi(
                                     allViews,
+                                    widgetSettings,
                                     context,
                                     appWidgetId,
                                     appWidgetManager
@@ -139,6 +116,58 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
                     }
                 }
             }
+        }
+    }
+
+    private fun loadAllWidgetDataAndSyncFromApi(
+        allViews: RemoteViews,
+        widgetSettings: WidgetSettings,
+        context: Context,
+        appWidgetId: Int,
+        appWidgetManager: AppWidgetManager
+    ) {
+        GlobalScope.launch {
+            val database = ChiaWidgetRoomsDatabase.getInstance(context)
+            val dataDao = database.getWidgetDataDao()
+            val oldWidgetData = dataDao.getByAddress(widgetSettings.chiaAddress)
+            if (oldWidgetData != null) {
+                Log.d(TAG, "got widgetData $oldWidgetData")
+                Slh.updateWithWidgetData(
+                    oldWidgetData,
+                    allViews,
+                    context,
+                    appWidgetId,
+                    appWidgetManager
+                )
+            } else {
+                allViews.setTextViewText(
+                    R.id.chiaAmountHolder,
+                    context.getText(R.string.loading)
+                )
+                appWidgetManager.updateAppWidget(appWidgetId, allViews)
+            }
+
+            Log.d(TAG, "loading new widget Data")
+            val newWidgetData =
+                Slh.receiveWidgetDataFromApi(widgetSettings.chiaAddress)
+
+            newWidgetData?.let {
+                Log.d(TAG, "loaded new widget Data")
+                NotificationHelper.checkIfNecessaryAndSendNotification(
+                    oldWidgetData?.chiaAmount,
+                    newWidgetData,
+                    context
+                )
+                dataDao.insertUpdate(it)
+                Slh.updateWithWidgetData(
+                    it,
+                    allViews,
+                    context,
+                    appWidgetId,
+                    appWidgetManager
+                )
+            }
+            Log.d(TAG, "loaded but no res :/")
         }
     }
 }
