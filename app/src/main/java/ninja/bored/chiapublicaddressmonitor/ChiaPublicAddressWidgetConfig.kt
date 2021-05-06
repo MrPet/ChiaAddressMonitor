@@ -53,6 +53,7 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
 
     override fun onResume() {
         super.onResume()
+
         widgetDB = ChiaWidgetRoomsDatabase.getInstance(this)
         val context = this
 
@@ -76,7 +77,13 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
                 chiaAddressEditText?.threshold = 1
                 chiaAddressEditText?.setAdapter(adapter)
                 chiaAddressEditText?.showDropDown()
-                chiaAddressEditText?.setOnFocusChangeListener { v, _ -> (v as AutoCompleteTextView).showDropDown() }
+                chiaAddressEditText?.setOnFocusChangeListener { v, hasFocus ->
+                    if (hasFocus) {
+                        v?.let {
+                            (v as AutoCompleteTextView).showDropDown()
+                        }
+                    }
+                }
             }
         }
 
