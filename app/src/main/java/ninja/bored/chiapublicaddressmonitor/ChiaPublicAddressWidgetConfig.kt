@@ -122,7 +122,7 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         chiaAddressEditText?.let {
             val chiaAddress = it.text.toString()
             if (Slh.isChiaAddressValid(chiaAddress.trim())) {
-                val widgetSettings = WidgetSettings(appWidgetID, chiaAddress)
+                val widgetSettings = WidgetSettings(appWidgetID, chiaAddress.trim())
                 val chiaWidgetSettingsDao = widgetDB?.getWidgetSettingsDao()
                 launch {
                     chiaWidgetSettingsDao?.insertUpdate(widgetSettings)

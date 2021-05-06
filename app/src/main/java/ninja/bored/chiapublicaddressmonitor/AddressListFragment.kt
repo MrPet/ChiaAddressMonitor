@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -28,7 +29,6 @@ import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
 // https://developer.android.com/guide/topics/appwidgets/#Pinning
-
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
@@ -73,6 +73,7 @@ class AddressListFragment : Fragment() {
             addAddressButton.setOnClickListener { addNewAddress() }
             loadingSpinner = view.findViewById(R.id.loading_spinner)
             addressListRecycler = view.findViewById(R.id.address_list)
+
             ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
                 override fun onMove(
                     recyclerView: RecyclerView,
@@ -146,6 +147,11 @@ class AddressListFragment : Fragment() {
     override fun onResume() {
         setUpRoomsToRecyclerListener()
         super.onResume()
+        activity?.let {
+            val supportActionBar = (activity as AppCompatActivity).supportActionBar
+            supportActionBar?.setDisplayShowHomeEnabled(false)
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
     }
 
     private fun addNewAddress() {
@@ -157,7 +163,7 @@ class AddressListFragment : Fragment() {
                 ) { dialog, text ->
                     val textString = text.toString()
                     val inputField = dialog.getInputField()
-                    if (Slh.isChiaAddressValid(textString)) {
+                    if (Slh.isChiaAddressValid(textString.trim())) {
                         dialog.setActionButtonEnabled(WhichButton.POSITIVE, true)
                     } else {
                         inputField.error = getString(R.string.chia_address_input_error_wrong)
@@ -165,7 +171,7 @@ class AddressListFragment : Fragment() {
                     }
                 }
                 positiveButton(R.string.add_address) { dialog ->
-                    getDataAndSaveAddress(dialog.getInputField().text.toString())
+                    getDataAndSaveAddress(dialog.getInputField().text.toString().trim())
                 }
             }
         }

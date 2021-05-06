@@ -4,6 +4,8 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.icu.text.DecimalFormat
+import android.icu.text.DecimalFormatSymbols
 import android.icu.text.SimpleDateFormat
 import android.util.Log
 import android.widget.RemoteViews
@@ -51,7 +53,7 @@ object Slh {
 
         suspendCancellableCoroutine { continuation ->
             val request = Request.Builder()
-                .url(Constants.BASE_API_URL + address)
+                .url(Constants.BASE_API_URL + address.trim())
                 .addHeader(
                     Constants.CHIA_EXPLORER_API_KEY_HEADER_NAME,
                     Constants.CHIA_EXPLORER_API_KEY
@@ -133,7 +135,7 @@ object Slh {
         appWidgetId?.let {
             val amountText = context.resources?.getString(
                 R.string.chia_amount_placeholder,
-                (currentWidgetData.chiaAmount)
+                formatChiaDecimal(currentWidgetData.chiaAmount)
             )
 
             val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
@@ -194,5 +196,13 @@ object Slh {
                 }
             }
         }
+    }
+
+    fun formatChiaDecimal(chiaAmount: Double): Any? {
+        var decimalFormat = DecimalFormat("#,##0.00####", DecimalFormatSymbols(Locale.getDefault()))
+        if (chiaAmount > 10000) {
+            decimalFormat = DecimalFormat("#,##0.##")
+        }
+        return decimalFormat.format(chiaAmount)
     }
 }
