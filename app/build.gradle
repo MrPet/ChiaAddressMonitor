@@ -6,8 +6,9 @@ plugins {
 }
 
 static def generateVersionCode() {
-    def result = "git rev-list --count HEAD".execute().text.trim() //unix
+    def result = "/usr/bin/git rev-list --count HEAD".execute().text.trim() //unix
     if(result.empty) result = "PowerShell -Command git rev-list --count HEAD".execute().text.trim() //windows
+    println "Result of git rev-list: ${result}"
     if(result.empty) throw new RuntimeException("Could not generate versioncode on this platform? Cmd output: ${result.text}")
     return result.toInteger()
 }
