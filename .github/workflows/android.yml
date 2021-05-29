@@ -11,8 +11,6 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Set api key
@@ -42,6 +40,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Set api key
         env:
           CHIA_EXPLORER_API_KEY: ${{ secrets.CHIA_EXPLORER_API_KEY }}
