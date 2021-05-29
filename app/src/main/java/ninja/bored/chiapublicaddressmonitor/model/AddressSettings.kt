@@ -14,7 +14,8 @@ data class AddressSettings(
     @PrimaryKey val chiaAddress: String,
     @ColumnInfo(name = "show_notification") val showNotification: Boolean,
     @ColumnInfo(name = "chia_address_synonym") val chiaAddressSynonym: String?,
-    @ColumnInfo(name = "update_time") val updateTime: Int // in seconds
+    @ColumnInfo(name = "update_time") val updateTime: Int, // in seconds
+    @ColumnInfo(name = "precision") val precision: String?
 )
 
 @Dao

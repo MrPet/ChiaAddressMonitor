@@ -19,6 +19,7 @@ import ninja.bored.chiapublicaddressmonitor.ChiaPublicAddressWidgetReceiver
 import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
 import java.text.DateFormat
 
@@ -61,7 +62,10 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
         if (widgetSettingsAndData.widgetData?.updateDate != null) {
             itemAmountAndDateTextView?.text = context?.getString(
                 R.string.recycler_item_amount_and_date,
-                Slh.formatChiaDecimal(widgetSettingsAndData.widgetData.chiaAmount),
+                Slh.formatChiaDecimal(
+                    widgetSettingsAndData.widgetData.chiaAmount,
+                    Slh.Precision.TOTAL
+                ),
                 localDateFormat.format(widgetSettingsAndData.widgetData.updateDate)
             )
         } else {
@@ -90,36 +94,42 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
             notificationImageView?.setImageResource(R.drawable.baseline_notifications_off_24)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && widgetSettingsAndData.widgetData?.chiaAddress != null) {
+        widgetSettingsAndData.widgetData?.chiaAddress?.let {
             addWidgetButton?.setOnClickListener {
-                val clickContext = itemView.context
-                val appWidgetManager: AppWidgetManager =
-                    clickContext.getSystemService(AppWidgetManager::class.java)
-                val myProvider =
-                    ComponentName(clickContext, ChiaPublicAddressWidgetReceiver::class.java)
+                this.addWidget(widgetSettingsAndData.widgetData)
+            }
+        }
+    }
 
-                if (appWidgetManager.isRequestPinAppWidgetSupported) {
-                    val intent = Intent(context, ChiaPublicAddressWidgetReceiver::class.java)
-                    intent.putExtra(
-                        Constants.ADDRESS_EXTRA,
-                        widgetSettingsAndData.widgetData.chiaAddress
-                    )
+    private fun addWidget(widgetData: WidgetData) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val clickContext = itemView.context
+            val appWidgetManager: AppWidgetManager =
+                clickContext.getSystemService(AppWidgetManager::class.java)
+            val myProvider =
+                ComponentName(clickContext, ChiaPublicAddressWidgetReceiver::class.java)
 
-                    val successCallback: PendingIntent = PendingIntent.getBroadcast(
-                        context,
-                        0,
-                        intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    )
+            if (appWidgetManager.isRequestPinAppWidgetSupported) {
+                val intent = Intent(clickContext, ChiaPublicAddressWidgetReceiver::class.java)
+                intent.putExtra(
+                    Constants.ADDRESS_EXTRA,
+                    widgetData.chiaAddress
+                )
 
-                    appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
-                } else {
-                    Toast.makeText(
-                        context,
-                        R.string.launcher_does_not_allow_widget_from_app,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                val successCallback: PendingIntent = PendingIntent.getBroadcast(
+                    clickContext,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+
+                appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
+            } else {
+                Toast.makeText(
+                    clickContext,
+                    R.string.launcher_does_not_allow_widget_from_app,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }

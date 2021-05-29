@@ -141,7 +141,7 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
                 )
             } else {
                 allViews.setTextViewText(
-                    R.id.chiaAmountHolder,
+                    R.id.chia_amount_holder,
                     context.getText(R.string.loading)
                 )
                 appWidgetManager.updateAppWidget(appWidgetId, allViews)

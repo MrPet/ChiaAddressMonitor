@@ -3,6 +3,7 @@
     <!-- Strings used for fragments for navigation -->
     <string name="address_list_label">Chia Address List</string>
     <string name="chia_amount">XCH</string>
+    <string name="mojo_amount">MOJO</string>
     <string name="chia_amount_placeholder">%s</string>
     <string name="last_refresh_placeholder">%s</string>
     <string name="chia_widget_config_title">Chia public address widget configuration</string>
@@ -49,6 +50,10 @@
     <string name="chia_address_synonym_hint">Chia address synonym</string>
     <string name="saved_address_settings">Saved address settings</string>
     <string name="add_widget_to_dashboard">Add this address as widget</string>
+    <string name="show_widget_in_mojo">Show widget in Mojo. Mojo is one trillionth of xch. Use this to track very small amounts on the address</string>
+    <string name="copyAddressDescription">copy chia address to clipboard</string>
+    <string name="copyAddressSuccessful">Address successfully copied to clipboard</string>
+    <string name="copyAddressError">Error while copying address to clipboard</string>
 
 
 </resources>

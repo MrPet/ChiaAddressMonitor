@@ -10,6 +10,7 @@
 
     <TextView
         style="@style/withTextShadow"
+        android:id="@+id/chia_amount_title_holder"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"
@@ -24,7 +25,7 @@
         app:autoSizeTextType="uniform" />
 
     <TextView
-        android:id="@+id/chiaAmountHolder"
+        android:id="@+id/chia_amount_holder"
         style="@style/xchWidgetAmount"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -37,7 +38,7 @@
         app:autoSizeTextType="uniform" />
 
     <TextView
-        android:id="@+id/chiaLastUpdateHolder"
+        android:id="@+id/chia_last_update_holder"
         style="@style/withTextShadow"
         android:layout_width="match_parent"
         android:layout_height="0dp"

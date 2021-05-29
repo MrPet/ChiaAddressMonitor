@@ -1,10 +1,14 @@
 package ninja.bored.chiapublicaddressmonitor
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
+import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.AddressSettings
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
@@ -48,7 +53,6 @@ class AddressDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_address_details, container, false)
         chiaAddress?.let { cChiaAddress ->
@@ -62,7 +66,8 @@ class AddressDetailsFragment : Fragment() {
                             cChiaAddress,
                             false,
                             null,
-                            Constants.defaultUpdateTime
+                            Constants.defaultUpdateTime,
+                            Slh.Precision.NORMAL
                         )
                         chiaAddressSettingsDao.insertUpdate(chiaAddressSettings)
                     }
@@ -89,6 +94,33 @@ class AddressDetailsFragment : Fragment() {
         val addressSynonym =
             rootView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
         addressSynonym.setText(chiaAddressSettings.chiaAddressSynonym)
+
+        val copyButton = rootView.findViewById<ImageButton>(R.id.copy_address_button)
+        copyButton?.setOnClickListener {
+            this.activity?.let {
+                val clipboard =
+                    it.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+                if (clipboard != null) {
+                    val label = when (val addressSynonymText = addressSynonym.text.toString()) {
+                        "" -> chiaAddress
+                        else -> addressSynonymText
+                    }
+                    val clip: ClipData = ClipData.newPlainText(label, chiaAddress)
+                    clipboard.setPrimaryClip(clip)
+                    Toast.makeText(this.context, R.string.copyAddressSuccessful, Toast.LENGTH_LONG)
+                        .show()
+                } else {
+                    Toast.makeText(this.context, R.string.copyAddressError, Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        }
+
+        val showWidgetAsMojoCheckBox =
+            rootView.findViewById<SwitchCompat>(R.id.chia_address_show_in_mojo)
+        if (chiaAddressSettings.precision == Slh.Precision.MOJO) {
+            showWidgetAsMojoCheckBox.isChecked = true
+        }
     }
 
     private fun saveSettingsFromParentView(parentView: View) {
@@ -99,6 +131,12 @@ class AddressDetailsFragment : Fragment() {
                     parentView.findViewById<SwitchCompat>(R.id.address_has_notification)
                 val addressSynonym =
                     parentView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
+                val showWidgetAsMojoCheckBox =
+                    parentView.findViewById<SwitchCompat>(R.id.chia_address_show_in_mojo)
+                val widgetPrecision = when (showWidgetAsMojoCheckBox.isChecked) {
+                    true -> Slh.Precision.MOJO
+                    else -> Slh.Precision.NORMAL
+                }
                 val addressSynonymString = when (addressSynonym.text.toString().trim()) {
                     "" -> null
                     else -> addressSynonym.text.toString()
@@ -107,7 +145,8 @@ class AddressDetailsFragment : Fragment() {
                     chiaAddress,
                     notificationCheckbox.isChecked,
                     addressSynonymString,
-                    Constants.defaultUpdateTime
+                    Constants.defaultUpdateTime,
+                    widgetPrecision
                 )
                 val chiaAddressSettingsDao = db.getAddressSettingsDao()
                 this.lifecycleScope.launch {

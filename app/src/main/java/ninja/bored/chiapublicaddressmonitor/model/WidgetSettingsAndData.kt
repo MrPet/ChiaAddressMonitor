@@ -28,7 +28,8 @@ interface WidgetSettingsAndDataDao {
                 ase.update_time AS ase_update_time, 
                 ase.show_notification AS ase_show_notification, 
                 ase.chia_address_synonym AS ase_chia_address_synonym, 
-                ase.chiaAddress AS ase_chiaAddress
+                ase.chiaAddress AS ase_chiaAddress,
+                ase.precision AS ase_precision
         FROM widget_data AS wd 
         LEFT JOIN widget_settings AS ws 
         ON ws.chia_address = wd.chiaAddress 

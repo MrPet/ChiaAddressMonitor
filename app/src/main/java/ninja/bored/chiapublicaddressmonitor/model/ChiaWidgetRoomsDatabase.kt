@@ -22,9 +22,15 @@ class WidgetDatabaseConverter {
     }
 }
 
+object DbVersion {
+    const val VERSION_3 = 3
+    const val VERSION_4 = 4
+    const val VERSION_5 = 5
+}
+
 @Database(
     entities = [WidgetSettings::class, WidgetData::class, AddressSettings::class],
-    version = 4
+    version = DbVersion.VERSION_5
 )
 @TypeConverters(WidgetDatabaseConverter::class)
 abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
@@ -40,10 +46,11 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
             synchronized(this) {
                 var instance = INSTANCE
                 if (instance == null) {
-                    val MIGRATION_3_4 = object : Migration(3, 4) {
-                        override fun migrate(database: SupportSQLiteDatabase) {
-                            database.execSQL(
-                                """
+                    val MIGRATION_3_4 =
+                        object : Migration(DbVersion.VERSION_3, DbVersion.VERSION_4) {
+                            override fun migrate(database: SupportSQLiteDatabase) {
+                                database.execSQL(
+                                    """
                                         CREATE TABLE
                                         `address_settings`
                                             (`chiaAddress` TEXT NOT NULL,
@@ -52,15 +59,28 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                              `update_time` INTEGER  NOT NULL,
                                         PRIMARY KEY (`chiaAddress`))
                                     """
-                            )
+                                )
+                            }
                         }
-                    }
+                    val MIGRATION_4_5 =
+                        object : Migration(DbVersion.VERSION_4, DbVersion.VERSION_5) {
+                            override fun migrate(database: SupportSQLiteDatabase) {
+                                database.execSQL(
+                                    """
+                                        ALTER TABLE
+                                        `address_settings`
+                                        ADD COLUMN precision TEXT
+                                    """
+                                )
+                            }
+                        }
 
                     instance = Room.databaseBuilder(
                         context,
                         ChiaWidgetRoomsDatabase::class.java, "chia-address-widget-db"
                     )
                         .addMigrations(MIGRATION_3_4)
+                        .addMigrations(MIGRATION_4_5)
                         .build()
                 }
                 return instance

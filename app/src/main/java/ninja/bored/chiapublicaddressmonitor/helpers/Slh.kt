@@ -33,6 +33,12 @@ import java.util.Locale
 object Slh {
     private const val TAG = "Slh"
 
+    object Precision {
+        const val TOTAL = "TOTAL"
+        const val MOJO = "MOJO"
+        const val NORMAL = "Normal"
+    }
+
     /**
      * validate chia address
      */
@@ -108,12 +114,8 @@ object Slh {
         date: Date
     ): WidgetData {
         val dividedNetBalance = when (chiaExplorerAddressResponse.netBalance) {
-            0.0 -> {
-                0.0
-            }
-            else -> {
-                chiaExplorerAddressResponse.netBalance.div(Constants.NET_BALANCE_DIVIDER)
-            }
+            0.0 -> 0.0
+            else -> chiaExplorerAddressResponse.netBalance.div(Constants.NET_BALANCE_DIVIDER)
         }
         return WidgetData(
             address,
@@ -125,7 +127,7 @@ object Slh {
     /**
      * Update widget data in Widget
      */
-    fun updateWithWidgetData(
+    suspend fun updateWithWidgetData(
         currentWidgetData: WidgetData,
         allViews: RemoteViews,
         context: Context,
@@ -133,9 +135,12 @@ object Slh {
         appWidgetManager: AppWidgetManager?
     ) {
         appWidgetId?.let {
+            val database = ChiaWidgetRoomsDatabase.getInstance(context)
+            val addressSettingsDao = database.getAddressSettingsDao()
+            val addressSettings = addressSettingsDao.getByAddress(currentWidgetData.chiaAddress)
             val amountText = context.resources?.getString(
                 R.string.chia_amount_placeholder,
-                formatChiaDecimal(currentWidgetData.chiaAmount)
+                formatChiaDecimal(currentWidgetData.chiaAmount, addressSettings?.precision)
             )
 
             val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
@@ -144,10 +149,21 @@ object Slh {
                 }
             allViews.setOnClickPendingIntent(R.id.widgetRootLayout, pendingIntent)
             allViews.setTextViewText(
-                R.id.chiaAmountHolder,
+                R.id.chia_amount_holder,
                 amountText
             )
 
+            if (addressSettings?.precision == Precision.MOJO) {
+                allViews.setTextViewText(
+                    R.id.chia_amount_title_holder,
+                    context.getText(R.string.mojo_amount)
+                )
+            } else {
+                allViews.setTextViewText(
+                    R.id.chia_amount_title_holder,
+                    context.getText(R.string.chia_amount)
+                )
+            }
             val sdf = SimpleDateFormat(
                 Constants.SHORT_DATE_TIME_FORMAT,
                 Locale.getDefault()
@@ -155,7 +171,7 @@ object Slh {
 
             val currentDate = sdf.format(currentWidgetData.updateDate)
             allViews.setTextViewText(
-                R.id.chiaLastUpdateHolder,
+                R.id.chia_last_update_holder,
                 context.resources?.getString(
                     R.string.last_refresh_placeholder,
                     currentDate
@@ -198,11 +214,27 @@ object Slh {
         }
     }
 
-    fun formatChiaDecimal(chiaAmount: Double): Any? {
-        var decimalFormat = DecimalFormat("#,##0.00####", DecimalFormatSymbols(Locale.getDefault()))
-        if (chiaAmount > 10000) {
-            decimalFormat = DecimalFormat("#,##0.##")
+    fun formatChiaDecimal(chiaAmount: Double, precision: String?): String? {
+        val decimalFormat: DecimalFormat
+        var amount = chiaAmount
+        if (precision == Precision.MOJO) {
+            decimalFormat = DecimalFormat("#,##0")
+            amount = chiaAmount * Constants.NET_BALANCE_DIVIDER
+        } else if (precision == Precision.TOTAL) {
+            decimalFormat =
+                DecimalFormat("#,##0.00############", DecimalFormatSymbols(Locale.getDefault()))
+            //         if (chiaAmount > 10000) {
+            //             decimalFormat = DecimalFormat("#,##0.##")
+            //         }
+            return decimalFormat.format(chiaAmount)
+        } else { // "normal is default
+            if (chiaAmount > Constants.BIG_AMOUNT_THRESHOLD) {
+                decimalFormat = DecimalFormat("#,##0.##")
+            } else {
+                decimalFormat =
+                    DecimalFormat("#,##0.00######", DecimalFormatSymbols(Locale.getDefault()))
+            }
         }
-        return decimalFormat.format(chiaAmount)
+        return decimalFormat.format(amount)
     }
 }

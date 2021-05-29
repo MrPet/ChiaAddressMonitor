@@ -89,8 +89,9 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
             if (EditorInfo.IME_ACTION_DONE == actionId) {
                 saveSettings(v)
                 false
+            } else {
+                true
             }
-            true
         }
     }
 
