@@ -232,7 +232,7 @@ object Slh {
                 decimalFormat = DecimalFormat("#,##0.##")
             } else {
                 decimalFormat =
-                    DecimalFormat("#,##0.00######", DecimalFormatSymbols(Locale.getDefault()))
+                    DecimalFormat("#,##0.00####", DecimalFormatSymbols(Locale.getDefault()))
             }
         }
         return decimalFormat.format(amount)
