@@ -7,17 +7,21 @@ import android.content.Intent
 import android.icu.text.DecimalFormat
 import android.icu.text.DecimalFormatSymbols
 import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.util.Log
 import android.widget.RemoteViews
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ninja.bored.chiapublicaddressmonitor.MainActivity
 import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants.CHIA_ADDRESS_LENGTH
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants.CHIA_ADDRESS_PREFIX
+import ninja.bored.chiapublicaddressmonitor.model.ChiaConversionResponse
 import ninja.bored.chiapublicaddressmonitor.model.ChiaExplorerAddressResponse
+import ninja.bored.chiapublicaddressmonitor.model.ChiaLatestConversion
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
@@ -138,9 +142,31 @@ object Slh {
             val database = ChiaWidgetRoomsDatabase.getInstance(context)
             val addressSettingsDao = database.getAddressSettingsDao()
             val addressSettings = addressSettingsDao.getByAddress(currentWidgetData.chiaAddress)
+
+
+            val currencyCode = when (addressSettings?.conversionCurrency) {
+                null -> {
+                    Constants.CHIA_CURRENCY_CONVERSIONS[0]
+                }
+                else -> {
+                    addressSettings.conversionCurrency
+                }
+            }
+
+            // get currency info
+            val chiaLatestConversion = getLatestChiaConversion(currencyCode, database)
+            val currencyMultiplier: Double = when(chiaLatestConversion?.price){
+                null -> {
+                    1.0
+                }
+                else -> {
+                    chiaLatestConversion.price
+                }
+            }
+
             val amountText = context.resources?.getString(
                 R.string.chia_amount_placeholder,
-                formatChiaDecimal(currentWidgetData.chiaAmount, addressSettings?.precision)
+                formatChiaDecimal( (currentWidgetData.chiaAmount * currencyMultiplier), addressSettings?.precision)
             )
 
             val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
@@ -161,7 +187,7 @@ object Slh {
             } else {
                 allViews.setTextViewText(
                     R.id.chia_amount_title_holder,
-                    context.getText(R.string.chia_amount)
+                    currencyCode
                 )
             }
             val sdf = SimpleDateFormat(
@@ -237,4 +263,91 @@ object Slh {
         }
         return decimalFormat.format(amount)
     }
+
+    /**
+     * checks in db if price is over threshold if so we get newer prices from api, save them
+     * and then return newest price
+     */
+    suspend fun getLatestChiaConversion(
+        conversionCurrency: String,
+        database: ChiaWidgetRoomsDatabase
+    ): ChiaLatestConversion? {
+        val latestCurrencyFromDb = database.getChiaLatestConversionDaoDao().getLatestForCurrency(conversionCurrency)
+
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.add(Calendar.MINUTE, Constants.TIME_THRESHOLD_FOR_FIAT_CONVERSION)
+        if( latestCurrencyFromDb != null && latestCurrencyFromDb.deviceImportDate.after( Date(calendar.timeInMillis) ) ) // still in threshold we return db
+        {
+            return latestCurrencyFromDb
+        }
+        else
+        {
+            // we need to get from api
+            val currencyFromApi = receiveChiaConversionFromApi()
+            currencyFromApi?.let{
+                var returnChiaConversion: ChiaLatestConversion?  = null
+                currencyFromApi.data.forEach{
+                    val chiaConverssionResponseData = it.value
+                    val newChiaConversion = ChiaLatestConversion(chiaConverssionResponseData.priceCurrency, chiaConverssionResponseData.price, chiaConverssionResponseData.updateDateTime, Date())
+                    database.getChiaLatestConversionDaoDao().insertUpdate(newChiaConversion)
+                    if( chiaConverssionResponseData.priceCurrency.endsWith(conversionCurrency) ) {
+                        returnChiaConversion = newChiaConversion
+                    }
+                }
+                return returnChiaConversion
+            }
+        }
+        return null
+    }
+
+    /**
+     * gets Conversion Data from conversion cache
+     */
+    suspend fun receiveChiaConversionFromApi(): ChiaConversionResponse? =
+        suspendCancellableCoroutine { continuation: CancellableContinuation<ChiaConversionResponse?> ->
+            val request = Request.Builder()
+                .url(Constants.CHIA_CONVERSIONS_BASE_API_URL)
+                .addHeader(
+                    Constants.CHIA_CONVERSIONS_API_KEY_HEADER_NAME,
+                    Constants.CHIA_CONVERSIONS_API_KEY
+                )
+                .build()
+
+            val client = OkHttpClient.Builder().build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.e(TAG, e.toString())
+                    continuation.resumeWith(Result.success(null))
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    // newer seen addresses get a 404 but if you start farming you still would like to add it ...
+                    if (response.isSuccessful) {
+                        try {
+                            val chiaExplorerAddressResult = response.body?.let {
+                                Gson().fromJson(
+                                    it.charStream(),
+                                    ChiaConversionResponse::class.java
+                                )
+                            }
+                            chiaExplorerAddressResult?.let {
+                                if (it.state.code == Constants.STATE_OK_CODE) {
+                                    continuation.resumeWith(Result.success(it))
+                                } else {
+                                    continuation.resumeWith(Result.success(null))
+                                }
+                            }
+                        } catch (e: JsonParseException) {
+                            // not good something bad happened
+                            Log.e(TAG, "ERROR in api response: $e")
+                            continuation.resumeWith(Result.success(null))
+                        }
+                    } else {
+                        Log.e(TAG, "Response not successful")
+                        continuation.resumeWith(Result.success(null))
+                    }
+                }
+            })
+        }
 }

@@ -26,11 +26,12 @@ object DbVersion {
     const val VERSION_3 = 3
     const val VERSION_4 = 4
     const val VERSION_5 = 5
+    const val VERSION_6 = 6
 }
 
 @Database(
-    entities = [WidgetSettings::class, WidgetData::class, AddressSettings::class],
-    version = DbVersion.VERSION_5
+    entities = [WidgetSettings::class, WidgetData::class, AddressSettings::class, ChiaLatestConversion::class],
+    version = DbVersion.VERSION_6
 )
 @TypeConverters(WidgetDatabaseConverter::class)
 abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
@@ -38,6 +39,7 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
     abstract fun getWidgetDataDao(): WidgetDataDao
     abstract fun getWidgetSettingsAndDataDao(): WidgetSettingsAndDataDao
     abstract fun getAddressSettingsDao(): AddressSettingsDao
+    abstract fun getChiaLatestConversionDaoDao(): ChiaLatestConversionDao
 
     companion object {
         @Volatile
@@ -74,6 +76,30 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                 )
                             }
                         }
+                    val MIGRATION_5_6 =
+                        object : Migration(DbVersion.VERSION_5, DbVersion.VERSION_6) {
+                            override fun migrate(database: SupportSQLiteDatabase) {
+                                database.execSQL(
+                                    """
+                                        CREATE TABLE
+                                        `chia_latest_conversion`
+                                         (
+                                            `priceCurrency` CHARACTER(10) NOT NULL,
+                                            `price` REAL NOT NULL,
+                                            `update_date` DATETIME  NOT NULL,
+                                            `device_import_date` DATETIME  NOT NULL,
+                                         PRIMARY KEY (`priceCurrency`))
+                                        """
+                                )
+                                database.execSQL(
+                                    """
+                                          ALTER TABLE
+                                        `conversion_currency`
+                                        ADD COLUMN precision TEXT
+                                        """
+                                )
+                            }
+                        }
 
                     instance = Room.databaseBuilder(
                         context,
@@ -81,6 +107,7 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                     )
                         .addMigrations(MIGRATION_3_4)
                         .addMigrations(MIGRATION_4_5)
+                        .addMigrations(MIGRATION_5_6)
                         .build()
                 }
                 return instance
