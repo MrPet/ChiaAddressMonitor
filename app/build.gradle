@@ -17,12 +17,12 @@ def majorVersion = 0
 def minorVersion = 98
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "ninja.bored.chiapublicaddressmonitor"
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode generateVersionCode()
         versionName "${majorVersion}.${minorVersion}.${generateVersionCode()}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -47,9 +47,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             try {
                 buildConfigField "String", "CHIA_EXPLORER_API_KEY", properties.getProperty('CHIA_EXPLORER_API_KEY')
+                buildConfigField "String", "CHIA_CONVERSIONS_API_KEY", properties.getProperty('CHIA_CONVERSIONS_API_KEY')
             }
             catch (ex) {
-                throw new InvalidUserDataException("You should define CHIA_EXPLORER_API_KEY in local.properties. Put CHIA_EXPLORER_API_KEY=\"YOUR KEY\" in it. Receive chia explorer key: https://www.chiaexplorer.com/pro/login", ex)
+                throw new InvalidUserDataException("You should define CHIA_EXPLORER_API_KEY and CHIA_CONVERSIONS_API_KEY in local.properties. Put CHIA_EXPLORER_API_KEY=\"YOUR KEY\" in it. Receive chia explorer key: https://www.chiaexplorer.com/pro/login", ex)
             }
         }
 
@@ -58,9 +59,10 @@ android {
             versionNameSuffix '-DEBUG'
             try {
                 buildConfigField "String", "CHIA_EXPLORER_API_KEY",  properties.getProperty('CHIA_EXPLORER_API_KEY')
+                buildConfigField "String", "CHIA_CONVERSIONS_API_KEY", properties.getProperty('CHIA_CONVERSIONS_API_KEY')
             }
             catch (ex) {
-                throw new InvalidUserDataException("You should define CHIA_EXPLORER_API_KEY in local.properties. Put CHIA_EXPLORER_API_KEY=\"YOUR KEY\" in it. Receive chia explorer key: https://www.chiaexplorer.com/pro/login", ex)
+                throw new InvalidUserDataException("You should define CHIA_EXPLORER_API_KEY and CHIA_CONVERSIONS_API_KEY in local.properties. Put CHIA_EXPLORER_API_KEY=\"YOUR KEY\" in it. Receive chia explorer key: https://www.chiaexplorer.com/pro/login", ex)
             }
         }
     }
@@ -77,10 +79,10 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def room_version = "2.3.0"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
 
@@ -107,10 +109,10 @@ dependencies {
 
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test:rules:1.3.0'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
+    androidTestImplementation 'androidx.test:rules:1.4.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
 }
