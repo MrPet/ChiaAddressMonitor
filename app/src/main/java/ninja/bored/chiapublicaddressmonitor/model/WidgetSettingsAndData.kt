@@ -22,6 +22,7 @@ interface WidgetSettingsAndDataDao {
         """
         SELECT  wd.chiaAddress, 
                 wd.chia_amount, 
+                wd.chia_gross_amount,
                 wd.update_date,
                 ws.chia_address, 
                 ws.widgetID, 
@@ -29,7 +30,8 @@ interface WidgetSettingsAndDataDao {
                 ase.show_notification AS ase_show_notification, 
                 ase.chia_address_synonym AS ase_chia_address_synonym, 
                 ase.chiaAddress AS ase_chiaAddress,
-                ase.conversion_currency AS ase_conversion_currency
+                ase.conversion_currency AS ase_conversion_currency,
+                ase.use_gross_balance AS ase_use_gross_balance
         FROM widget_data AS wd 
         LEFT JOIN widget_settings AS ws 
         ON ws.chia_address = wd.chiaAddress 

@@ -69,7 +69,8 @@ class AddressDetailsFragment : Fragment() {
                             false,
                             null,
                             Constants.defaultUpdateTime,
-                            Constants.CurrencyCode.XCH // 0 default ... xch
+                            Constants.CurrencyCode.XCH, // 0 default ... xch
+                            false
                         )
                         chiaAddressSettingsDao.insertUpdate(chiaAddressSettings)
                     }
@@ -92,6 +93,10 @@ class AddressDetailsFragment : Fragment() {
         val notificationCheckbox =
             rootView.findViewById<SwitchCompat>(R.id.address_has_notification)
         notificationCheckbox.isChecked = chiaAddressSettings.showNotification
+
+        val grossBalanceCheckbox =
+            rootView.findViewById<SwitchCompat>(R.id.use_gross_balance)
+        grossBalanceCheckbox.isChecked = chiaAddressSettings.useGrossBalance
 
         val addressSynonym =
             rootView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
@@ -118,6 +123,8 @@ class AddressDetailsFragment : Fragment() {
             }
         }
 
+
+
         val chiaConversionSpinner: Spinner = rootView.findViewById(R.id.chia_convertion_spinner)
         // Create an ArrayAdapter using the string array and a default spinner layout
         val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.keys.toTypedArray();
@@ -137,6 +144,10 @@ class AddressDetailsFragment : Fragment() {
             database?.let { db ->
                 val notificationCheckbox =
                     parentView.findViewById<SwitchCompat>(R.id.address_has_notification)
+
+                val useGrossBalanceCheckbox =
+                    parentView.findViewById<SwitchCompat>(R.id.use_gross_balance)
+
                 val addressSynonym =
                     parentView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
 
@@ -152,7 +163,8 @@ class AddressDetailsFragment : Fragment() {
                     notificationCheckbox.isChecked,
                     addressSynonymString,
                     Constants.defaultUpdateTime,
-                    chiaConversionCurrencyString
+                    chiaConversionCurrencyString,
+                    useGrossBalanceCheckbox.isChecked
                 )
                 val chiaAddressSettingsDao = db.getAddressSettingsDao()
                 this.lifecycleScope.launch {

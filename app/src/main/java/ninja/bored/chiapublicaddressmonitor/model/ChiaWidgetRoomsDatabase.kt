@@ -27,11 +27,12 @@ object DbVersion {
     const val VERSION_4 = 4
     const val VERSION_5 = 5
     const val VERSION_6 = 6
+    const val VERSION_7 = 7
 }
 
 @Database(
     entities = [WidgetSettings::class, WidgetData::class, AddressSettings::class, ChiaLatestConversion::class],
-    version = DbVersion.VERSION_6
+    version = DbVersion.VERSION_7
 )
 @TypeConverters(WidgetDatabaseConverter::class)
 abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
@@ -104,6 +105,25 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                         """)
                             }
                         }
+                    val MIGRATION_6_7 =
+                        object : Migration(DbVersion.VERSION_6, DbVersion.VERSION_7) {
+                            override fun migrate(database: SupportSQLiteDatabase) {
+                                database.execSQL(
+                                    """
+                                          ALTER TABLE
+                                            `widget_data`
+                                            ADD COLUMN `chia_gross_amount` REAL DEFAULT 0
+                                        """
+                                )
+                                database.execSQL(
+                                    """
+                                         ALTER TABLE
+                                            `address_settings`
+                                            ADD COLUMN `use_gross_balance` INTEGER DEFAULT 0
+                                        """
+                                )
+                            }
+                        }
 
                     instance = Room.databaseBuilder(
                         context,
@@ -112,6 +132,7 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                         .addMigrations(MIGRATION_3_4)
                         .addMigrations(MIGRATION_4_5)
                         .addMigrations(MIGRATION_5_6)
+                        .addMigrations(MIGRATION_6_7)
                         .build()
                 }
                 return instance

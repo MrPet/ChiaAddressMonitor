@@ -104,13 +104,18 @@ object Slh {
         date: Date
     ): WidgetData {
         val dividedNetBalance = when (chiaExplorerAddressResponse.netBalance) {
-            0.0 -> 0.0
+            0.0 -> chiaExplorerAddressResponse.netBalance
             else -> chiaExplorerAddressResponse.netBalance.div(Constants.NET_BALANCE_DIVIDER)
+        }
+        val dividedGrossBalance = when (chiaExplorerAddressResponse.grossBalance) {
+            0.0 -> chiaExplorerAddressResponse.grossBalance
+            else -> chiaExplorerAddressResponse.grossBalance.div(Constants.NET_BALANCE_DIVIDER)
         }
         return WidgetData(
             address,
             dividedNetBalance,
-            date
+            date,
+            dividedGrossBalance
         )
     }
 
@@ -139,6 +144,15 @@ object Slh {
                 }
             }
 
+            val chiaAmount = when(addressSettings?.useGrossBalance){
+                true -> {
+                    currentWidgetData.chiaGrossAmount
+                }
+                else -> {
+                    currentWidgetData.chiaAmount
+                }
+            }
+
             var currencyMultiplier = Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.hardcodedMultiplier
             // get currency info
             if( currencyMultiplier == null ) {
@@ -156,7 +170,7 @@ object Slh {
             val amountText = context.resources?.getString(
                 R.string.chia_amount_placeholder,
                 formatChiaDecimal(
-                    (currentWidgetData.chiaAmount * currencyMultiplier),
+                    (chiaAmount * currencyMultiplier),
                     Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.precision
                 )
             )

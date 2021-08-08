@@ -60,10 +60,15 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
         val localDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
         val context = chiaAddressTextView?.context
         if (widgetSettingsAndData.widgetData?.updateDate != null) {
+            val chiaAmount = when (widgetSettingsAndData.addressSettings?.useGrossBalance)
+            {
+                true -> widgetSettingsAndData.widgetData.chiaGrossAmount
+                else -> widgetSettingsAndData.widgetData.chiaAmount
+            }
             itemAmountAndDateTextView?.text = context?.getString(
                 R.string.recycler_item_amount_and_date,
                 Slh.formatChiaDecimal(
-                    widgetSettingsAndData.widgetData.chiaAmount,
+                    chiaAmount,
                     Constants.Precision.TOTAL
                 ),
                 localDateFormat.format(widgetSettingsAndData.widgetData.updateDate)

@@ -54,6 +54,7 @@
     <string name="copyAddressDescription">copy chia address to clipboard</string>
     <string name="copyAddressSuccessful">Address successfully copied to clipboard</string>
     <string name="copyAddressError">Error while copying address to clipboard</string>
+    <string name="use_gross_balance_desciption">Show address in gross balance. This will ignore all outgoing transactions. Intended for minders who would like to see how much they mined in total.</string>
 
 
 </resources>
