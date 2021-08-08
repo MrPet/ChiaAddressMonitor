@@ -29,7 +29,7 @@ interface WidgetSettingsAndDataDao {
                 ase.show_notification AS ase_show_notification, 
                 ase.chia_address_synonym AS ase_chia_address_synonym, 
                 ase.chiaAddress AS ase_chiaAddress,
-                ase.precision AS ase_precision
+                ase.conversion_currency AS ase_conversion_currency
         FROM widget_data AS wd 
         LEFT JOIN widget_settings AS ws 
         ON ws.chia_address = wd.chiaAddress 

@@ -64,7 +64,7 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
                 R.string.recycler_item_amount_and_date,
                 Slh.formatChiaDecimal(
                     widgetSettingsAndData.widgetData.chiaAmount,
-                    Slh.Precision.TOTAL
+                    Constants.Precision.TOTAL
                 ),
                 localDateFormat.format(widgetSettingsAndData.widgetData.updateDate)
             )

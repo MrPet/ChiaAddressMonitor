@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "7552c51a5a2bf43d4bf23bf021bee13c",
+    "identityHash": "c3fdfb318a848d66b526b2acfe759fbb",
     "entities": [
       {
         "tableName": "widget_settings",
@@ -64,7 +64,7 @@
       },
       {
         "tableName": "address_settings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chiaAddress` TEXT NOT NULL, `show_notification` INTEGER NOT NULL, `chia_address_synonym` TEXT, `update_time` INTEGER NOT NULL, `precision` TEXT, `conversion_currency` TEXT, PRIMARY KEY(`chiaAddress`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chiaAddress` TEXT NOT NULL, `show_notification` INTEGER NOT NULL, `chia_address_synonym` TEXT, `update_time` INTEGER NOT NULL, `conversion_currency` TEXT, PRIMARY KEY(`chiaAddress`))",
         "fields": [
           {
             "fieldPath": "chiaAddress",
@@ -89,12 +89,6 @@
             "columnName": "update_time",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "precision",
-            "columnName": "precision",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "conversionCurrency",
@@ -154,7 +148,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7552c51a5a2bf43d4bf23bf021bee13c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c3fdfb318a848d66b526b2acfe759fbb')"
     ]
   }
 }

@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChiaPublicAddressMonitor">
         <activity
+            android:exported="true"
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleInstance"
@@ -24,17 +25,22 @@
         </activity>
 
 
-        <activity android:name="ChiaPublicAddressWidgetConfig">
+        <activity
+            android:exported="true"
+            android:name="ChiaPublicAddressWidgetConfig">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
         <activity
+            android:exported="true"
             android:name="com.mikepenz.aboutlibraries.ui.LibsActivity"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
 
-        <receiver android:name=".ChiaPublicAddressWidgetReceiver">
+        <receiver
+            android:exported="true"
+            android:name=".ChiaPublicAddressWidgetReceiver">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

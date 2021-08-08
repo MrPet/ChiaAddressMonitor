@@ -94,10 +94,14 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                 database.execSQL(
                                     """
                                           ALTER TABLE
-                                        `conversion_currency`
-                                        ADD COLUMN precision TEXT
+                                            `address_settings`
+                                            RENAME COLUMN precision TO conversion_currency
                                         """
                                 )
+                                database.execSQL(
+                                    """
+                                            UPDATE `address_settings` SET `conversion_currency` = 'XCH' WHERE `conversion_currency` != 'MOJO'
+                                        """)
                             }
                         }
 

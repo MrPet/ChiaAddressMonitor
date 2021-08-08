@@ -1,6 +1,7 @@
 package ninja.bored.chiapublicaddressmonitor.helpers
 
 import ninja.bored.chiapublicaddressmonitor.BuildConfig
+import ninja.bored.chiapublicaddressmonitor.model.CurrencyConversionInfo
 
 object Constants {
     const val TIME_THRESHOLD_FOR_FIAT_CONVERSION: Int = 15
@@ -24,5 +25,23 @@ object Constants {
     const val CHIA_CONVERSIONS_BASE_API_URL: String = "https://cmccache.bored.ninja/price"
     const val CHIA_CONVERSIONS_API_KEY_HEADER_NAME: String = "api-key"
     const val CHIA_CONVERSIONS_API_KEY: String = BuildConfig.CHIA_CONVERSIONS_API_KEY
-    val CHIA_CURRENCY_CONVERSIONS: Array<String> = arrayOf("XCH", "EUR", "USD")
+    object Precision {
+        const val TOTAL = "TOTAL"
+        const val MOJO = "MOJO"
+        const val NORMAL = "NORMAL"
+        const val FIAT = "FIAT"
+    }
+    object CurrencyCode {
+        const val XCH = "XCH"
+        const val USD = "USD"
+        const val EUR = "EUR"
+        const val MOJO = "MOJO"
+    }
+
+    val CHIA_CURRENCY_CONVERSIONS: Map<String, CurrencyConversionInfo> = mapOf(
+                    CurrencyCode.XCH to CurrencyConversionInfo( CurrencyCode.XCH, Precision.NORMAL, 1.0),
+                    CurrencyCode.MOJO to CurrencyConversionInfo(CurrencyCode.MOJO, Precision.MOJO, NET_BALANCE_DIVIDER),
+                    CurrencyCode.EUR to CurrencyConversionInfo(CurrencyCode.EUR, Precision.FIAT, null),
+                    CurrencyCode.USD to CurrencyConversionInfo(CurrencyCode.USD, Precision.FIAT, null)
+                )
 }

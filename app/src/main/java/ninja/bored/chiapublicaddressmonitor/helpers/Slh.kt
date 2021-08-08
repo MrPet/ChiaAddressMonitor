@@ -19,29 +19,15 @@ import ninja.bored.chiapublicaddressmonitor.MainActivity
 import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants.CHIA_ADDRESS_LENGTH
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants.CHIA_ADDRESS_PREFIX
-import ninja.bored.chiapublicaddressmonitor.model.ChiaConversionResponse
-import ninja.bored.chiapublicaddressmonitor.model.ChiaExplorerAddressResponse
-import ninja.bored.chiapublicaddressmonitor.model.ChiaLatestConversion
-import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
-import ninja.bored.chiapublicaddressmonitor.model.WidgetData
-import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import ninja.bored.chiapublicaddressmonitor.model.*
+import okhttp3.*
 import java.io.IOException
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 object Slh {
     private const val TAG = "Slh"
 
-    object Precision {
-        const val TOTAL = "TOTAL"
-        const val MOJO = "MOJO"
-        const val NORMAL = "Normal"
-    }
+
 
     /**
      * validate chia address
@@ -146,50 +132,52 @@ object Slh {
 
             val currencyCode = when (addressSettings?.conversionCurrency) {
                 null -> {
-                    Constants.CHIA_CURRENCY_CONVERSIONS[0]
+                    Constants.CurrencyCode.XCH
                 }
                 else -> {
                     addressSettings.conversionCurrency
                 }
             }
 
+            var currencyMultiplier = Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.hardcodedMultiplier
             // get currency info
-            val chiaLatestConversion = getLatestChiaConversion(currencyCode, database)
-            val currencyMultiplier: Double = when(chiaLatestConversion?.price){
-                null -> {
-                    1.0
-                }
-                else -> {
-                    chiaLatestConversion.price
+            if( currencyMultiplier == null ) {
+                val chiaLatestConversion = getLatestChiaConversion(currencyCode, database)
+                currencyMultiplier = when (chiaLatestConversion?.price) {
+                    null -> {
+                        1.0
+                    }
+                    else -> {
+                        chiaLatestConversion.price
+                    }
                 }
             }
 
             val amountText = context.resources?.getString(
                 R.string.chia_amount_placeholder,
-                formatChiaDecimal( (currentWidgetData.chiaAmount * currencyMultiplier), addressSettings?.precision)
+                formatChiaDecimal(
+                    (currentWidgetData.chiaAmount * currencyMultiplier),
+                    Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.precision
+                )
             )
 
             val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
                 .let { intent ->
                     PendingIntent.getActivity(context, 0, intent, 0)
                 }
+
             allViews.setOnClickPendingIntent(R.id.widgetRootLayout, pendingIntent)
             allViews.setTextViewText(
                 R.id.chia_amount_holder,
                 amountText
             )
 
-            if (addressSettings?.precision == Precision.MOJO) {
-                allViews.setTextViewText(
-                    R.id.chia_amount_title_holder,
-                    context.getText(R.string.mojo_amount)
-                )
-            } else {
-                allViews.setTextViewText(
-                    R.id.chia_amount_title_holder,
-                    currencyCode
-                )
-            }
+
+            allViews.setTextViewText(
+                R.id.chia_amount_title_holder,
+                currencyCode
+            )
+
             val sdf = SimpleDateFormat(
                 Constants.SHORT_DATE_TIME_FORMAT,
                 Locale.getDefault()
@@ -243,16 +231,18 @@ object Slh {
     fun formatChiaDecimal(chiaAmount: Double, precision: String?): String? {
         val decimalFormat: DecimalFormat
         var amount = chiaAmount
-        if (precision == Precision.MOJO) {
+        if (precision == Constants.Precision.MOJO) {
             decimalFormat = DecimalFormat("#,##0")
-            amount = chiaAmount * Constants.NET_BALANCE_DIVIDER
-        } else if (precision == Precision.TOTAL) {
+        } else if (precision == Constants.Precision.TOTAL) {
             decimalFormat =
                 DecimalFormat("#,##0.00############", DecimalFormatSymbols(Locale.getDefault()))
             //         if (chiaAmount > 10000) {
             //             decimalFormat = DecimalFormat("#,##0.##")
             //         }
             return decimalFormat.format(chiaAmount)
+        } else if (precision == Constants.Precision.FIAT) {
+            decimalFormat =
+                DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.getDefault()))
         } else { // "normal is default
             if (chiaAmount > Constants.BIG_AMOUNT_THRESHOLD) {
                 decimalFormat = DecimalFormat("#,##0.##")
