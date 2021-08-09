@@ -87,8 +87,8 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                          (
                                             `priceCurrency` CHARACTER(10) NOT NULL,
                                             `price` REAL NOT NULL,
-                                            `update_date` DATETIME  NOT NULL,
-                                            `device_import_date` DATETIME  NOT NULL,
+                                            `update_date` INTEGER  NOT NULL,
+                                            `device_import_date` INTEGER  NOT NULL,
                                          PRIMARY KEY (`priceCurrency`))
                                         """
                                 )
@@ -96,12 +96,16 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                     """
                                           ALTER TABLE
                                             `address_settings`
-                                            RENAME COLUMN precision TO conversion_currency
+                                            RENAME COLUMN `precision` TO `conversion_currency`
                                         """
                                 )
                                 database.execSQL(
                                     """
-                                            UPDATE `address_settings` SET `conversion_currency` = 'XCH' WHERE `conversion_currency` != 'MOJO'
+                                            UPDATE `address_settings` 
+                                            SET 
+                                                `conversion_currency` = 'XCH' 
+                                            WHERE 
+                                                `conversion_currency` != 'MOJO'
                                         """)
                             }
                         }
@@ -112,14 +116,14 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                     """
                                           ALTER TABLE
                                             `widget_data`
-                                            ADD COLUMN `chia_gross_amount` REAL DEFAULT 0
+                                            ADD COLUMN `chia_gross_amount` REAL NOT NULL
                                         """
                                 )
                                 database.execSQL(
                                     """
                                          ALTER TABLE
                                             `address_settings`
-                                            ADD COLUMN `use_gross_balance` INTEGER DEFAULT 0
+                                            ADD COLUMN `use_gross_balance` INTEGER NOT NULL
                                         """
                                 )
                             }
@@ -129,10 +133,8 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                         context,
                         ChiaWidgetRoomsDatabase::class.java, "chia-address-widget-db"
                     )
-                        .addMigrations(MIGRATION_3_4)
-                        .addMigrations(MIGRATION_4_5)
-                        .addMigrations(MIGRATION_5_6)
-                        .addMigrations(MIGRATION_6_7)
+                        .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
+//                        .fallbackToDestructiveMigration()
                         .build()
                 }
                 return instance
