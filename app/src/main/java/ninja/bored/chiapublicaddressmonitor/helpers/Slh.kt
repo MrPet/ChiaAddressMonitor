@@ -13,21 +13,29 @@ import android.widget.RemoteViews
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
+import java.io.IOException
+import java.util.Date
+import java.util.Locale
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ninja.bored.chiapublicaddressmonitor.MainActivity
 import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants.CHIA_ADDRESS_LENGTH
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants.CHIA_ADDRESS_PREFIX
-import ninja.bored.chiapublicaddressmonitor.model.*
-import okhttp3.*
-import java.io.IOException
-import java.util.*
+import ninja.bored.chiapublicaddressmonitor.model.ChiaConversionResponse
+import ninja.bored.chiapublicaddressmonitor.model.ChiaExplorerAddressResponse
+import ninja.bored.chiapublicaddressmonitor.model.ChiaLatestConversion
+import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
+import ninja.bored.chiapublicaddressmonitor.model.WidgetData
+import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 
 object Slh {
     private const val TAG = "Slh"
-
-
 
     /**
      * validate chia address
@@ -134,36 +142,24 @@ object Slh {
             val addressSettingsDao = database.getAddressSettingsDao()
             val addressSettings = addressSettingsDao.getByAddress(currentWidgetData.chiaAddress)
 
-
             val currencyCode = when (addressSettings?.conversionCurrency) {
-                null -> {
-                    Constants.CurrencyCode.XCH
-                }
-                else -> {
-                    addressSettings.conversionCurrency
-                }
+                null -> Constants.CurrencyCode.XCH
+                else -> addressSettings.conversionCurrency
             }
 
-            val chiaAmount = when(addressSettings?.useGrossBalance){
-                true -> {
-                    currentWidgetData.chiaGrossAmount
-                }
-                else -> {
-                    currentWidgetData.chiaAmount
-                }
+            val chiaAmount = when (addressSettings?.useGrossBalance) {
+                true -> currentWidgetData.chiaGrossAmount
+                else -> currentWidgetData.chiaAmount
             }
 
-            var currencyMultiplier = Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.hardcodedMultiplier
+            var currencyMultiplier =
+                Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.hardcodedMultiplier
             // get currency info
-            if( currencyMultiplier == null ) {
+            if (currencyMultiplier == null) {
                 val chiaLatestConversion = getLatestChiaConversion(currencyCode, database)
                 currencyMultiplier = when (chiaLatestConversion?.price) {
-                    null -> {
-                        1.0
-                    }
-                    else -> {
-                        chiaLatestConversion.price
-                    }
+                    null -> 1.0
+                    else -> chiaLatestConversion.price
                 }
             }
 
@@ -181,21 +177,11 @@ object Slh {
                 }
 
             allViews.setOnClickPendingIntent(R.id.widgetRootLayout, pendingIntent)
-            allViews.setTextViewText(
-                R.id.chia_amount_holder,
-                amountText
-            )
+            allViews.setTextViewText(R.id.chia_amount_holder, amountText)
 
+            allViews.setTextViewText(R.id.chia_amount_title_holder, currencyCode)
 
-            allViews.setTextViewText(
-                R.id.chia_amount_title_holder,
-                currencyCode
-            )
-
-            val sdf = SimpleDateFormat(
-                Constants.SHORT_DATE_TIME_FORMAT,
-                Locale.getDefault()
-            )
+            val sdf = SimpleDateFormat(Constants.SHORT_DATE_TIME_FORMAT, Locale.getDefault())
 
             val currentDate = sdf.format(currentWidgetData.updateDate)
             allViews.setTextViewText(
@@ -243,71 +229,61 @@ object Slh {
     }
 
     fun formatChiaDecimal(chiaAmount: Double, precision: String?): String? {
-        val decimalFormat: DecimalFormat
-        var amount = chiaAmount
-        if (precision == Constants.Precision.MOJO) {
-            decimalFormat = DecimalFormat("#,##0")
-        } else if (precision == Constants.Precision.TOTAL) {
-            decimalFormat =
-                DecimalFormat("#,##0.00############", DecimalFormatSymbols(Locale.getDefault()))
-            //         if (chiaAmount > 10000) {
-            //             decimalFormat = DecimalFormat("#,##0.##")
-            //         }
-            return decimalFormat.format(chiaAmount)
-        } else if (precision == Constants.Precision.FIAT) {
-            decimalFormat =
-                DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.getDefault()))
-        } else { // "normal is default
-            if (chiaAmount > Constants.BIG_AMOUNT_THRESHOLD) {
-                decimalFormat = DecimalFormat("#,##0.##")
-            } else {
-                decimalFormat =
-                    DecimalFormat("#,##0.00####", DecimalFormatSymbols(Locale.getDefault()))
+        val decimalFormat: DecimalFormat =
+            when {
+                (precision == Constants.Precision.MOJO) ->
+                    DecimalFormat("#,##0")
+
+                (precision == Constants.Precision.TOTAL) ->
+                    DecimalFormat("#,##0.00############", DecimalFormatSymbols(Locale.getDefault()))
+
+                (precision == Constants.Precision.FIAT) ->
+                    DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.getDefault()))
+
+                else -> when {
+                    (chiaAmount > Constants.BIG_AMOUNT_THRESHOLD) -> DecimalFormat("#,##0.##")
+
+                    else -> DecimalFormat("#,##0.00####", DecimalFormatSymbols(Locale.getDefault()))
+                }
             }
-        }
-        return decimalFormat.format(amount)
+        return decimalFormat.format(chiaAmount)
     }
 
     /**
      * checks in db if price is over threshold if so we get newer prices from api, save them
      * and then return newest price
      */
-    suspend fun getLatestChiaConversion(
+    private suspend fun getLatestChiaConversion(
         conversionCurrency: String,
         database: ChiaWidgetRoomsDatabase
     ): ChiaLatestConversion? {
-        val latestCurrencyFromDb = database.getChiaLatestConversionDaoDao().getLatestForCurrency(conversionCurrency)
+        var returnChiaConversion: ChiaLatestConversion? =
+            database.getChiaLatestConversionDaoDao().getLatestForCurrency(conversionCurrency)
 
         val calendar: Calendar = Calendar.getInstance()
         calendar.add(Calendar.MINUTE, Constants.TIME_THRESHOLD_FOR_FIAT_CONVERSION)
-        if( latestCurrencyFromDb != null && latestCurrencyFromDb.deviceImportDate.after( Date(calendar.timeInMillis) ) ) // still in threshold we return db
-        {
-            return latestCurrencyFromDb
-        }
-        else
+        if (returnChiaConversion == null ||
+            returnChiaConversion.deviceImportDate.before(Date(calendar.timeInMillis))
+        ) // still in threshold we return db
         {
             // we need to get from api
             val currencyFromApi = receiveChiaConversionFromApi()
-            currencyFromApi?.let{
-                var returnChiaConversion: ChiaLatestConversion?  = null
-                currencyFromApi.data.forEach{
-                    val chiaConverssionResponseData = it.value
-                    val newChiaConversion = ChiaLatestConversion(chiaConverssionResponseData.priceCurrency, chiaConverssionResponseData.price, chiaConverssionResponseData.updateDateTime, Date())
-                    database.getChiaLatestConversionDaoDao().insertUpdate(newChiaConversion)
-                    if( chiaConverssionResponseData.priceCurrency.endsWith(conversionCurrency) ) {
-                        returnChiaConversion = newChiaConversion
-                    }
+             currencyFromApi?.data?.forEach {
+                val chiaConversionResponseData = it.value
+                val newChiaConversion = ChiaLatestConversion(chiaConversionResponseData)
+                database.getChiaLatestConversionDaoDao().insertUpdate(newChiaConversion)
+                if (chiaConversionResponseData.priceCurrency == conversionCurrency) {
+                    returnChiaConversion = newChiaConversion
                 }
-                return returnChiaConversion
             }
         }
-        return null
+        return returnChiaConversion
     }
 
     /**
      * gets Conversion Data from conversion cache
      */
-    suspend fun receiveChiaConversionFromApi(): ChiaConversionResponse? =
+    private suspend fun receiveChiaConversionFromApi(): ChiaConversionResponse? =
         suspendCancellableCoroutine { continuation: CancellableContinuation<ChiaConversionResponse?> ->
             val request = Request.Builder()
                 .url(Constants.CHIA_CONVERSIONS_BASE_API_URL)

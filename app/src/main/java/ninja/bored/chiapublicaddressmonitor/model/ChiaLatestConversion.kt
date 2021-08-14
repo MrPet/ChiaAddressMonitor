@@ -16,7 +16,14 @@ data class ChiaLatestConversion(
     @ColumnInfo(name = "price") val price: Double,
     @ColumnInfo(name = "update_date") val updateDate: Date,
     @ColumnInfo(name = "device_import_date") val deviceImportDate: Date
-)
+) {
+    constructor(chiaConversionResponseData: ChiaConversionResponseData) : this(
+        chiaConversionResponseData.priceCurrency,
+        chiaConversionResponseData.price,
+        chiaConversionResponseData.updateDateTime,
+        Date()
+    )
+}
 
 @Dao
 interface ChiaLatestConversionDao {

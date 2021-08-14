@@ -10,7 +10,7 @@ static def generateVersionCode() {
     if(result.empty) result = "PowerShell -Command git rev-list --count HEAD".execute().text.trim() //windows
     println "Result of git rev-list: ${result}"
     if(result.empty) throw new RuntimeException("Could not generate versioncode on this platform? Cmd output: ${result.text}")
-    return result.toInteger()
+    return result.toInteger() + 3
 }
 
 def majorVersion = 0

@@ -94,18 +94,11 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                 )
                                 database.execSQL(
                                     """
-                                          ALTER TABLE
-                                            `address_settings`
-                                            RENAME COLUMN `precision` TO `conversion_currency`
-                                        """
-                                )
-                                database.execSQL(
-                                    """
                                             UPDATE `address_settings` 
                                             SET 
-                                                `conversion_currency` = 'XCH' 
+                                                `precision` = 'XCH' 
                                             WHERE 
-                                                `conversion_currency` != 'MOJO'
+                                                `precision` != 'MOJO'
                                         """)
                             }
                         }
@@ -116,14 +109,14 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                     """
                                           ALTER TABLE
                                             `widget_data`
-                                            ADD COLUMN `chia_gross_amount` REAL NOT NULL
+                                            ADD COLUMN `chia_gross_amount` REAL NOT NULL DEFAULT 0 
                                         """
                                 )
                                 database.execSQL(
                                     """
                                          ALTER TABLE
                                             `address_settings`
-                                            ADD COLUMN `use_gross_balance` INTEGER NOT NULL
+                                            ADD COLUMN `use_gross_balance` INTEGER NOT NULL DEFAULT 0
                                         """
                                 )
                             }
