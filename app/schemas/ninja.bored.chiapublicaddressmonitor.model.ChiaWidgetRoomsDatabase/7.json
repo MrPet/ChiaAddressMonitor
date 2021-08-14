@@ -1,0 +1,154 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 7,
+    "identityHash": "c3fdfb318a848d66b526b2acfe759fbb",
+    "entities": [
+      {
+        "tableName": "widget_settings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`widgetID` INTEGER NOT NULL, `chia_address` TEXT NOT NULL, PRIMARY KEY(`widgetID`))",
+        "fields": [
+          {
+            "fieldPath": "widgetID",
+            "columnName": "widgetID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chiaAddress",
+            "columnName": "chia_address",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "widgetID"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "widget_data",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chiaAddress` TEXT NOT NULL, `chia_amount` REAL NOT NULL, `update_date` INTEGER NOT NULL, PRIMARY KEY(`chiaAddress`))",
+        "fields": [
+          {
+            "fieldPath": "chiaAddress",
+            "columnName": "chiaAddress",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chiaAmount",
+            "columnName": "chia_amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateDate",
+            "columnName": "update_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "chiaAddress"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "address_settings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chiaAddress` TEXT NOT NULL, `show_notification` INTEGER NOT NULL, `chia_address_synonym` TEXT, `update_time` INTEGER NOT NULL, `conversion_currency` TEXT, PRIMARY KEY(`chiaAddress`))",
+        "fields": [
+          {
+            "fieldPath": "chiaAddress",
+            "columnName": "chiaAddress",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showNotification",
+            "columnName": "show_notification",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chiaAddressSynonym",
+            "columnName": "chia_address_synonym",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "updateTime",
+            "columnName": "update_time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "conversionCurrency",
+            "columnName": "conversion_currency",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "chiaAddress"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "chia_latest_conversion",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`priceCurrency` TEXT NOT NULL, `price` REAL NOT NULL, `update_date` INTEGER NOT NULL, `device_import_date` INTEGER NOT NULL, PRIMARY KEY(`priceCurrency`))",
+        "fields": [
+          {
+            "fieldPath": "priceCurrency",
+            "columnName": "priceCurrency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateDate",
+            "columnName": "update_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceImportDate",
+            "columnName": "device_import_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "priceCurrency"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c3fdfb318a848d66b526b2acfe759fbb')"
+    ]
+  }
+}

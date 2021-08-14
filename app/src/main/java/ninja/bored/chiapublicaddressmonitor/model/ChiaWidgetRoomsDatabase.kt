@@ -27,11 +27,19 @@ object DbVersion {
     const val VERSION_4 = 4
     const val VERSION_5 = 5
     const val VERSION_6 = 6
+    const val VERSION_7 = 7
+    const val VERSION_8 = 8
 }
 
 @Database(
-    entities = [WidgetSettings::class, WidgetData::class, AddressSettings::class, ChiaLatestConversion::class],
-    version = DbVersion.VERSION_6
+    entities = [
+        WidgetSettings::class,
+        WidgetData::class,
+        AddressSettings::class,
+        WidgetFiatConversionSettings::class,
+        ChiaLatestConversion::class
+    ],
+    version = DbVersion.VERSION_8
 )
 @TypeConverters(WidgetDatabaseConverter::class)
 abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
@@ -39,7 +47,8 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
     abstract fun getWidgetDataDao(): WidgetDataDao
     abstract fun getWidgetSettingsAndDataDao(): WidgetSettingsAndDataDao
     abstract fun getAddressSettingsDao(): AddressSettingsDao
-    abstract fun getChiaLatestConversionDaoDao(): ChiaLatestConversionDao
+    abstract fun getChiaLatestConversionDao(): ChiaLatestConversionDao
+    abstract fun getWidgetFiatConversionSettingsDao(): WidgetFiatConversionSettingsDao
 
     companion object {
         @Volatile
@@ -100,8 +109,26 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                 )
                                 database.execSQL(
                                     """
-                                            UPDATE `address_settings` SET `conversion_currency` = 'XCH' WHERE `conversion_currency` != 'MOJO'
-                                        """)
+                                            UPDATE `address_settings` 
+                                            SET `conversion_currency` = 'XCH' 
+                                            WHERE `conversion_currency` != 'MOJO'
+                                        """
+                                )
+                            }
+                        }
+                    val MIGRATION_7_8 =
+                        object : Migration(DbVersion.VERSION_7, DbVersion.VERSION_8) {
+                            override fun migrate(database: SupportSQLiteDatabase) {
+                                database.execSQL(
+                                    """
+                                        CREATE TABLE IF NOT EXISTS
+                                        `widget_fiat_conversion_settings`
+                                         (
+                                            `widgetID` INTEGER NOT NULL,
+                                            `conversion_currency` TEXT NOT NULL,
+                                         PRIMARY KEY (`widgetID`))
+                                        """
+                                )
                             }
                         }
 
@@ -109,9 +136,7 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                         context,
                         ChiaWidgetRoomsDatabase::class.java, "chia-address-widget-db"
                     )
-                        .addMigrations(MIGRATION_3_4)
-                        .addMigrations(MIGRATION_4_5)
-                        .addMigrations(MIGRATION_5_6)
+                        .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_7_8)
                         .build()
                 }
                 return instance

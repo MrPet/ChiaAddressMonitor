@@ -13,21 +13,30 @@ import android.widget.RemoteViews
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
+import java.io.IOException
+import java.util.Date
+import java.util.Locale
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ninja.bored.chiapublicaddressmonitor.MainActivity
 import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants.CHIA_ADDRESS_LENGTH
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants.CHIA_ADDRESS_PREFIX
-import ninja.bored.chiapublicaddressmonitor.model.*
-import okhttp3.*
-import java.io.IOException
-import java.util.*
+import ninja.bored.chiapublicaddressmonitor.model.ChiaConversionResponse
+import ninja.bored.chiapublicaddressmonitor.model.ChiaExplorerAddressResponse
+import ninja.bored.chiapublicaddressmonitor.model.ChiaLatestConversion
+import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
+import ninja.bored.chiapublicaddressmonitor.model.WidgetData
+import ninja.bored.chiapublicaddressmonitor.model.WidgetFiatConversionSettings
+import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 
 object Slh {
     private const val TAG = "Slh"
-
-
 
     /**
      * validate chia address
@@ -128,8 +137,6 @@ object Slh {
             val database = ChiaWidgetRoomsDatabase.getInstance(context)
             val addressSettingsDao = database.getAddressSettingsDao()
             val addressSettings = addressSettingsDao.getByAddress(currentWidgetData.chiaAddress)
-
-
             val currencyCode = when (addressSettings?.conversionCurrency) {
                 null -> {
                     Constants.CurrencyCode.XCH
@@ -141,7 +148,7 @@ object Slh {
 
             var currencyMultiplier = Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.hardcodedMultiplier
             // get currency info
-            if( currencyMultiplier == null ) {
+            if (currencyMultiplier == null) {
                 val chiaLatestConversion = getLatestChiaConversion(currencyCode, database)
                 currencyMultiplier = when (chiaLatestConversion?.price) {
                     null -> {
@@ -153,13 +160,10 @@ object Slh {
                 }
             }
 
-            val amountText = context.resources?.getString(
-                R.string.chia_amount_placeholder,
-                formatChiaDecimal(
+            val amountText = formatChiaDecimal(
                     (currentWidgetData.chiaAmount * currencyMultiplier),
                     Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.precision
                 )
-            )
 
             val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
                 .let { intent ->
@@ -171,7 +175,6 @@ object Slh {
                 R.id.chia_amount_holder,
                 amountText
             )
-
 
             allViews.setTextViewText(
                 R.id.chia_amount_title_holder,
@@ -192,6 +195,61 @@ object Slh {
                 )
             )
             appWidgetManager?.updateAppWidget(appWidgetId, allViews)
+        }
+    }
+
+    /**
+     * Update widget data in Widget
+     */
+    suspend fun updateFiatWidgetWithSettings(
+        widgetFiatConversionSettings: WidgetFiatConversionSettings,
+        allViews: RemoteViews,
+        context: Context,
+        appWidgetId: Int?,
+        appWidgetManager: AppWidgetManager?
+    ) {
+        appWidgetId?.let {
+            val database = ChiaWidgetRoomsDatabase.getInstance(context)
+            val chiaLatestConversion = getLatestChiaConversion(
+                widgetFiatConversionSettings.conversionCurrency, database
+            )
+            chiaLatestConversion?.let {
+                val conversionText = Constants.CurrencyCode.XCH + " / " + chiaLatestConversion.priceCurrency
+                val amountText = formatChiaDecimal(
+                    chiaLatestConversion.price,
+                    Constants.CHIA_CURRENCY_CONVERSIONS[chiaLatestConversion.priceCurrency]?.precision
+                )
+                val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
+                    .let { intent ->
+                        PendingIntent.getActivity(context, 0, intent, 0)
+                    }
+
+                allViews.setOnClickPendingIntent(R.id.widgetRootLayout, pendingIntent)
+                allViews.setTextViewText(
+                    R.id.chia_amount_holder,
+                    amountText
+                )
+
+                allViews.setTextViewText(
+                    R.id.chia_amount_title_holder,
+                    conversionText
+                )
+
+                val sdf = SimpleDateFormat(
+                    Constants.SHORT_DATE_TIME_FORMAT,
+                    Locale.getDefault()
+                )
+
+                val currentDate = sdf.format(chiaLatestConversion.deviceImportDate)
+                allViews.setTextViewText(
+                    R.id.chia_last_update_holder,
+                    context.resources?.getString(
+                        R.string.last_refresh_placeholder,
+                        currentDate
+                    )
+                )
+                appWidgetManager?.updateAppWidget(appWidgetId, allViews)
+            }
         }
     }
 
@@ -262,7 +320,7 @@ object Slh {
         conversionCurrency: String,
         database: ChiaWidgetRoomsDatabase
     ): ChiaLatestConversion? {
-        val latestCurrencyFromDb = database.getChiaLatestConversionDaoDao().getLatestForCurrency(conversionCurrency)
+        val latestCurrencyFromDb = database.getChiaLatestConversionDao().getLatestForCurrency(conversionCurrency)
 
         val calendar: Calendar = Calendar.getInstance()
         calendar.add(Calendar.MINUTE, Constants.TIME_THRESHOLD_FOR_FIAT_CONVERSION)
@@ -279,7 +337,7 @@ object Slh {
                 currencyFromApi.data.forEach{
                     val chiaConverssionResponseData = it.value
                     val newChiaConversion = ChiaLatestConversion(chiaConverssionResponseData.priceCurrency, chiaConverssionResponseData.price, chiaConverssionResponseData.updateDateTime, Date())
-                    database.getChiaLatestConversionDaoDao().insertUpdate(newChiaConversion)
+                    database.getChiaLatestConversionDao().insertUpdate(newChiaConversion)
                     if( chiaConverssionResponseData.priceCurrency.endsWith(conversionCurrency) ) {
                         returnChiaConversion = newChiaConversion
                     }
