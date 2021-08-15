@@ -33,6 +33,8 @@ import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import ninja.bored.chiapublicaddressmonitor.model.WidgetFiatConversionSettings
+
 
 object Slh {
     private const val TAG = "Slh"
@@ -163,10 +165,8 @@ object Slh {
                 }
             }
 
-            val amountText = context.resources?.getString(
-                R.string.chia_amount_placeholder,
-                formatChiaDecimal(
-                    (chiaAmount * currencyMultiplier),
+            val amountText = formatChiaDecimal(
+                    (currentWidgetData.chiaAmount * currencyMultiplier),
                     Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.precision
                 )
             )
@@ -192,6 +192,61 @@ object Slh {
                 )
             )
             appWidgetManager?.updateAppWidget(appWidgetId, allViews)
+        }
+    }
+
+    /**
+     * Update widget data in Widget
+     */
+    suspend fun updateFiatWidgetWithSettings(
+        widgetFiatConversionSettings: WidgetFiatConversionSettings,
+        allViews: RemoteViews,
+        context: Context,
+        appWidgetId: Int?,
+        appWidgetManager: AppWidgetManager?
+    ) {
+        appWidgetId?.let {
+            val database = ChiaWidgetRoomsDatabase.getInstance(context)
+            val chiaLatestConversion = getLatestChiaConversion(
+                widgetFiatConversionSettings.conversionCurrency, database
+            )
+            chiaLatestConversion?.let {
+                val conversionText = Constants.CurrencyCode.XCH + " / " + chiaLatestConversion.priceCurrency
+                val amountText = formatChiaDecimal(
+                    chiaLatestConversion.price,
+                    Constants.CHIA_CURRENCY_CONVERSIONS[chiaLatestConversion.priceCurrency]?.precision
+                )
+                val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
+                    .let { intent ->
+                        PendingIntent.getActivity(context, 0, intent, 0)
+                    }
+
+                allViews.setOnClickPendingIntent(R.id.widgetRootLayout, pendingIntent)
+                allViews.setTextViewText(
+                    R.id.chia_amount_holder,
+                    amountText
+                )
+
+                allViews.setTextViewText(
+                    R.id.chia_amount_title_holder,
+                    conversionText
+                )
+
+                val sdf = SimpleDateFormat(
+                    Constants.SHORT_DATE_TIME_FORMAT,
+                    Locale.getDefault()
+                )
+
+                val currentDate = sdf.format(chiaLatestConversion.deviceImportDate)
+                allViews.setTextViewText(
+                    R.id.chia_last_update_holder,
+                    context.resources?.getString(
+                        R.string.last_refresh_placeholder,
+                        currentDate
+                    )
+                )
+                appWidgetManager?.updateAppWidget(appWidgetId, allViews)
+            }
         }
     }
 

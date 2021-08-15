@@ -54,6 +54,8 @@
     <string name="copyAddressDescription">copy chia address to clipboard</string>
     <string name="copyAddressSuccessful">Address successfully copied to clipboard</string>
     <string name="copyAddressError">Error while copying address to clipboard</string>
+    <string name="chia_fiat_conversion_widget_config_title">Chia exchange rate widget</string>
+    <string name="chia_exchange_rate_widget_config_description">This widget will update every hour. The exchange rate is from the coinmarketcap API. It can differ from specific exchanges.</string>
     <string name="use_gross_balance_desciption">Show address in gross balance. This will ignore all outgoing transactions. Intended for minders who would like to see how much they mined in total.</string>
 
 

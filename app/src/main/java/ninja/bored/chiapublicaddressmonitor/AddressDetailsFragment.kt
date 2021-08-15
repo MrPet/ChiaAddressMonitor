@@ -20,7 +20,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
-import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.AddressSettings
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
@@ -127,12 +126,14 @@ class AddressDetailsFragment : Fragment() {
 
         val chiaConversionSpinner: Spinner = rootView.findViewById(R.id.chia_convertion_spinner)
         // Create an ArrayAdapter using the string array and a default spinner layout
-        val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.keys.toTypedArray();
+        val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.keys.toTypedArray()
         ArrayAdapter(rootView.context, R.layout.support_simple_spinner_dropdown_item, chiaConversionKeys)
         .also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             chiaConversionSpinner.adapter = adapter
-            if( chiaAddressSettings.conversionCurrency != null && chiaConversionKeys.contains(chiaAddressSettings.conversionCurrency) ) {
+            if (chiaAddressSettings.conversionCurrency != null &&
+                chiaConversionKeys.contains(chiaAddressSettings.conversionCurrency)
+            ) {
                 chiaConversionSpinner.setSelection(chiaConversionKeys.indexOf(chiaAddressSettings.conversionCurrency))
             }
         }
