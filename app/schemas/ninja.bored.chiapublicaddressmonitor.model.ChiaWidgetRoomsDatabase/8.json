@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "415fd47cc611d79f4501cd9d5088dd7a",
+    "identityHash": "dda217229001a856388ad20165eb5607",
     "entities": [
       {
         "tableName": "widget_settings",
@@ -32,7 +32,7 @@
       },
       {
         "tableName": "widget_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chiaAddress` TEXT NOT NULL, `chia_amount` REAL NOT NULL, `update_date` INTEGER NOT NULL, PRIMARY KEY(`chiaAddress`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chiaAddress` TEXT NOT NULL, `chia_amount` REAL NOT NULL, `update_date` INTEGER NOT NULL, `chia_gross_amount` REAL NOT NULL, PRIMARY KEY(`chiaAddress`))",
         "fields": [
           {
             "fieldPath": "chiaAddress",
@@ -51,6 +51,12 @@
             "columnName": "update_date",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "chiaGrossAmount",
+            "columnName": "chia_gross_amount",
+            "affinity": "REAL",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -64,7 +70,7 @@
       },
       {
         "tableName": "address_settings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chiaAddress` TEXT NOT NULL, `show_notification` INTEGER NOT NULL, `chia_address_synonym` TEXT, `update_time` INTEGER NOT NULL, `conversion_currency` TEXT, PRIMARY KEY(`chiaAddress`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chiaAddress` TEXT NOT NULL, `show_notification` INTEGER NOT NULL, `chia_address_synonym` TEXT, `update_time` INTEGER NOT NULL, `precision` TEXT, `use_gross_balance` INTEGER NOT NULL, PRIMARY KEY(`chiaAddress`))",
         "fields": [
           {
             "fieldPath": "chiaAddress",
@@ -92,9 +98,15 @@
           },
           {
             "fieldPath": "conversionCurrency",
-            "columnName": "conversion_currency",
+            "columnName": "precision",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "useGrossBalance",
+            "columnName": "use_gross_balance",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -174,7 +186,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '415fd47cc611d79f4501cd9d5088dd7a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dda217229001a856388ad20165eb5607')"
     ]
   }
 }

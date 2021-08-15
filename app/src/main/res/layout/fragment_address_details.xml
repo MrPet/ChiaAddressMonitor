@@ -70,7 +70,7 @@
         android:layout_marginTop="24dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:text="@string/use_gross_balance_desciption"
+        android:text="@string/use_gross_balance_description"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/use_gross_balance"
         app:layout_constraintEnd_toStartOf="@+id/use_gross_balance"

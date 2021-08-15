@@ -1,5 +1,6 @@
 package ninja.bored.chiapublicaddressmonitor
 
+import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.os.Bundle
@@ -25,7 +26,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.adapter.ChiaAddressListAdapter
-import ninja.bored.chiapublicaddressmonitor.helpers.Constants
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
@@ -155,6 +155,7 @@ class AddressListFragment : Fragment() {
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun addNewAddress() {
         // open address popup
         this.context?.let { context ->

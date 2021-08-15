@@ -35,7 +35,6 @@ import okhttp3.Request
 import okhttp3.Response
 import ninja.bored.chiapublicaddressmonitor.model.WidgetFiatConversionSettings
 
-
 object Slh {
     private const val TAG = "Slh"
 
@@ -166,14 +165,13 @@ object Slh {
             }
 
             val amountText = formatChiaDecimal(
-                    (currentWidgetData.chiaAmount * currencyMultiplier),
+                    (chiaAmount * currencyMultiplier),
                     Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.precision
                 )
-            )
 
             val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
                 .let { intent ->
-                    PendingIntent.getActivity(context, 0, intent, 0)
+                    PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
                 }
 
             allViews.setOnClickPendingIntent(R.id.widgetRootLayout, pendingIntent)
@@ -218,7 +216,7 @@ object Slh {
                 )
                 val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
                     .let { intent ->
-                        PendingIntent.getActivity(context, 0, intent, 0)
+                        PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
                     }
 
                 allViews.setOnClickPendingIntent(R.id.widgetRootLayout, pendingIntent)
@@ -313,7 +311,7 @@ object Slh {
         database: ChiaWidgetRoomsDatabase
     ): ChiaLatestConversion? {
         var returnChiaConversion: ChiaLatestConversion? =
-            database.getChiaLatestConversionDaoDao().getLatestForCurrency(conversionCurrency)
+            database.getChiaLatestConversionDao().getLatestForCurrency(conversionCurrency)
 
         val calendar: Calendar = Calendar.getInstance()
         calendar.add(Calendar.MINUTE, Constants.TIME_THRESHOLD_FOR_FIAT_CONVERSION)
@@ -326,7 +324,7 @@ object Slh {
              currencyFromApi?.data?.forEach {
                 val chiaConversionResponseData = it.value
                 val newChiaConversion = ChiaLatestConversion(chiaConversionResponseData)
-                database.getChiaLatestConversionDaoDao().insertUpdate(newChiaConversion)
+                database.getChiaLatestConversionDao().insertUpdate(newChiaConversion)
                 if (chiaConversionResponseData.priceCurrency == conversionCurrency) {
                     returnChiaConversion = newChiaConversion
                 }

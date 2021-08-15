@@ -127,11 +127,14 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                             ADD COLUMN `use_gross_balance` INTEGER NOT NULL DEFAULT 0
                                         """
                                 )
-                    val MIGRATION_7_8 =
-                        object : Migration(DbVersion.VERSION_7, DbVersion.VERSION_8) {
-                            override fun migrate(database: SupportSQLiteDatabase) {
-                                database.execSQL(
-                                    """
+                            }
+                        }
+
+                            val MIGRATION_7_8 =
+                                object : Migration(DbVersion.VERSION_7, DbVersion.VERSION_8) {
+                                    override fun migrate(database: SupportSQLiteDatabase) {
+                                        database.execSQL(
+                                            """
                                         CREATE TABLE IF NOT EXISTS
                                         `widget_fiat_conversion_settings`
                                          (
@@ -139,9 +142,9 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                             `conversion_currency` TEXT NOT NULL,
                                          PRIMARY KEY (`widgetID`))
                                         """
-                                )
-                            }
-                        }
+                                        )
+                                    }
+                                }
 
                     instance = Room.databaseBuilder(
                         context,
