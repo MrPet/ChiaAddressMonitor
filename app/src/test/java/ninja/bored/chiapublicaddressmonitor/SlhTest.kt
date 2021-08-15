@@ -38,13 +38,13 @@ class SlhTest : TestCase() {
     fun testpParseApiResponseToWidgetDataInvalid() {
         val address = "xch1xntpeve5yjnadgjsyhc2szvjw07xt6mkv&d2v3qfvsvj097sywls7m6k2"
         val date = Date()
-        val highAmountChiaWidgetData = WidgetData(address, 18375000.0, date)
+        val highAmountChiaWidgetData = WidgetData(address, 18375000.0, date, 18475000.0)
         // maybe change datattypes in future, but for now it is good enough wont show so many decimals
         val highAmountParsedWidgetData = Slh.parseApiResponseToWidgetData(
             address,
             Gson().fromJson(
                 "{\n" +
-                "    \"grossBalance\": 18375000000000010000,\n" +
+                "    \"grossBalance\": 18475000000000010000,\n" +
                 "    \"netBalance\": 18375000000000010000\n" +
                 "}",
                 ChiaExplorerAddressResponse::class.java
@@ -65,7 +65,7 @@ class SlhTest : TestCase() {
         val date = Date()
         val chiaExplorerAddressResponse =
             ChiaExplorerAddressResponse(zeroAmount, zeroAmount)
-        val chiaWidgetData = WidgetData(address, zeroAmount, date)
+        val chiaWidgetData = WidgetData(address, zeroAmount, date, zeroAmount)
         val parsedWidgetData =
             Slh.parseApiResponseToWidgetData(address, chiaExplorerAddressResponse, date)
         assertEquals(
@@ -73,12 +73,12 @@ class SlhTest : TestCase() {
             chiaWidgetData,
             parsedWidgetData
         )
-        val highAmountChiaWidgetData = WidgetData(address, 18375000.0, date)
+        val highAmountChiaWidgetData = WidgetData(address, 18375000.0, date, 18475000.0)
         val highAmountParsedWidgetData = Slh.parseApiResponseToWidgetData(
             address,
             Gson().fromJson(
                 "{\n" +
-                "    \"grossBalance\": 18375000000000000000,\n" +
+                "    \"grossBalance\": 18475000000000000000,\n" +
                 "    \"netBalance\": 18375000000000000000\n" +
                 "}",
                 ChiaExplorerAddressResponse::class.java
@@ -90,12 +90,12 @@ class SlhTest : TestCase() {
             highAmountChiaWidgetData,
             highAmountParsedWidgetData
         )
-        val decimalAmountChiaWidgetData = WidgetData(address, 28.1234, date)
+        val decimalAmountChiaWidgetData = WidgetData(address, 28.1234, date, 28.2234)
         val smallAmountParsedWidgetData = Slh.parseApiResponseToWidgetData(
             address,
             Gson().fromJson(
                 "{\n" +
-                "    \"grossBalance\": 28123400000000,\n" +
+                "    \"grossBalance\": 28223400000000,\n" +
                 "    \"netBalance\": 28123400000000\n" +
                 "}",
                 ChiaExplorerAddressResponse::class.java
