@@ -37,6 +37,11 @@ jobs:
         env:
           CHIA_CONVERSIONS_API_KEY: ${{ secrets.CHIA_CONVERSIONS_API_KEY }}
         run: echo CHIA_CONVERSIONS_API_KEY="\"$CHIA_CONVERSIONS_API_KEY\"" >> ./local.properties
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
       - name: Instrumentation Tests
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
