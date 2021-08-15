@@ -1,5 +1,6 @@
 package ninja.bored.chiapublicaddressmonitor
 
+import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.os.Bundle
@@ -154,6 +155,7 @@ class AddressListFragment : Fragment() {
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun addNewAddress() {
         // open address popup
         this.context?.let { context ->

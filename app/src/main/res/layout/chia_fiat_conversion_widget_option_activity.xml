@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:focusable="true">
 
-
     <TextView
         android:id="@+id/headerTextView"
         android:layout_width="match_parent"
@@ -13,7 +12,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:text="@string/chia_widget_config_title"
+        android:text="@string/chia_fiat_conversion_widget_config_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -27,39 +26,22 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
-        android:text="@string/chia_widget_config_description"
+        android:text="@string/chia_exchange_rate_widget_config_description"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerTextView" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/chiaAddressInputLayout"
-        android:layout_width="0dp"
+    <Spinner
+        android:id="@+id/chia_widget_conversion_spinner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="24dp"
-        android:hint="@string/public_address_hint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.526"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description">
-
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/chiaAddressEditText"
-            style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:inputType="textNoSuggestions" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <Button
-        android:id="@+id/chia_widget_save_button"
+        android:id="@+id/chia_widget_conversion_save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -70,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chiaAddressInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/chia_widget_conversion_spinner"
         app:layout_constraintVertical_bias="0.949" />
 
 

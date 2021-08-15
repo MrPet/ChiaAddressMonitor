@@ -95,15 +95,14 @@ object NotificationHelper {
                     context.getString(
                         R.string.address_balance_changed_notification_header,
                         Slh.formatChiaDecimal(
-                            newWidgetData.chiaAmount - oldChiaAmount,
-                            Slh.Precision.TOTAL
+                            newWidgetData.chiaAmount - oldChiaAmount, Constants.Precision.TOTAL
                         )
                     ),
                     context.getString(
                         R.string.address_balance_changed_notification_text,
                         addressStringOrSynonym,
-                        Slh.formatChiaDecimal(oldChiaAmount, Slh.Precision.TOTAL),
-                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Slh.Precision.TOTAL)
+                        Slh.formatChiaDecimal(oldChiaAmount, Constants.Precision.TOTAL),
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL)
                     ),
                     Constants.NOTIFICATION_ID_POSITIVE_CHANGE,
                     context
@@ -113,13 +112,13 @@ object NotificationHelper {
                     Constants.NOTIFICATION_CHANNEL_NEGATIVE_CHANGE,
                     context.getString(
                         R.string.address_balance_changed_negative_notification_header,
-                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Slh.Precision.TOTAL)
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL)
                     ),
                     context.getString(
                         R.string.address_balance_changed_negative_notification_text,
                         addressStringOrSynonym,
-                        Slh.formatChiaDecimal(oldChiaAmount, Slh.Precision.TOTAL),
-                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Slh.Precision.TOTAL)
+                        Slh.formatChiaDecimal(oldChiaAmount, Constants.Precision.TOTAL),
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL)
                     ),
                     Constants.NOTIFICATION_ID_NEGATIVE_CHANGE,
                     context

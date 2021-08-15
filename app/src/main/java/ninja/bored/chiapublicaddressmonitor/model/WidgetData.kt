@@ -14,8 +14,9 @@ import java.util.Date
 data class WidgetData(
     @PrimaryKey val chiaAddress: String,
     @ColumnInfo(name = "chia_amount") val chiaAmount: Double,
-    @ColumnInfo(name = "update_date") val updateDate: Date
-)
+    @ColumnInfo(name = "update_date") val updateDate: Date,
+    @ColumnInfo(name = "chia_gross_amount") val chiaGrossAmount: Double
+    )
 
 @Dao
 interface WidgetDataDao {

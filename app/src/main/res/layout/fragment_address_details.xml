@@ -43,13 +43,12 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="84dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:text="@string/notification_activate_for_address"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/address_has_notification"
-        app:layout_constraintEnd_toStartOf="@+id/chia_address_show_in_mojo"
-
+        app:layout_constraintEnd_toStartOf="@+id/address_has_notification"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/address_detail_fragment_header" />
 
@@ -62,8 +61,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/enable_notifications_text" />
 
-
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/use_gross_balance_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="@string/use_gross_balance_description"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/use_gross_balance"
+        app:layout_constraintEnd_toStartOf="@+id/use_gross_balance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/enable_notifications_text" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/use_gross_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/use_gross_balance_text" />
+
+
+
+ <!--   <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/chia_address_show_in_mojo_text"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -87,7 +112,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/chia_address_show_in_mojo_text"
 
-        />
+        />-->
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/chia_address_show_in_mojo_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="@string/show_widget_in_mojo"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/use_gross_balance_text" />
+
+    <Spinner
+        android:id="@+id/chia_convertion_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chia_address_show_in_mojo_text" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -100,14 +152,16 @@
         android:hint="@string/chia_address_synonym_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chia_address_show_in_mojo_text">
+        app:layout_constraintTop_toBottomOf="@+id/chia_convertion_spinner">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/chia_address_synonym_text_input_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textAutoCorrect"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:layout_marginTop="16dp"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,6 +178,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chia_address_synonym_text_input_layout"
         app:layout_constraintVertical_bias="0.949" />
+
+
     <!--    app:layout_constraintStart_toEndOf="@+id/back_button"-->
     <!--    <Button-->
     <!--        android:id="@+id/back_button"-->

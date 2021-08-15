@@ -16,7 +16,11 @@ jobs:
       - name: Set api key
         env:
           CHIA_EXPLORER_API_KEY: ${{ secrets.CHIA_EXPLORER_API_KEY }}
-        run: echo CHIA_EXPLORER_API_KEY="\"$CHIA_EXPLORER_API_KEY\"" > ./local.properties
+        run: echo CHIA_EXPLORER_API_KEY="\"$CHIA_EXPLORER_API_KEY\"" >> ./local.properties
+      - name: Set api coinbasecache key
+        env:
+          CHIA_CONVERSIONS_API_KEY: ${{ secrets.CHIA_CONVERSIONS_API_KEY }}
+        run: echo CHIA_CONVERSIONS_API_KEY="\"$CHIA_CONVERSIONS_API_KEY\"" >> ./local.properties
       - name: Unit tests
         run: ./gradlew test
   android_tests:
@@ -28,7 +32,16 @@ jobs:
       - name: Set api key
         env:
           CHIA_EXPLORER_API_KEY: ${{ secrets.CHIA_EXPLORER_API_KEY }}
-        run: echo CHIA_EXPLORER_API_KEY="\"$CHIA_EXPLORER_API_KEY\"" > ./local.properties
+        run: echo CHIA_EXPLORER_API_KEY="\"$CHIA_EXPLORER_API_KEY\"" >> ./local.properties
+      - name: Set api coinbasecache key
+        env:
+          CHIA_CONVERSIONS_API_KEY: ${{ secrets.CHIA_CONVERSIONS_API_KEY }}
+        run: echo CHIA_CONVERSIONS_API_KEY="\"$CHIA_CONVERSIONS_API_KEY\"" >> ./local.properties
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
       - name: Instrumentation Tests
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
@@ -45,7 +58,11 @@ jobs:
       - name: Set api key
         env:
           CHIA_EXPLORER_API_KEY: ${{ secrets.CHIA_EXPLORER_API_KEY }}
-        run: echo CHIA_EXPLORER_API_KEY="\"$CHIA_EXPLORER_API_KEY\"" > ./local.properties
+        run: echo CHIA_EXPLORER_API_KEY="\"$CHIA_EXPLORER_API_KEY\"" >> ./local.properties
+      - name: Set api coinbasecache key
+        env:
+          CHIA_CONVERSIONS_API_KEY: ${{ secrets.CHIA_CONVERSIONS_API_KEY }}
+        run: echo CHIA_CONVERSIONS_API_KEY="\"$CHIA_CONVERSIONS_API_KEY\"" >> ./local.properties
       - name: set up JDK 11
         uses: actions/setup-java@v2
         with:

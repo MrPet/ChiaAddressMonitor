@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +20,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
-import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.AddressSettings
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
@@ -67,7 +68,8 @@ class AddressDetailsFragment : Fragment() {
                             false,
                             null,
                             Constants.defaultUpdateTime,
-                            Slh.Precision.NORMAL
+                            Constants.CurrencyCode.XCH, // 0 default ... xch
+                            false
                         )
                         chiaAddressSettingsDao.insertUpdate(chiaAddressSettings)
                     }
@@ -90,6 +92,10 @@ class AddressDetailsFragment : Fragment() {
         val notificationCheckbox =
             rootView.findViewById<SwitchCompat>(R.id.address_has_notification)
         notificationCheckbox.isChecked = chiaAddressSettings.showNotification
+
+        val grossBalanceCheckbox =
+            rootView.findViewById<SwitchCompat>(R.id.use_gross_balance)
+        grossBalanceCheckbox.isChecked = chiaAddressSettings.useGrossBalance
 
         val addressSynonym =
             rootView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
@@ -116,10 +122,20 @@ class AddressDetailsFragment : Fragment() {
             }
         }
 
-        val showWidgetAsMojoCheckBox =
-            rootView.findViewById<SwitchCompat>(R.id.chia_address_show_in_mojo)
-        if (chiaAddressSettings.precision == Slh.Precision.MOJO) {
-            showWidgetAsMojoCheckBox.isChecked = true
+
+
+        val chiaConversionSpinner: Spinner = rootView.findViewById(R.id.chia_convertion_spinner)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.keys.toTypedArray()
+        ArrayAdapter(rootView.context, R.layout.support_simple_spinner_dropdown_item, chiaConversionKeys)
+        .also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            chiaConversionSpinner.adapter = adapter
+            if (chiaAddressSettings.conversionCurrency != null &&
+                chiaConversionKeys.contains(chiaAddressSettings.conversionCurrency)
+            ) {
+                chiaConversionSpinner.setSelection(chiaConversionKeys.indexOf(chiaAddressSettings.conversionCurrency))
+            }
         }
     }
 
@@ -129,14 +145,16 @@ class AddressDetailsFragment : Fragment() {
             database?.let { db ->
                 val notificationCheckbox =
                     parentView.findViewById<SwitchCompat>(R.id.address_has_notification)
+
+                val useGrossBalanceCheckbox =
+                    parentView.findViewById<SwitchCompat>(R.id.use_gross_balance)
+
                 val addressSynonym =
                     parentView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
-                val showWidgetAsMojoCheckBox =
-                    parentView.findViewById<SwitchCompat>(R.id.chia_address_show_in_mojo)
-                val widgetPrecision = when (showWidgetAsMojoCheckBox.isChecked) {
-                    true -> Slh.Precision.MOJO
-                    else -> Slh.Precision.NORMAL
-                }
+
+                val chiaConversionSpinner: Spinner = parentView.findViewById(R.id.chia_convertion_spinner)
+                val chiaConversionCurrencyString = chiaConversionSpinner.selectedItem.toString()
+
                 val addressSynonymString = when (addressSynonym.text.toString().trim()) {
                     "" -> null
                     else -> addressSynonym.text.toString()
@@ -146,7 +164,8 @@ class AddressDetailsFragment : Fragment() {
                     notificationCheckbox.isChecked,
                     addressSynonymString,
                     Constants.defaultUpdateTime,
-                    widgetPrecision
+                    chiaConversionCurrencyString,
+                    useGrossBalanceCheckbox.isChecked
                 )
                 val chiaAddressSettingsDao = db.getAddressSettingsDao()
                 this.lifecycleScope.launch {

@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import java.text.DateFormat
 import ninja.bored.chiapublicaddressmonitor.AddressDetailsFragment
 import ninja.bored.chiapublicaddressmonitor.ChiaPublicAddressWidgetReceiver
 import ninja.bored.chiapublicaddressmonitor.R
@@ -21,7 +22,6 @@ import ninja.bored.chiapublicaddressmonitor.helpers.Constants
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
-import java.text.DateFormat
 
 class ChiaAddressListAdapter(private val widgetSettingsAndData: List<WidgetSettingsAndData>) :
     RecyclerView.Adapter<ChiaAddressListViewHolder>() {
@@ -60,11 +60,15 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
         val localDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
         val context = chiaAddressTextView?.context
         if (widgetSettingsAndData.widgetData?.updateDate != null) {
+            val chiaAmount = when (widgetSettingsAndData.addressSettings?.useGrossBalance) {
+                true -> widgetSettingsAndData.widgetData.chiaGrossAmount
+                else -> widgetSettingsAndData.widgetData.chiaAmount
+            }
             itemAmountAndDateTextView?.text = context?.getString(
                 R.string.recycler_item_amount_and_date,
                 Slh.formatChiaDecimal(
-                    widgetSettingsAndData.widgetData.chiaAmount,
-                    Slh.Precision.TOTAL
+                    chiaAmount,
+                    Constants.Precision.TOTAL
                 ),
                 localDateFormat.format(widgetSettingsAndData.widgetData.updateDate)
             )
@@ -120,7 +124,7 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
                     clickContext,
                     0,
                     intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_IMMUTABLE
                 )
 
                 appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)

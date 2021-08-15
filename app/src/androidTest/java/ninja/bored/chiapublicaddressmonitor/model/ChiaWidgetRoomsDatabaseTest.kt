@@ -45,8 +45,9 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
 
         val testAddress = "xch1xntpeve5yjnadgjsyhc2szvjw07xt6mkv7d2v3qfvsvj097sywls7m6k2v"
         val testAmount = 100.00
+        val grossAmount = 200.00
         val testDate = Date()
-        val widgetData = WidgetData(testAddress, testAmount, testDate)
+        val widgetData = WidgetData(testAddress, testAmount, testDate, grossAmount)
 
         widgetDataDao.insertUpdate(widgetData)
 
@@ -64,12 +65,14 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
 
         val testAddress = "xch1xntpeve5yjnadgjsyhc2szvjw07xt6mkv7d2v3qfvsvj097sywls7m6k2v"
         val testAmount = 100.00
+        val testGrossAmount = 300.00
         val testDate = Date()
-        val widgetData = WidgetData(testAddress, testAmount, testDate)
+        val widgetData = WidgetData(testAddress, testAmount, testDate, testGrossAmount)
 
         widgetDataDao.insertUpdate(widgetData)
 
         val newTestAmount = 110.00
+        val newTestGrossAmount = 210.00
         val newTestDate = Date(testDate.time + 10000)
 
         val savedWidgetData = widgetDataDao.getByAddress(testAddress)
@@ -78,7 +81,7 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
             widgetData, savedWidgetData
         )
 
-        val newWidgetData = WidgetData(testAddress, newTestAmount, newTestDate)
+        val newWidgetData = WidgetData(testAddress, newTestAmount, newTestDate, newTestGrossAmount)
 
         assertNotEquals("New WidgetData cant be the same as the old", widgetData, newWidgetData)
 
@@ -97,8 +100,9 @@ class ChiaWidgetRoomsDatabaseTest : TestCase() {
 
         val testAddress = "xch1xntpeve5yjnadgjsyhc2szvjw07xt6mkv7d2v3qfvsvj097sywls7m6k2v"
         val testAmount = 100.00
+        val testGrossAmount = 300.00
         val testDate = Date()
-        val widgetData = WidgetData(testAddress, testAmount, testDate)
+        val widgetData = WidgetData(testAddress, testAmount, testDate,testGrossAmount)
 
         widgetDataDao.insertUpdate(widgetData)
 

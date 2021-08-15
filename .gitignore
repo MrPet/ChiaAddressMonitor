@@ -88,3 +88,7 @@ lint/tmp/
 *.hprof
 /app/release/output-metadata.json
 /source/.idea/workspace.xml
+.idea/runConfigurations.xml
+.idea/codeStyles/Project.xml
+.idea/misc.xml
+.idea/runConfigurations.xml
