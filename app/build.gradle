@@ -10,7 +10,7 @@ static def generateVersionCode() {
     if(result.empty) result = "PowerShell -Command git rev-list --count HEAD".execute().text.trim() //windows
     println "Result of git rev-list: ${result}"
     if(result.empty) throw new RuntimeException("Could not generate versioncode on this platform? Cmd output: ${result.text}")
-    return result.toInteger() + 3
+    return result.toInteger()
 }
 
 def majorVersion = 0
@@ -23,6 +23,7 @@ android {
         applicationId "ninja.bored.chiapublicaddressmonitor"
         minSdkVersion 24
         targetSdkVersion 31
+        buildToolsVersion = "30.0.2"
         versionCode generateVersionCode()
         versionName "${majorVersion}.${minorVersion}.${generateVersionCode()}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
