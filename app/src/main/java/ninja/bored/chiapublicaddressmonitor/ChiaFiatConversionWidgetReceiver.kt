@@ -18,7 +18,15 @@ class ChiaFiatConversionWidgetReceiver : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(TAG, "onReceive")
+        val receivedAppWidgetID =
+            intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID
+            )
+        if (receivedAppWidgetID != null && receivedAppWidgetID != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            val appWidgetManager = AppWidgetManager.getInstance(context?.applicationContext)
+            onUpdate(context, appWidgetManager, intArrayOf(receivedAppWidgetID))
+        }
+        super.onReceive(context, intent)
     }
 
     override fun onUpdate(

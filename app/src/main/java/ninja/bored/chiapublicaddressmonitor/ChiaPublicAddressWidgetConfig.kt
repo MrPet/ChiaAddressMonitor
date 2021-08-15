@@ -12,6 +12,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.RemoteViews
 import com.mikepenz.aboutlibraries.LibsBuilder
 import kotlinx.coroutines.CoroutineScope
@@ -56,6 +57,8 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         widgetDB = ChiaWidgetRoomsDatabase.getInstance(this)
         val context = this
 
+        findViewById<Button>(R.id.chia_widget_save_button)?.setOnClickListener { saveSettings() }
+
         launch {
             val widgetCurrentSettings = widgetDB?.getWidgetSettingsDao()?.getByID(
                 appWidgetID
@@ -85,9 +88,9 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
             }
         }
 
-        chiaAddressEditText?.setOnEditorActionListener { v, actionId, _ ->
+        chiaAddressEditText?.setOnEditorActionListener { _, actionId, _ ->
             if (EditorInfo.IME_ACTION_DONE == actionId) {
-                saveSettings(v)
+                saveSettings()
                 false
             } else {
                 true
@@ -117,8 +120,7 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         super.onDestroy()
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun saveSettings(view: View?) {
+    fun saveSettings() {
         chiaAddressEditText?.let {
             val chiaAddress = it.text.toString()
             if (Slh.isChiaAddressValid(chiaAddress.trim())) {

@@ -8,11 +8,12 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.RemoteViews
 import android.widget.Spinner
 import com.mikepenz.aboutlibraries.LibsBuilder
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,7 +22,6 @@ import ninja.bored.chiapublicaddressmonitor.helpers.Constants
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetFiatConversionSettings
-import kotlin.coroutines.CoroutineContext
 
 class ChiaFiatConversionWidgetConfig : Activity(), CoroutineScope {
 
@@ -56,6 +56,10 @@ class ChiaFiatConversionWidgetConfig : Activity(), CoroutineScope {
 
         widgetDB = ChiaWidgetRoomsDatabase.getInstance(this)
         val context = this
+
+        findViewById<Button>(R.id.chia_widget_conversion_save_button)?.setOnClickListener {
+            saveFiatConversionWidgetSettings()
+        }
 
         launch {
             val widgetCurrentSettings = widgetDB?.getWidgetFiatConversionSettingsDao()?.getByID(
@@ -104,8 +108,7 @@ class ChiaFiatConversionWidgetConfig : Activity(), CoroutineScope {
         super.onDestroy()
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun saveFiatConversionWidgetSettings(view: View?) {
+    fun saveFiatConversionWidgetSettings() {
         chiaConversionSpinner?.let {
             val chiaConversionCurrency = it.selectedItem.toString()
             val widgetSettings = WidgetFiatConversionSettings(appWidgetID, chiaConversionCurrency)
