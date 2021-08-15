@@ -105,7 +105,7 @@ class ChiaFiatConversionWidgetConfig : Activity(), CoroutineScope {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun saveSettings(view: View?) {
+    fun saveFiatConversionWidgetSettings(view: View?) {
         chiaConversionSpinner?.let {
             val chiaConversionCurrency = it.selectedItem.toString()
             val widgetSettings = WidgetFiatConversionSettings(appWidgetID, chiaConversionCurrency)
