@@ -11,15 +11,21 @@ import android.icu.util.Calendar
 import android.util.Log
 import android.widget.RemoteViews
 import android.widget.Toast
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import java.io.IOException
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ninja.bored.chiapublicaddressmonitor.MainActivity
 import ninja.bored.chiapublicaddressmonitor.R
+import ninja.bored.chiapublicaddressmonitor.WidgetUpdaterWork
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants.CHIA_ADDRESS_LENGTH
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants.CHIA_ADDRESS_PREFIX
 import ninja.bored.chiapublicaddressmonitor.model.ChiaConversionResponse
@@ -27,13 +33,14 @@ import ninja.bored.chiapublicaddressmonitor.model.ChiaExplorerAddressResponse
 import ninja.bored.chiapublicaddressmonitor.model.ChiaLatestConversion
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
+import ninja.bored.chiapublicaddressmonitor.model.WidgetDataDao
+import ninja.bored.chiapublicaddressmonitor.model.WidgetFiatConversionSettings
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import ninja.bored.chiapublicaddressmonitor.model.WidgetFiatConversionSettings
 
 object Slh {
     private const val TAG = "Slh"
@@ -165,9 +172,9 @@ object Slh {
             }
 
             val amountText = formatChiaDecimal(
-                    (chiaAmount * currencyMultiplier),
-                    Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.precision
-                )
+                (chiaAmount * currencyMultiplier),
+                Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.precision
+            )
 
             val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
                 .let { intent ->
@@ -209,7 +216,8 @@ object Slh {
                 widgetFiatConversionSettings.conversionCurrency, database
             )
             chiaLatestConversion?.let {
-                val conversionText = Constants.CurrencyCode.XCH + " / " + chiaLatestConversion.priceCurrency
+                val conversionText =
+                    Constants.CurrencyCode.XCH + " / " + chiaLatestConversion.priceCurrency
                 val amountText = formatChiaDecimal(
                     chiaLatestConversion.price,
                     Constants.CHIA_CURRENCY_CONVERSIONS[chiaLatestConversion.priceCurrency]?.precision
@@ -251,33 +259,101 @@ object Slh {
     /**
      * gets data from api and try to update widget attached with address
      */
-    suspend fun refreshAll(
+    suspend fun refreshAllAddressWidgets(
         data: List<WidgetSettingsAndData>?,
         context: Context,
-        database: ChiaWidgetRoomsDatabase
+        database: ChiaWidgetRoomsDatabase,
+        showConnectionProblems: Boolean
     ) {
         val widgetDataDao = database.getWidgetDataDao()
         val allViews = RemoteViews(context.packageName, R.layout.chia_public_address_widget)
         val appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
 
         data?.forEach { widgetData ->
-            widgetData.widgetData?.let {
-                val currentWidgetDataUpdate =
-                    receiveWidgetDataFromApi(widgetData.widgetData.chiaAddress)
-                if (currentWidgetDataUpdate != null) {
-                    widgetDataDao.insertUpdate(currentWidgetDataUpdate)
-                    updateWithWidgetData(
-                        currentWidgetDataUpdate,
-                        allViews,
-                        context,
-                        widgetData.widgetSettings?.widgetID,
-                        appWidgetManager
+            refreshSingleAddressWidget(
+                widgetData,
+                widgetDataDao,
+                allViews,
+                context,
+                appWidgetManager,
+                showConnectionProblems
+            )
+        }
+    }
+
+    suspend fun refreshSingleAddressWidget(
+        widgetData: WidgetSettingsAndData,
+        widgetDataDao: WidgetDataDao,
+        allViews: RemoteViews,
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        showConnectionProblems: Boolean
+    ) {
+        var chiaAddress = widgetData.widgetData?.chiaAddress
+        if (chiaAddress == null) {
+            chiaAddress = widgetData.widgetSettings?.chiaAddress
+        }
+        chiaAddress?.let {
+            // has widget settings
+            receiveWidgetDataFromApiAndUpdateToDatabase(
+                chiaAddress,
+                widgetDataDao,
+                context,
+                showConnectionProblems
+            )?.also { newWidgetData ->
+                updateWithWidgetData(
+                    newWidgetData,
+                    allViews,
+                    context,
+                    widgetData.widgetSettings?.widgetID,
+                    appWidgetManager
+                )
+                widgetData.widgetData?.let { oldWidgetData ->
+                    NotificationHelper.checkIfNecessaryAndSendNotification(
+                        oldWidgetData.chiaAmount,
+                        newWidgetData,
+                        context
                     )
-                } else {
-                    Toast.makeText(context, R.string.connectionProblems, Toast.LENGTH_LONG)
-                        .show()
                 }
             }
+        }
+    }
+
+    suspend fun receiveWidgetDataFromApiAndUpdateToDatabase(
+        chiaAddress: String,
+        widgetDataDao: WidgetDataDao,
+        context: Context,
+        showConnectionProblems: Boolean
+    ): WidgetData? {
+        val currentWidgetDataUpdate =
+            receiveWidgetDataFromApi(chiaAddress)
+        if (currentWidgetDataUpdate != null) {
+            widgetDataDao.insertUpdate(currentWidgetDataUpdate)
+        } else if (showConnectionProblems) {
+            Toast.makeText(context, R.string.connectionProblems, Toast.LENGTH_LONG)
+                .show()
+        }
+        return currentWidgetDataUpdate
+    }
+
+    /**
+     * gets data from api and try to update widget attached with address
+     */
+    suspend fun refreshAllFiatConversionWidgets(
+        data: List<WidgetFiatConversionSettings>?,
+        context: Context
+    ) {
+        val allViews = RemoteViews(context.packageName, R.layout.chia_public_address_widget)
+        val appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context)
+
+        data?.forEach { widgetFiatConversionSettings ->
+            updateFiatWidgetWithSettings(
+                widgetFiatConversionSettings,
+                allViews,
+                context,
+                widgetFiatConversionSettings.widgetID,
+                appWidgetManager
+            )
         }
     }
 
@@ -321,7 +397,7 @@ object Slh {
         {
             // we need to get from api
             val currencyFromApi = receiveChiaConversionFromApi()
-             currencyFromApi?.data?.forEach {
+            currencyFromApi?.data?.forEach {
                 val chiaConversionResponseData = it.value
                 val newChiaConversion = ChiaLatestConversion(chiaConversionResponseData)
                 database.getChiaLatestConversionDao().insertUpdate(newChiaConversion)
@@ -383,4 +459,22 @@ object Slh {
                 }
             })
         }
+
+    fun setupWidgetUpdateWorker(context: Context) {
+        val widgetUpdaterWorkRequest: PeriodicWorkRequest =
+            PeriodicWorkRequestBuilder<WidgetUpdaterWork>(
+                Constants.UPDATE_WORKER_INTERVAL_IN_MINUTES,
+                TimeUnit.MINUTES
+            )
+                .build()
+
+        // we keep the old job if we try to add it again
+        WorkManager
+            .getInstance(context)
+            .enqueueUniquePeriodicWork(
+                Constants.UPDATE_WORKER_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                widgetUpdaterWorkRequest
+            )
+    }
 }

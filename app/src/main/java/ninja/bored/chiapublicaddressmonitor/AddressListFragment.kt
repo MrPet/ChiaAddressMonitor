@@ -61,10 +61,11 @@ class AddressListFragment : Fragment() {
             swipeRefreshLayout.setOnRefreshListener {
                 database?.let { db ->
                     this.lifecycleScope.launch {
-                        Slh.refreshAll(
+                        Slh.refreshAllAddressWidgets(
                             (addressListRecycler?.adapter as ChiaAddressListAdapter).getData(),
                             context,
-                            db
+                            db,
+                            true
                         )
                         swipeRefreshLayout.isRefreshing = false
                     }
@@ -203,7 +204,7 @@ class AddressListFragment : Fragment() {
     }
 
     private fun setUpRoomsToRecyclerListener() {
-        database?.getWidgetSettingsAndDataDao()?.loadAll()?.observe(viewLifecycleOwner) {
+        database?.getWidgetSettingsAndDataDao()?.loadAllLiveData()?.observe(viewLifecycleOwner) {
             addressListRecycler?.adapter = ChiaAddressListAdapter(it)
         }
     }

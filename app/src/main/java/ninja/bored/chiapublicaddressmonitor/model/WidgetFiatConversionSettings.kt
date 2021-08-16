@@ -26,4 +26,7 @@ interface WidgetFiatConversionSettingsDao {
 
     @Query("SELECT * FROM widget_fiat_conversion_settings WHERE widgetID = :widgetID")
     suspend fun getByID(widgetID: Int): WidgetFiatConversionSettings?
+
+    @Query("SELECT * FROM widget_fiat_conversion_settings")
+    suspend fun loadAll(): List<WidgetFiatConversionSettings>?
 }

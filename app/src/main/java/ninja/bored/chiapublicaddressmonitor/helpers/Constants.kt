@@ -8,6 +8,7 @@ object Constants {
     const val BIG_AMOUNT_THRESHOLD = 10000
     const val defaultUpdateTime: Int = 3600
     const val NOTIFICATION_CHANNEL_POSITIVE_CHANGE: String = "positiveChange"
+
     // for updating the notifications
     const val NOTIFICATION_ID_POSITIVE_CHANGE: Int = 13371
     const val NOTIFICATION_ID_NEGATIVE_CHANGE: Int = 13372
@@ -25,12 +26,14 @@ object Constants {
     const val CHIA_CONVERSIONS_BASE_API_URL: String = "https://cmccache.bored.ninja/price"
     const val CHIA_CONVERSIONS_API_KEY_HEADER_NAME: String = "api-key"
     const val CHIA_CONVERSIONS_API_KEY: String = BuildConfig.CHIA_CONVERSIONS_API_KEY
+
     object Precision {
         const val TOTAL = "TOTAL"
         const val MOJO = "MOJO"
         const val NORMAL = "NORMAL"
         const val FIAT = "FIAT"
     }
+
     object CurrencyCode {
         const val XCH = "XCH"
         const val USD = "USD"
@@ -39,9 +42,16 @@ object Constants {
     }
 
     val CHIA_CURRENCY_CONVERSIONS: Map<String, CurrencyConversionInfo> = mapOf(
-                    CurrencyCode.XCH to CurrencyConversionInfo( CurrencyCode.XCH, Precision.NORMAL, 1.0),
-                    CurrencyCode.MOJO to CurrencyConversionInfo(CurrencyCode.MOJO, Precision.MOJO, NET_BALANCE_DIVIDER),
-                    CurrencyCode.EUR to CurrencyConversionInfo(CurrencyCode.EUR, Precision.FIAT, null),
-                    CurrencyCode.USD to CurrencyConversionInfo(CurrencyCode.USD, Precision.FIAT, null)
-                )
+        CurrencyCode.XCH to CurrencyConversionInfo(CurrencyCode.XCH, Precision.NORMAL, 1.0),
+        CurrencyCode.MOJO to CurrencyConversionInfo(
+            CurrencyCode.MOJO,
+            Precision.MOJO,
+            NET_BALANCE_DIVIDER
+        ),
+        CurrencyCode.EUR to CurrencyConversionInfo(CurrencyCode.EUR, Precision.FIAT, null),
+        CurrencyCode.USD to CurrencyConversionInfo(CurrencyCode.USD, Precision.FIAT, null)
+    )
+
+    const val UPDATE_WORKER_INTERVAL_IN_MINUTES: Long = 60L
+    const val UPDATE_WORKER_NAME: String = "widget_update_worker"
 }
