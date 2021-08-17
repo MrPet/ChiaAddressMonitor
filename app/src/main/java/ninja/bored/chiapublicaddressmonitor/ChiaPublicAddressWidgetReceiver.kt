@@ -25,18 +25,20 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
+
         Log.d(TAG, "onReceive")
         addressFromReceive = intent?.extras?.getString(Constants.ADDRESS_EXTRA)
         val receivedAppWidgetID =
             intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID)
+
         Log.d(TAG, "receivedAppWidgetID $receivedAppWidgetID")
         val receivedAddress = addressFromReceive
         Log.d(TAG, "receivedAddress $receivedAddress")
         context?.let {
             if (
+                receivedAddress != null &&
                 receivedAppWidgetID != null &&
-                receivedAppWidgetID != INVALID_APPWIDGET_ID &&
-                receivedAddress != null
+                receivedAppWidgetID != INVALID_APPWIDGET_ID
             ) {
                 val database = ChiaWidgetRoomsDatabase.getInstance(context)
                 val widgetSettings = WidgetSettings(receivedAppWidgetID, receivedAddress)
@@ -62,12 +64,11 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
         super.onDeleted(context, appWidgetIds)
         if (context != null) {
             val database = ChiaWidgetRoomsDatabase.getInstance(context)
-            appWidgetIds?.forEach {
+            appWidgetIds?.forEach { appWidgetID ->
                 GlobalScope.launch {
                     val widgetSettingsDao = database.getWidgetSettingsDao()
-                    val widgetSettingsToDelete = widgetSettingsDao.getByID(it)
-                    if (widgetSettingsToDelete != null) {
-                        widgetSettingsDao.delete(widgetSettingsToDelete)
+                    widgetSettingsDao.getByID(appWidgetID)?.let { widgetSettings ->
+                        widgetSettingsDao.delete(widgetSettings)
                     }
                 }
             }
@@ -79,6 +80,7 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager?,
         appWidgetIds: IntArray?
     ) {
+        Log.d(TAG, "onUpdate")
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         context?.let {
             Slh.setupWidgetUpdateWorker(context)

@@ -29,6 +29,23 @@ class ChiaFiatConversionWidgetReceiver : AppWidgetProvider() {
         super.onReceive(context, intent)
     }
 
+    override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
+        super.onDeleted(context, appWidgetIds)
+        if (context != null) {
+            val database = ChiaWidgetRoomsDatabase.getInstance(context)
+            appWidgetIds?.forEach { appWidgetID ->
+                GlobalScope.launch {
+                    val widgetFiatConversionSettingsDao =
+                        database.getWidgetFiatConversionSettingsDao()
+                    widgetFiatConversionSettingsDao.getByID(appWidgetID)
+                        ?.let { widgetFiatConversionSettings ->
+                            widgetFiatConversionSettingsDao.delete(widgetFiatConversionSettings)
+                        }
+                }
+            }
+        }
+    }
+
     override fun onUpdate(
         context: Context?,
         appWidgetManager: AppWidgetManager?,
