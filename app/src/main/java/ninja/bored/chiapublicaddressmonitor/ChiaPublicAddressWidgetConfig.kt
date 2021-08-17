@@ -8,21 +8,20 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.RemoteViews
 import com.mikepenz.aboutlibraries.LibsBuilder
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import ninja.bored.chiapublicaddressmonitor.helpers.ChiaExplorerApiHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettings
-import kotlin.coroutines.CoroutineContext
 
 class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
 
@@ -138,32 +137,27 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
     }
 
     private suspend fun updateAppWidget(appWidgetID: Int, widgetSettings: WidgetSettings) {
-        val appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(this)
         val context = this
-        RemoteViews(this.packageName, R.layout.chia_public_address_widget).also { views ->
 
-            Log.d("Hans", "getting data")
-            val dataDao = widgetDB?.getWidgetDataDao()
-            var widgetData = dataDao?.getByAddress(widgetSettings.chiaAddress)
-            if (widgetData == null) {
-                widgetData = Slh.receiveWidgetDataFromApi(
-                    widgetSettings.chiaAddress
-                )
+        Log.d("Hans", "getting data")
+        val dataDao = widgetDB?.getWidgetDataDao()
+        var widgetData = dataDao?.getByAddress(widgetSettings.chiaAddress)
+        if (widgetData == null) {
+            widgetData = ChiaExplorerApiHelper.receiveWidgetDataFromApi(
+                widgetSettings.chiaAddress
+            )
 
-                if (widgetData != null) {
-                    dataDao?.insertUpdate(widgetData)
-                }
+            if (widgetData != null) {
+                dataDao?.insertUpdate(widgetData)
             }
+        }
 
-            widgetData?.let {
-                Slh.updateWithWidgetData(
-                    widgetData,
-                    views,
-                    context,
-                    appWidgetID,
-                    appWidgetManager
-                )
-            }
+        widgetData?.let {
+            Slh.updateWithWidgetData(
+                widgetData,
+                context,
+                appWidgetID
+            )
         }
     }
 

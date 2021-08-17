@@ -111,10 +111,8 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
                                     Log.d(TAG, "got widgetData $oldWidgetData")
                                     Slh.updateWithWidgetData(
                                         oldWidgetData,
-                                        allViews,
                                         context,
-                                        appWidgetId,
-                                        appWidgetManager
+                                        appWidgetId
                                     )
                                 } else {
                                     allViews.setTextViewText(
