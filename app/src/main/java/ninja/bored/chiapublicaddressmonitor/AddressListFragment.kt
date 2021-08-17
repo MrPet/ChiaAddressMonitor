@@ -26,6 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.adapter.ChiaAddressListAdapter
+import ninja.bored.chiapublicaddressmonitor.helpers.ChiaExplorerApiHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
@@ -61,10 +62,11 @@ class AddressListFragment : Fragment() {
             swipeRefreshLayout.setOnRefreshListener {
                 database?.let { db ->
                     this.lifecycleScope.launch {
-                        Slh.refreshAll(
+                        Slh.refreshAllAddressWidgets(
                             (addressListRecycler?.adapter as ChiaAddressListAdapter).getData(),
                             context,
-                            db
+                            db,
+                            true
                         )
                         swipeRefreshLayout.isRefreshing = false
                     }
@@ -185,7 +187,7 @@ class AddressListFragment : Fragment() {
             this.lifecycleScope.launch {
                 loadingSpinner?.visibility = View.VISIBLE
                 val dataDao = database?.getWidgetDataDao()
-                val widgetData = Slh.receiveWidgetDataFromApi(address)
+                val widgetData = ChiaExplorerApiHelper.receiveWidgetDataFromApi(address)
 
                 if (widgetData != null) {
                     dataDao?.insertUpdate(widgetData)
@@ -203,7 +205,7 @@ class AddressListFragment : Fragment() {
     }
 
     private fun setUpRoomsToRecyclerListener() {
-        database?.getWidgetSettingsAndDataDao()?.loadAll()?.observe(viewLifecycleOwner) {
+        database?.getWidgetSettingsAndDataDao()?.loadAllLiveData()?.observe(viewLifecycleOwner) {
             addressListRecycler?.adapter = ChiaAddressListAdapter(it)
         }
     }

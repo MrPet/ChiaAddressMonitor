@@ -41,5 +41,30 @@ interface WidgetSettingsAndDataDao {
         ORDER by wd.chiaAddress
         """
     )
-    fun loadAll(): LiveData<List<WidgetSettingsAndData>>
+    fun loadAllLiveData(): LiveData<List<WidgetSettingsAndData>>
+
+    @Query(
+        """
+        SELECT  wd.chiaAddress, 
+                wd.chia_amount, 
+                wd.chia_gross_amount,
+                wd.update_date,
+                ws.chia_address, 
+                ws.widgetID, 
+                ase.update_time AS ase_update_time, 
+                ase.show_notification AS ase_show_notification, 
+                ase.chia_address_synonym AS ase_chia_address_synonym, 
+                ase.chiaAddress AS ase_chiaAddress,
+                ase.precision AS ase_precision,
+                ase.use_gross_balance AS ase_use_gross_balance
+        FROM widget_data AS wd 
+        LEFT JOIN widget_settings AS ws 
+        ON ws.chia_address = wd.chiaAddress 
+        LEFT JOIN address_settings AS ase
+        on wd.chiaAddress = ase.chiaAddress
+        GROUP BY wd.chiaAddress 
+        ORDER by wd.chiaAddress
+        """
+    )
+    fun loadAll(): List<WidgetSettingsAndData>
 }

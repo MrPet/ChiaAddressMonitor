@@ -10,7 +10,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.RemoteViews
 import android.widget.Spinner
 import com.mikepenz.aboutlibraries.LibsBuilder
 import kotlin.coroutines.CoroutineContext
@@ -66,22 +65,26 @@ class ChiaFiatConversionWidgetConfig : Activity(), CoroutineScope {
                 appWidgetID
             )
             chiaConversionSpinner?.let {
-            // Create an ArrayAdapter using the string array and a default spinner layout
-            val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.filter {
-                it.value.hardcodedMultiplier == null
-            }.keys.toTypedArray()
-            ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, chiaConversionKeys)
-                .also { adapter ->
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    it.adapter = adapter
-                    if (widgetCurrentSettings?.conversionCurrency != null &&
-                        chiaConversionKeys.contains(widgetCurrentSettings.conversionCurrency)
-                    ) {
-                        it.setSelection(
-                            chiaConversionKeys.indexOf(widgetCurrentSettings.conversionCurrency)
-                        )
+                // Create an ArrayAdapter using the string array and a default spinner layout
+                val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.filter {
+                    it.value.hardcodedMultiplier == null
+                }.keys.toTypedArray()
+                ArrayAdapter(
+                    context,
+                    R.layout.support_simple_spinner_dropdown_item,
+                    chiaConversionKeys
+                )
+                    .also { adapter ->
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        it.adapter = adapter
+                        if (widgetCurrentSettings?.conversionCurrency != null &&
+                            chiaConversionKeys.contains(widgetCurrentSettings.conversionCurrency)
+                        ) {
+                            it.setSelection(
+                                chiaConversionKeys.indexOf(widgetCurrentSettings.conversionCurrency)
+                            )
+                        }
                     }
-                }
             }
         }
     }
@@ -121,18 +124,18 @@ class ChiaFiatConversionWidgetConfig : Activity(), CoroutineScope {
         }
     }
 
-    private suspend fun updateAppWidget(appWidgetID: Int, widgetFiatConversionSettings: WidgetFiatConversionSettings) {
+    private suspend fun updateAppWidget(
+        appWidgetID: Int,
+        widgetFiatConversionSettings: WidgetFiatConversionSettings
+    ) {
         val appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(this)
         val context = this
-        RemoteViews(this.packageName, R.layout.chia_public_address_widget).also { views ->
-            Slh.updateFiatWidgetWithSettings(
-                widgetFiatConversionSettings,
-                views,
-                context,
-                appWidgetID,
-                appWidgetManager
-            )
-        }
+        Slh.updateFiatWidgetWithSettings(
+            widgetFiatConversionSettings,
+            context,
+            appWidgetID,
+            appWidgetManager
+        )
     }
 
     private fun doneWithEverythingAndWentWell(appWidgetID: Int) {

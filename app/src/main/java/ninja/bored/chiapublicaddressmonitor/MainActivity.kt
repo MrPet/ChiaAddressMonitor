@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.mikepenz.aboutlibraries.LibsBuilder
 import ninja.bored.chiapublicaddressmonitor.helpers.NotificationHelper
+import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         NotificationHelper.createNotificationChannels(this)
+        Slh.setupWidgetUpdateWorker(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

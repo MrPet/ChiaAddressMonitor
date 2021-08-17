@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.widget.RemoteViews
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
@@ -19,7 +18,8 @@ class ChiaFiatConversionWidgetReceiver : AppWidgetProvider() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val receivedAppWidgetID =
-            intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
+            intent?.extras?.getInt(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID
             )
         if (receivedAppWidgetID != null && receivedAppWidgetID != AppWidgetManager.INVALID_APPWIDGET_ID) {
@@ -29,6 +29,23 @@ class ChiaFiatConversionWidgetReceiver : AppWidgetProvider() {
         super.onReceive(context, intent)
     }
 
+    override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
+        super.onDeleted(context, appWidgetIds)
+        if (context != null) {
+            val database = ChiaWidgetRoomsDatabase.getInstance(context)
+            appWidgetIds?.forEach { appWidgetID ->
+                GlobalScope.launch {
+                    val widgetFiatConversionSettingsDao =
+                        database.getWidgetFiatConversionSettingsDao()
+                    widgetFiatConversionSettingsDao.getByID(appWidgetID)
+                        ?.let { widgetFiatConversionSettings ->
+                            widgetFiatConversionSettingsDao.delete(widgetFiatConversionSettings)
+                        }
+                }
+            }
+        }
+    }
+
     override fun onUpdate(
         context: Context?,
         appWidgetManager: AppWidgetManager?,
@@ -36,6 +53,8 @@ class ChiaFiatConversionWidgetReceiver : AppWidgetProvider() {
     ) {
         Log.d(TAG, "onUpdate")
         context?.let {
+            Slh.setupWidgetUpdateWorker(context)
+
             val database = ChiaWidgetRoomsDatabase.getInstance(context)
             appWidgetManager?.let {
                 appWidgetIds?.forEach { appWidgetId ->
@@ -45,17 +64,16 @@ class ChiaFiatConversionWidgetReceiver : AppWidgetProvider() {
                         val widgetFiatConversionSettings =
                             widgetFiatConversionSettingsDao.getByID(appWidgetId)
                         widgetFiatConversionSettings?.let {
-                            RemoteViews(
-                                context.packageName,
-                                R.layout.chia_public_address_widget
-                            ).apply {
-                                val allViews = this
-                                Slh.updateFiatWidgetWithSettings(
-                                    widgetFiatConversionSettings,
-                                    allViews,
+
+                            val chiaLatestConversionDao = database.getChiaLatestConversionDao()
+                            chiaLatestConversionDao.getLatestForCurrency(
+                                widgetFiatConversionSettings.conversionCurrency
+                            )?.let { chiaLatestConversionFromDb ->
+                                Slh.updateFiatWidgetWithData(
+                                    chiaLatestConversionFromDb,
                                     context,
-                                    appWidgetId,
-                                    appWidgetManager
+                                    appWidgetManager,
+                                    appWidgetId
                                 )
                             }
                         }

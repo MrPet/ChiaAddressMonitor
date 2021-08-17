@@ -9,6 +9,7 @@ import ninja.bored.chiapublicaddressmonitor.model.ChiaExplorerAddressResponse
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import org.junit.Test
 import java.util.Date
+import ninja.bored.chiapublicaddressmonitor.helpers.ChiaExplorerApiHelper
 
 class SlhTest : TestCase() {
     @Test
@@ -40,7 +41,7 @@ class SlhTest : TestCase() {
         val date = Date()
         val highAmountChiaWidgetData = WidgetData(address, 18375000.0, date, 18475000.0)
         // maybe change datattypes in future, but for now it is good enough wont show so many decimals
-        val highAmountParsedWidgetData = Slh.parseApiResponseToWidgetData(
+        val highAmountParsedWidgetData = ChiaExplorerApiHelper.parseApiResponseToWidgetData(
             address,
             Gson().fromJson(
                 "{\n" +
@@ -67,14 +68,14 @@ class SlhTest : TestCase() {
             ChiaExplorerAddressResponse(zeroAmount, zeroAmount)
         val chiaWidgetData = WidgetData(address, zeroAmount, date, zeroAmount)
         val parsedWidgetData =
-            Slh.parseApiResponseToWidgetData(address, chiaExplorerAddressResponse, date)
+            ChiaExplorerApiHelper.parseApiResponseToWidgetData(address, chiaExplorerAddressResponse, date)
         assertEquals(
             "Api Response Netbalance with Zero must match widget data initialized with zero",
             chiaWidgetData,
             parsedWidgetData
         )
         val highAmountChiaWidgetData = WidgetData(address, 18375000.0, date, 18475000.0)
-        val highAmountParsedWidgetData = Slh.parseApiResponseToWidgetData(
+        val highAmountParsedWidgetData = ChiaExplorerApiHelper.parseApiResponseToWidgetData(
             address,
             Gson().fromJson(
                 "{\n" +
@@ -91,7 +92,7 @@ class SlhTest : TestCase() {
             highAmountParsedWidgetData
         )
         val decimalAmountChiaWidgetData = WidgetData(address, 28.1234, date, 28.2234)
-        val smallAmountParsedWidgetData = Slh.parseApiResponseToWidgetData(
+        val smallAmountParsedWidgetData = ChiaExplorerApiHelper.parseApiResponseToWidgetData(
             address,
             Gson().fromJson(
                 "{\n" +

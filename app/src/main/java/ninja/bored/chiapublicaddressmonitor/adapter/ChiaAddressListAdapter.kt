@@ -119,12 +119,16 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
                     Constants.ADDRESS_EXTRA,
                     widgetData.chiaAddress
                 )
+                var flags = PendingIntent.FLAG_UPDATE_CURRENT
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                }
 
                 val successCallback: PendingIntent = PendingIntent.getBroadcast(
                     clickContext,
                     0,
                     intent,
-                    PendingIntent.FLAG_IMMUTABLE
+                    flags
                 )
 
                 appWidgetManager.requestPinAppWidget(myProvider, null, successCallback)
