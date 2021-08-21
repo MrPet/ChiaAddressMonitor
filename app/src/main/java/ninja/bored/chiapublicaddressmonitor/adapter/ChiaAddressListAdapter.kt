@@ -119,9 +119,11 @@ class ChiaAddressListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
                     Constants.ADDRESS_EXTRA,
                     widgetData.chiaAddress
                 )
-                var flags = PendingIntent.FLAG_UPDATE_CURRENT
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                val flags = when {
+                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) -> {
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                    }
+                    else -> PendingIntent.FLAG_UPDATE_CURRENT
                 }
 
                 val successCallback: PendingIntent = PendingIntent.getBroadcast(

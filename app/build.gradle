@@ -7,25 +7,137 @@ plugins {
 
 static def generateVersionCode() {
     def result = "git rev-list --count HEAD".execute().text.trim() //unix
-    if(result.empty) result = "PowerShell -Command git rev-list --count HEAD".execute().text.trim() //windows
+    if (result.empty) result = "PowerShell -Command git rev-list --count HEAD".execute().text.trim()
+    //windows
     println "Result of git rev-list: ${result}"
-    if(result.empty) throw new RuntimeException("Could not generate versioncode on this platform? Cmd output: ${result.text}")
+    if (result.empty) throw new RuntimeException("Could not generate versioncode on this platform? Cmd output: ${result.text}")
     return result.toInteger()
 }
+
+class CopyScreenshotTask extends DefaultTask {
+
+    static def getDeviceListArray() {
+        def deviceSerialList = []
+        "adb devices".execute().text.trim().eachLine {
+            if (!it.startsWith('List of')) { // ignore first line
+                def deviceSerial = it.split('\t')[0]
+                deviceSerialList.add(deviceSerial)
+            }
+        }
+        return deviceSerialList
+    }
+
+    @TaskAction
+    copyScreenshotsFromDevices() {
+        getDeviceListArray().each {
+            copyScreenshotsFromDevice(it, project)
+        }
+    }
+
+    // why was it not possible to have this as normal member function?
+    static def copyScreenshotsFromDevice(String deviceSerial, project) {
+        def modelName = "adb -s ${deviceSerial} shell getprop ro.product.model".execute().text.trim()
+        def serialNumber = "adb -s ${deviceSerial} shell getprop ro.serialno".execute().text.trim()
+        def deviceFolder = "/storage/emulated/0/Download/screenshots"
+        def versionCode = project.android.defaultConfig.versionCode
+        def outPutFolder = "screenshots/${versionCode}/${modelName}_${serialNumber}_${deviceSerial}".replaceAll("\\s", "_")
+        def outPutFolderFile = project.mkdir outPutFolder
+        //        def currentDirectory = "pwd".execute().text.trim()
+        println "Coping from ${deviceFolder} to ${outPutFolderFile}"
+        def adbPullResult = "adb -s ${deviceSerial} -a pull ${deviceFolder} ${outPutFolderFile}".execute().text
+        if (adbPullResult.startsWith("adb: error:")) {
+            throw new RuntimeException("Adb Pull failed: ${adbPullResult}")
+        }
+        println "Coping done"
+        def getPropFile = new File(outPutFolderFile, "getprop.txt")
+        getPropFile.text = "adb -s ${deviceSerial} shell getprop".execute().text
+        println "Writing getprop.txt done"
+    }
+}
+
+class ClearScreenshotsFromDevice extends DefaultTask {
+
+    static def getDeviceListArray() {
+        def deviceSerialList = []
+        "adb devices".execute().text.trim().eachLine {
+            if (!it.startsWith('List of')) { // ignore first line
+                def deviceSerial = it.split('\t')[0]
+                deviceSerialList.add(deviceSerial)
+            }
+        }
+        return deviceSerialList
+    }
+
+    @TaskAction
+    ClearScreenshots() {
+        getDeviceListArray().each {
+            clearScreenshotsForOneDevice(it)
+        }
+    }
+
+    static def clearScreenshotsForOneDevice(deviceSerial) {
+        def deviceFolder = "/storage/emulated/0/Download/screenshots"
+        println "Remove screenshots from device ..."
+        println "adb -s ${deviceSerial} shell rm -r ${deviceFolder}".execute().text
+        println "done"
+    }
+}
+
+class ClearScreenshotsFromPC extends DefaultTask {
+
+    static def getDeviceListArray() {
+        def deviceSerialList = []
+        "adb devices".execute().text.trim().eachLine {
+            if (!it.startsWith('List of')) { // ignore first line
+                def deviceSerial = it.split('\t')[0]
+                deviceSerialList.add(deviceSerial)
+            }
+        }
+        return deviceSerialList
+    }
+
+    @TaskAction
+    ClearScreenshots() {
+        getDeviceListArray().each {
+            clearScreenshotsForDevice(it, project)
+        }
+    }
+
+    static def clearScreenshotsForDevice(String deviceSerial, project) {
+        println "Clearing screenshots from pc for device ${deviceSerial} ..."
+        def modelName = "adb -s ${deviceSerial} shell getprop ro.product.model".execute().text.trim()
+        def serialNumber = "adb -s ${deviceSerial} shell getprop ro.serialno".execute().text.trim()
+        def versionCode = project.android.defaultConfig.versionCode
+        def outPutFolder = "screenshots/${versionCode}/${modelName}_${serialNumber}_${deviceSerial}".replaceAll("\\s", "_")
+        if (modelName.empty == false && serialNumber.empty == false) {
+            // get rid of old files
+            def outPutFolderFile = project.file(outPutFolder)
+            if (outPutFolderFile.exists()) {
+                println "Removing files from ${outPutFolderFile}"
+                //            project.delete project.fileTree(outPutFolderFile).include('**/*')
+                project.delete outPutFolderFile
+            }
+            println "... done"
+        } else {
+            throw RuntimeException("No model name and Serialnumber fould ... abandon task")
+        }
+    }
+
+}
+
 
 def majorVersion = 0
 def minorVersion = 99
 
 android {
     compileSdkVersion 31
-
     defaultConfig {
         applicationId "ninja.bored.chiapublicaddressmonitor"
         minSdkVersion 24
         targetSdkVersion 31
         buildToolsVersion = "30.0.2"
         versionCode generateVersionCode()
-        versionName "${majorVersion}.${minorVersion}.${generateVersionCode()}"
+        versionName "${majorVersion}.${minorVersion}.${versionCode}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         setProperty("archivesBaseName", "chia-address-monitor-$versionName")
     }
@@ -59,7 +171,7 @@ android {
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
             try {
-                buildConfigField "String", "CHIA_EXPLORER_API_KEY",  properties.getProperty('CHIA_EXPLORER_API_KEY')
+                buildConfigField "String", "CHIA_EXPLORER_API_KEY", properties.getProperty('CHIA_EXPLORER_API_KEY')
                 buildConfigField "String", "CHIA_CONVERSIONS_API_KEY", properties.getProperty('CHIA_CONVERSIONS_API_KEY')
             }
             catch (ex) {
@@ -67,12 +179,18 @@ android {
             }
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    testOptions {
+        animationsDisabled = true
     }
 }
 
@@ -132,4 +250,19 @@ dependencies {
 
     // optional - Multiprocess support
     implementation "androidx.work:work-multiprocess:$work_version"
+
+
+    androidTestImplementation 'com.kaspersky.android-components:kaspresso:1.2.1'
+}
+
+tasks.register('clearScreenshotsFromDevice', ClearScreenshotsFromDevice)
+tasks.register('clearScreenshotsFromPC', ClearScreenshotsFromPC)
+tasks.register('copyScreenshots', CopyScreenshotTask)
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'connectedAndroidTest') {
+        task.dependsOn 'clearScreenshotsFromDevice'
+        task.dependsOn 'clearScreenshotsFromPC'
+        task.finalizedBy 'copyScreenshots'
+    }
 }
