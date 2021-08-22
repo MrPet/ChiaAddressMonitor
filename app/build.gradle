@@ -255,14 +255,14 @@ dependencies {
     androidTestImplementation 'com.kaspersky.android-components:kaspresso:1.2.1'
 }
 
-//tasks.register('clearScreenshotsFromDevice', ClearScreenshotsFromDevice)
-//tasks.register('clearScreenshotsFromPC', ClearScreenshotsFromPC)
-//tasks.register('copyScreenshots', CopyScreenshotTask)
+tasks.register('clearScreenshotsFromDevice', ClearScreenshotsFromDevice)
+tasks.register('clearScreenshotsFromPC', ClearScreenshotsFromPC)
+tasks.register('copyScreenshots', CopyScreenshotTask)
 
-//tasks.whenTaskAdded { task ->
-//    if (task.name == 'connectedAndroidTest') {
-//        task.dependsOn 'clearScreenshotsFromDevice'
-//        task.dependsOn 'clearScreenshotsFromPC'
-//        task.finalizedBy 'copyScreenshots'
-//    }
-//}
+tasks.whenTaskAdded { task ->
+    if (task.name == 'connectedAndroidTest') {
+        task.dependsOn 'clearScreenshotsFromDevice'
+        task.dependsOn 'clearScreenshotsFromPC'
+        task.finalizedBy 'copyScreenshots'
+    }
+}
