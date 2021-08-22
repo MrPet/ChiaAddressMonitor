@@ -45,7 +45,7 @@ jobs:
       - name: Instrumentation Tests
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 28
           script: ./gradlew connectedAndroidTest
   build:
     needs: [ unit_tests, android_tests ]
