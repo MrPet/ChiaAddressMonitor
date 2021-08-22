@@ -1,7 +1,7 @@
 package ninja.bored.chiapublicaddressmonitor.model
 
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
 import com.kaspersky.kaspresso.annotations.ScreenShooterTest
 import com.kaspersky.kaspresso.testcases.api.testcase.DocLocScreenshotTestCase
 import java.io.File
@@ -9,7 +9,6 @@ import ninja.bored.chiapublicaddressmonitor.MainActivity
 import ninja.bored.chiapublicaddressmonitor.model.screens.AddressDetailScreen
 import ninja.bored.chiapublicaddressmonitor.model.screens.AddressListRecyclerItem
 import ninja.bored.chiapublicaddressmonitor.model.screens.AddressListScreen
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -19,14 +18,8 @@ class ChiaWidgetScreenshots : DocLocScreenshotTestCase(
     locales = "en"
 ) {
 
-//    @get:Rule
-//    val runtimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-//        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//        Manifest.permission.READ_EXTERNAL_STORAGE
-//    )
-
-    @get:Rule
-    val activityTestRule = ActivityTestRule(MainActivity::class.java, true, false)
+    // @get:Rule
+    // val activityTestRule = ActivityTestRule(MainActivity::class.java, true, false)
 
     @ScreenShooterTest
     @Test
@@ -37,7 +30,7 @@ class ChiaWidgetScreenshots : DocLocScreenshotTestCase(
                 captureScreenshot(it.description)
             }
             step("${++stepCounter}. Launch activity") {
-                activityTestRule.launchActivity(null)
+                ActivityScenario.launch(MainActivity::class.java)
                 captureScreenshot(it.description)
             }
 
