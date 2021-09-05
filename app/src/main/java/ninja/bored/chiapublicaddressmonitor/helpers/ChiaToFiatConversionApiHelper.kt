@@ -32,6 +32,7 @@ object ChiaToFiatConversionApiHelper {
         context: Context,
         showConnectionProblems: Boolean
     ): WidgetData? {
+        Log.d(TAG, "getting widget data from Api")
         val currentWidgetDataUpdate =
             ChiaExplorerApiHelper.receiveWidgetDataFromApi(chiaAddress)
         if (currentWidgetDataUpdate != null) {
@@ -55,14 +56,14 @@ object ChiaToFiatConversionApiHelper {
             database.getChiaLatestConversionDao().getLatestForCurrency(conversionCurrency)
 
         val calendar: Calendar = Calendar.getInstance()
-        calendar.add(Calendar.MINUTE, Constants.TIME_THRESHOLD_FOR_FIAT_CONVERSION)
+        calendar.add(Calendar.MINUTE, (-1 * Constants.TIME_THRESHOLD_FOR_FIAT_CONVERSION))
         if (returnChiaConversion == null ||
             returnChiaConversion.deviceImportDate.before(Date(calendar.timeInMillis))
         ) // still in threshold we return db
         {
+            Log.d(TAG, "getting conversion from Api")
             // we need to get from api
-            val currencyFromApi = receiveChiaConversionFromApi()
-            currencyFromApi?.data?.forEach {
+            receiveChiaConversionFromApi()?.data?.forEach {
                 val chiaConversionResponseData = it.value
                 val newChiaConversion = ChiaLatestConversion(chiaConversionResponseData)
                 database.getChiaLatestConversionDao().insertUpdate(newChiaConversion)
@@ -105,6 +106,7 @@ object ChiaToFiatConversionApiHelper {
                                     ChiaConversionResponse::class.java
                                 )
                             }
+                            response.body?.close()
                             chiaExplorerAddressResult?.let {
                                 if (it.state.code == Constants.STATE_OK_CODE) {
                                     continuation.resumeWith(Result.success(it))
@@ -115,10 +117,12 @@ object ChiaToFiatConversionApiHelper {
                         } catch (e: JsonParseException) {
                             // not good something bad happened
                             Log.e(TAG, "ERROR in api response: $e")
+                            response.body?.close()
                             continuation.resumeWith(Result.success(null))
                         }
                     } else {
                         Log.e(TAG, "Response not successful")
+                        response.body?.close()
                         continuation.resumeWith(Result.success(null))
                     }
                 }

@@ -22,8 +22,8 @@ object ChiaExplorerApiHelper {
      * gets Address data from chiaexplorer.com
      */
     suspend fun receiveWidgetDataFromApi(address: String): WidgetData? =
-
         suspendCancellableCoroutine { continuation ->
+            Log.d(TAG, "calling explorer api: $address")
             val request = Request.Builder()
                 .url(Constants.BASE_API_URL + address.trim())
                 .addHeader(
@@ -50,6 +50,7 @@ object ChiaExplorerApiHelper {
                                     ChiaExplorerAddressResponse::class.java
                                 )
                             }
+                            response.body?.close()
                             chiaExplorerAddressResult?.let {
                                 continuation.resumeWith(
                                     Result.success(
@@ -64,10 +65,12 @@ object ChiaExplorerApiHelper {
                         } catch (e: JsonParseException) {
                             // not good something bad happened
                             Log.e(TAG, "ERROR in api response: $e")
+                            response.body?.close()
                             continuation.resumeWith(Result.success(null))
                         }
                     } else {
                         Log.e(TAG, "Response not successful")
+                        response.body?.close()
                         continuation.resumeWith(Result.success(null))
                     }
                 }

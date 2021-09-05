@@ -72,7 +72,8 @@ object Slh {
                 Constants.CHIA_CURRENCY_CONVERSIONS[currencyCode]?.hardcodedMultiplier
             // get currency info
             if (currencyMultiplier == null) {
-                val chiaLatestConversion = ChiaToFiatConversionApiHelper.getLatestChiaConversion(currencyCode, database)
+                val chiaLatestConversion =
+                    ChiaToFiatConversionApiHelper.getLatestChiaConversion(currencyCode, database)
                 currencyMultiplier = when (chiaLatestConversion?.price) {
                     null -> 1.0
                     else -> chiaLatestConversion.price
@@ -123,7 +124,12 @@ object Slh {
                 widgetFiatConversionSettings.conversionCurrency, database
             )
             chiaLatestConversion?.let {
-                updateFiatWidgetWithData(chiaLatestConversion, context, appWidgetManager, appWidgetId)
+                updateFiatWidgetWithData(
+                    chiaLatestConversion,
+                    context,
+                    appWidgetManager,
+                    appWidgetId
+                )
             }
         }
     }
@@ -275,11 +281,14 @@ object Slh {
     }
 
     fun setupWidgetUpdateWorker(context: Context) {
+//        if (!isUpdateWorkerRunning(context)) {
         val widgetUpdaterWorkRequest: PeriodicWorkRequest =
+
             PeriodicWorkRequestBuilder<WidgetUpdaterWork>(
                 Constants.UPDATE_WORKER_INTERVAL_IN_MINUTES,
                 TimeUnit.MINUTES
             )
+                .addTag(Constants.UPDATE_WORKER_NAME)
                 .build()
 
         // we keep the old job if we try to add it again
@@ -290,5 +299,28 @@ object Slh {
                 ExistingPeriodicWorkPolicy.KEEP,
                 widgetUpdaterWorkRequest
             )
+//        }
     }
+
+//    private fun isUpdateWorkerRunning(context: Context): Boolean {
+//        var isRunning = false
+//        try {
+//            val status =
+//                WorkManager.getInstance(context).getWorkInfosByTag(Constants.UPDATE_WORKER_NAME)
+//                    .get()
+//            for (workStatus in status) {
+//                if (workStatus.state == WorkInfo.State.RUNNING ||
+//                    workStatus.state == WorkInfo.State.ENQUEUED
+//                ) {
+//                    isRunning = true
+//                }
+//            }
+//            return false
+//        } catch (e: InterruptedException) {
+//            Log.d(TAG, e.toString())
+//        } catch (e: ExecutionException) {
+//            Log.d(TAG, e.toString())
+//        }
+//        return isRunning
+//    }
 }

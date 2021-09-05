@@ -15,7 +15,7 @@ class WidgetUpdaterWork(appContext: Context, workerParams: WorkerParameters) :
     }
 
     override suspend fun doWork(): Result {
-        Log.d(TAG, "doing my part")
+        Log.d(TAG, "doing my part .. Working")
         // first get all widgets
         val database = ChiaWidgetRoomsDatabase.getInstance(this.applicationContext)
         // update conversions
