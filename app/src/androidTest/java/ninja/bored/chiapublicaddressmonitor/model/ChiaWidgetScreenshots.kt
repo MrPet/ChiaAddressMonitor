@@ -6,8 +6,6 @@ import com.kaspersky.kaspresso.annotations.ScreenShooterTest
 import com.kaspersky.kaspresso.testcases.api.testcase.DocLocScreenshotTestCase
 import java.io.File
 import ninja.bored.chiapublicaddressmonitor.MainActivity
-import ninja.bored.chiapublicaddressmonitor.model.screens.AddressDetailScreen
-import ninja.bored.chiapublicaddressmonitor.model.screens.AddressListRecyclerItem
 import ninja.bored.chiapublicaddressmonitor.model.screens.AddressListScreen
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -43,7 +41,7 @@ class ChiaWidgetScreenshots : DocLocScreenshotTestCase(
                 editText.replaceText("xch1away45w2acy8cqgcjxnne8aket33y49tt437gjjk86y7fanstw7qyewsrf")
                 captureScreenshot(it.description)
             }
-
+/*
             step("${++stepCounter}. click add Button") {
                 positiveButton.click()
                 captureScreenshot(it.description)
@@ -86,6 +84,7 @@ class ChiaWidgetScreenshots : DocLocScreenshotTestCase(
 //                    }
 //                }
             }
+            */
         }
     }
 }
