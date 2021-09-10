@@ -3,13 +3,14 @@
 package ninja.bored.chiapublicaddressmonitor
 
 import com.google.gson.Gson
+import java.util.Date
 import junit.framework.TestCase
+import ninja.bored.chiapublicaddressmonitor.helpers.AllTheBlocksApiHelper
+import ninja.bored.chiapublicaddressmonitor.helpers.ChiaExplorerApiHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaExplorerAddressResponse
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import org.junit.Test
-import java.util.Date
-import ninja.bored.chiapublicaddressmonitor.helpers.ChiaExplorerApiHelper
 
 class SlhTest : TestCase() {
     @Test
@@ -32,6 +33,24 @@ class SlhTest : TestCase() {
         assertFalse(
             "Address invalid characters - invalid",
             Slh.isChiaAddressValid("xch1xntpeve5yjnadgjsyhc2szvjw07xt6mkv&d2v3qfvsvj097sywls7m6k2")
+        )
+    }
+
+    @Test
+    fun testBuildUrlFromAddress() {
+        assertEquals(
+            "https://api.alltheblocks.net/chia/address/xch1away45w2acy8cqgcjxnne8aket33y49tt437gjjk86y7fanstw7qyewsrf",
+            AllTheBlocksApiHelper
+                .buildUrlFromAddress("xch1away45w2acy8cqgcjxnne8aket33y49tt437gjjk86y7fanstw7qyewsrf")
+        )
+    }
+
+    @Test
+    fun testGetCurrencyIdentifierFromAddress() {
+        assertEquals(
+            "chia",
+            AllTheBlocksApiHelper
+                .getCurrencyIdentifierFromAddress("xch1away45w2acy8cqgcjxnne8aket33y49tt437gjjk86y7fanstw7qyewsrf")
         )
     }
 

@@ -26,7 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.adapter.ChiaAddressListAdapter
-import ninja.bored.chiapublicaddressmonitor.helpers.ChiaExplorerApiHelper
+import ninja.bored.chiapublicaddressmonitor.helpers.AllTheBlocksApiHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
@@ -187,7 +187,7 @@ class AddressListFragment : Fragment() {
             this.lifecycleScope.launch {
                 loadingSpinner?.visibility = View.VISIBLE
                 val dataDao = database?.getWidgetDataDao()
-                val widgetData = ChiaExplorerApiHelper.receiveWidgetDataFromApi(address)
+                val widgetData = AllTheBlocksApiHelper.receiveWidgetDataFromApi(address)
 
                 if (widgetData != null) {
                     dataDao?.insertUpdate(widgetData)

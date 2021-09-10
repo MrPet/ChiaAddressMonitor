@@ -1,21 +1,16 @@
 package ninja.bored.chiapublicaddressmonitor.helpers
 
-import android.content.Context
 import android.icu.util.Calendar
 import android.util.Log
-import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import java.io.IOException
 import java.util.Date
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
-import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.model.ChiaConversionResponse
 import ninja.bored.chiapublicaddressmonitor.model.ChiaLatestConversion
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
-import ninja.bored.chiapublicaddressmonitor.model.WidgetData
-import ninja.bored.chiapublicaddressmonitor.model.WidgetDataDao
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -25,24 +20,6 @@ import okhttp3.Response
 object ChiaToFiatConversionApiHelper {
 
     const val TAG: String = "ChiaToFiatConversionApiHelper"
-
-    suspend fun receiveWidgetDataFromApiAndUpdateToDatabase(
-        chiaAddress: String,
-        widgetDataDao: WidgetDataDao,
-        context: Context,
-        showConnectionProblems: Boolean
-    ): WidgetData? {
-        Log.d(TAG, "getting widget data from Api")
-        val currentWidgetDataUpdate =
-            ChiaExplorerApiHelper.receiveWidgetDataFromApi(chiaAddress)
-        if (currentWidgetDataUpdate != null) {
-            widgetDataDao.insertUpdate(currentWidgetDataUpdate)
-        } else if (showConnectionProblems) {
-            Toast.makeText(context, R.string.connectionProblems, Toast.LENGTH_LONG)
-                .show()
-        }
-        return currentWidgetDataUpdate
-    }
 
     /**
      * checks in db if price is over threshold if so we get newer prices from api, save them

@@ -20,6 +20,9 @@ object Constants {
     const val CHIA_ADDRESS_LENGTH: Int = 62
     const val CHIA_ADDRESS_PREFIX: String = "xch"
     const val SHORT_DATE_TIME_FORMAT: String = "EEE, HH:mm"
+    const val BASE_ALL_THE_BLOCKS_API_URL: String = "https://api.alltheblocks.net/"
+    val ALL_THE_BLOCKS_CURRENCIES = mapOf("xch" to "chia", "xdg" to "dogechia", "xcc" to "chives")
+    const val BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH: String = "/address/"
     const val BASE_API_URL: String = "https://public-api.chiaexplorer.com/0.1/balance/"
     const val CHIA_EXPLORER_API_KEY_HEADER_NAME: String = "x-api-key"
     const val CHIA_EXPLORER_API_KEY: String = BuildConfig.CHIA_EXPLORER_API_KEY
