@@ -218,7 +218,7 @@ object Slh {
         }
         chiaAddress?.let {
             // has widget settings
-            ChiaToFiatConversionApiHelper.receiveWidgetDataFromApiAndUpdateToDatabase(
+            AllTheBlocksApiHelper.receiveWidgetDataFromApiAndUpdateToDatabase(
                 chiaAddress,
                 widgetDataDao,
                 context,

@@ -9,7 +9,7 @@ import java.io.IOException
 import java.util.Date
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ninja.bored.chiapublicaddressmonitor.R
-import ninja.bored.chiapublicaddressmonitor.model.ChiaExplorerAddressResponse
+import ninja.bored.chiapublicaddressmonitor.model.AllTheBlocksApiResponse
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import ninja.bored.chiapublicaddressmonitor.model.WidgetDataDao
 import okhttp3.Call
@@ -18,9 +18,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 
-object ChiaExplorerApiHelper {
+object AllTheBlocksApiHelper {
 
-    const val TAG: String = "chiaExplorerApiHelper"
+    const val TAG: String = "allTheBlocksApiHelper"
 
     suspend fun receiveWidgetDataFromApiAndUpdateToDatabase(
         chiaAddress: String,
@@ -30,7 +30,7 @@ object ChiaExplorerApiHelper {
     ): WidgetData? {
         Log.d(ChiaToFiatConversionApiHelper.TAG, "getting widget data from Api")
         val currentWidgetDataUpdate =
-            ChiaExplorerApiHelper.receiveWidgetDataFromApi(chiaAddress)
+            receiveWidgetDataFromApi(chiaAddress)
         if (currentWidgetDataUpdate != null) {
             widgetDataDao.insertUpdate(currentWidgetDataUpdate)
         } else if (showConnectionProblems) {
@@ -40,18 +40,28 @@ object ChiaExplorerApiHelper {
         return currentWidgetDataUpdate
     }
 
+    fun buildUrlFromAddress(address: String): String {
+
+        return Constants.BASE_ALL_THE_BLOCKS_API_URL +
+                getCurrencyIdentifierFromAddress(address) +
+                Constants.BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH +
+                address
+    }
+
+    fun getCurrencyIdentifierFromAddress(address: String): String? {
+        val addressIdentifier = address.substring(0, Constants.ADDRESS_IDENTIFIER_LENGTH)
+        return Constants.ALL_THE_BLOCKS_CURRENCIES[addressIdentifier]
+    }
+
     /**
-     * gets Address data from chiaexplorer.com
+     * gets Address data from api.alltheblocks.net
      */
     suspend fun receiveWidgetDataFromApi(address: String): WidgetData? =
         suspendCancellableCoroutine { continuation ->
-            Log.d(TAG, "calling explorer api: $address")
+            val allTheBlocksUrl = buildUrlFromAddress(address)
+            Log.d(TAG, "calling api.alltheblocks.net: $allTheBlocksUrl")
             val request = Request.Builder()
-                .url(Constants.BASE_API_URL + address.trim())
-                .addHeader(
-                    Constants.CHIA_EXPLORER_API_KEY_HEADER_NAME,
-                    Constants.CHIA_EXPLORER_API_KEY
-                )
+                .url(allTheBlocksUrl)
                 .build()
 
             val client = OkHttpClient.Builder().build()
@@ -63,17 +73,18 @@ object ChiaExplorerApiHelper {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    // newer seen addresses get a 404 but if you start farming you still would like to add it ...
-                    if (response.isSuccessful || response.code == Constants.ADDRESS_NOT_FOUND_HTTP_CODE) {
+                    // never seen addresses get a 404 but if you start farming you still would like to add it ...
+                    if (response.isSuccessful) {
                         try {
-                            val chiaExplorerAddressResult = response.body?.let {
+                            val allTheBlocksAddressResult = response.body?.let {
                                 Gson().fromJson(
-                                    it.charStream(),
-                                    ChiaExplorerAddressResponse::class.java
+                                    it.string(),
+                                    AllTheBlocksApiResponse::class.java
                                 )
                             }
                             response.body?.close()
-                            chiaExplorerAddressResult?.let {
+                            allTheBlocksAddressResult?.let {
+                                Log.d(TAG, it.toString())
                                 continuation.resumeWith(
                                     Result.success(
                                         parseApiResponseToWidgetData(
@@ -101,22 +112,18 @@ object ChiaExplorerApiHelper {
 
     fun parseApiResponseToWidgetData(
         address: String,
-        chiaExplorerAddressResponse: ChiaExplorerAddressResponse,
+        allTheBlocksApiResponse: AllTheBlocksApiResponse,
         date: Date
     ): WidgetData {
-        val dividedNetBalance = when (chiaExplorerAddressResponse.netBalance) {
-            0.0 -> chiaExplorerAddressResponse.netBalance
-            else -> chiaExplorerAddressResponse.netBalance.div(Constants.NET_BALANCE_DIVIDER)
-        }
-        val dividedGrossBalance = when (chiaExplorerAddressResponse.grossBalance) {
-            0.0 -> chiaExplorerAddressResponse.grossBalance
-            else -> chiaExplorerAddressResponse.grossBalance.div(Constants.NET_BALANCE_DIVIDER)
+        val dividedNetBalance = when (allTheBlocksApiResponse.balance) {
+            0L -> allTheBlocksApiResponse.balance.toDouble()
+            else -> allTheBlocksApiResponse.balance.div(Constants.NET_BALANCE_DIVIDER)
         }
         return WidgetData(
             address,
             dividedNetBalance,
             date,
-            dividedGrossBalance
+            dividedNetBalance
         )
     }
 }

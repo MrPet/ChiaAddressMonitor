@@ -18,7 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import ninja.bored.chiapublicaddressmonitor.helpers.ChiaExplorerApiHelper
+import ninja.bored.chiapublicaddressmonitor.helpers.AllTheBlocksApiHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettings
@@ -143,7 +143,7 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         val dataDao = widgetDB?.getWidgetDataDao()
         var widgetData = dataDao?.getByAddress(widgetSettings.chiaAddress)
         if (widgetData == null) {
-            widgetData = ChiaExplorerApiHelper.receiveWidgetDataFromApi(
+            widgetData = AllTheBlocksApiHelper.receiveWidgetDataFromApi(
                 widgetSettings.chiaAddress
             )
 

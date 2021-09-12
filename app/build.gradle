@@ -159,7 +159,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             try {
-                buildConfigField "String", "CHIA_EXPLORER_API_KEY", properties.getProperty('CHIA_EXPLORER_API_KEY')
+                //buildConfigField "String", "CHIA_EXPLORER_API_KEY", properties.getProperty('CHIA_EXPLORER_API_KEY')
                 buildConfigField "String", "CHIA_CONVERSIONS_API_KEY", properties.getProperty('CHIA_CONVERSIONS_API_KEY')
             }
             catch (ex) {
@@ -171,7 +171,7 @@ android {
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
             try {
-                buildConfigField "String", "CHIA_EXPLORER_API_KEY", properties.getProperty('CHIA_EXPLORER_API_KEY')
+                //buildConfigField "String", "CHIA_EXPLORER_API_KEY", properties.getProperty('CHIA_EXPLORER_API_KEY')
                 buildConfigField "String", "CHIA_CONVERSIONS_API_KEY", properties.getProperty('CHIA_CONVERSIONS_API_KEY')
             }
             catch (ex) {
@@ -237,7 +237,7 @@ dependencies {
 
 
     // worker manager
-    def work_version = "2.6.0"
+    def work_version = "2.7.0-beta01"
 
     // Kotlin + coroutines
     implementation "androidx.work:work-runtime-ktx:$work_version"

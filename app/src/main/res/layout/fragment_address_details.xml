@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".AddressDetailsFragment">
 
+
     <TextView
         android:id="@+id/address_detail_fragment_header"
         android:layout_width="0dp"
@@ -13,12 +14,11 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:focusable="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:autoSizeMaxTextSize="20sp"
         app:autoSizeMinTextSize="2sp"
         app:autoSizeStepGranularity="3sp"
         app:autoSizeTextType="uniform"
-
+        android:maxLines="2"
         app:layout_constraintEnd_toStartOf="@+id/copy_address_button"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +36,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+    <TextView
+        android:id="@+id/address_fragment_detail_header_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:linksClickable="true"
+        android:autoLink="web"
+        android:text="@string/chia_widget_config_description"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/address_has_notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/address_detail_fragment_header"
+        />
+
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/enable_notifications_text"
         android:layout_width="0dp"
@@ -50,7 +65,7 @@
         app:layout_constraintBottom_toBottomOf="@id/address_has_notification"
         app:layout_constraintEnd_toStartOf="@+id/address_has_notification"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/address_detail_fragment_header" />
+        app:layout_constraintTop_toBottomOf="@id/address_fragment_detail_header_text" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/address_has_notification"

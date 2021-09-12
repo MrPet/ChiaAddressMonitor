@@ -8,7 +8,7 @@
     <string name="last_refresh_placeholder">%s</string>
     <string name="chia_widget_config_title">Chia public address widget configuration</string>
     <string name="public_address_hint">Public address (xch…)</string>
-    <string name="chia_widget_config_description">This widget will periodically check the balance of the public address.</string>
+    <string name="chia_widget_config_description">This widget will periodically check the balance of the public address. We use https://alltheblocks.net to get accurate information about your address balance.</string>
     <string name="save_widget_settings">Save</string>
     <string name="chia_address_input_error_wrong">The address seems to be wrong, please check your input. You can find your address in the "Wallet" tab of your Chia UI</string>
     <string name="recycler_item_amount_and_date">%s XCH @%s</string>
@@ -39,13 +39,22 @@
     <string name="address_balance_changed_negative_notification_text">Your balance for %s changed from %s XCH to %s XCH </string>
 
     <!-- custom lib -->
-    <string name="define_plu_chia_explorer" tools:keep="@string/define_plu_chia_explorer">year;owner</string>
-    <string name="library_chia_explorer_author" tools:keep="@string/library_chia_explorer_author">Freddie Coleman</string>
-    <string name="library_chia_explorer_authorWebsite" tools:keep="@string/library_chia_explorer_authorWebsite">https://chiaexplorer.com</string>
-    <string name="library_chia_explorer_libraryName" tools:keep="@string/library_chia_explorer_libraryName">Chia explorer</string>
-    <string name="library_chia_explorer_libraryDescription" tools:keep="@string/library_chia_explorer_libraryDescription">Browse and search the Chia blockchain™ with historic data charts.</string>
-    <string name="library_chia_explorer_libraryVersion" tools:keep="@string/library_chia_explorer_libraryVersion">0.1</string>
-    <string name="library_chia_explorer_libraryWebsite" tools:keep="@string/library_chia_explorer_libraryWebsite">https://www.chiaexplorer.com/api/v0.1</string>
+<!--    <string name="define_plu_chia_explorer" tools:keep="@string/define_plu_chia_explorer">year;owner</string>-->
+<!--    <string name="library_chia_explorer_author" tools:keep="@string/library_chia_explorer_author">Freddie Coleman</string>-->
+<!--    <string name="library_chia_explorer_authorWebsite" tools:keep="@string/library_chia_explorer_authorWebsite">https://chiaexplorer.com</string>-->
+<!--    <string name="library_chia_explorer_libraryName" tools:keep="@string/library_chia_explorer_libraryName">Chia explorer</string>-->
+<!--    <string name="library_chia_explorer_libraryDescription" tools:keep="@string/library_chia_explorer_libraryDescription">Browse and search the Chia blockchain™ with historic data charts.</string>-->
+<!--    <string name="library_chia_explorer_libraryVersion" tools:keep="@string/library_chia_explorer_libraryVersion">0.1</string>-->
+<!--    <string name="library_chia_explorer_libraryWebsite" tools:keep="@string/library_chia_explorer_libraryWebsite">https://www.chiaexplorer.com/api/v0.1</string>-->
+
+    <string name="define_plu_all_the_blocks"                    tools:keep="@string/define_plu_all_the_blocks">year;owner</string>
+    <string name="library_all_the_blocks_author"                tools:keep="@string/library_all_the_blocks_author">SirCotare</string>
+    <string name="library_all_the_blocks_authorWebsite"         tools:keep="@string/library_all_the_blocks_authorWebsite">https://alltheblocks.net</string>
+    <string name="library_all_the_blocks_libraryName"           tools:keep="@string/library_all_the_blocks_libraryName">All the blocks</string>
+    <string name="library_all_the_blocks_libraryDescription"    tools:keep="@string/library_all_the_blocks_libraryDescription">ALL THE BLOCKS - Chia &amp; forks | blockchain explorer</string>
+    <string name="library_all_the_blocks_libraryVersion"        tools:keep="@string/library_all_the_blocks_libraryVersion">0.1</string>
+    <string name="library_all_the_blocks_libraryWebsite"        tools:keep="@string/library_all_the_blocks_libraryWebsite">https://alltheblocks.net</string>
+
     <string name="notification_activate_for_address">Enable notifications for this address</string>
     <string name="chia_address_synonym_hint">Chia address synonym</string>
     <string name="saved_address_settings">Saved address settings</string>
@@ -55,7 +64,7 @@
     <string name="copyAddressSuccessful">Address successfully copied to clipboard</string>
     <string name="copyAddressError">Error while copying address to clipboard</string>
     <string name="chia_fiat_conversion_widget_config_title">Chia exchange rate widget</string>
-    <string name="chia_exchange_rate_widget_config_description">This widget will update every hour. The exchange rate is from the coinmarketcap API. It can differ from specific exchanges.</string>
+    <string name="chia_exchange_rate_widget_config_description">This widget will update every two hours. The exchange rate is from the https://coinmarketcap.com/ API. It can differ from specific exchanges.</string>
     <string name="use_gross_balance_description">Show address in gross balance. This will ignore all outgoing transactions. Intended for farmers who would like to see how much they mined in total.</string>
 
 

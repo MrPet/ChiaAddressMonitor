@@ -28,6 +28,8 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:text="@string/chia_widget_config_description"
+        android:linksClickable="true"
+        android:autoLink="web"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
