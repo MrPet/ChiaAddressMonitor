@@ -6,7 +6,7 @@ With this widget, you can always check your chia [blockchain™](https://www.chi
 
 The Widget will be refreshed by the widget api, this can result in irregular updates but will not drain your battery. If you need a quick update you can refresh the widget manually in the app. Just pull the list of addresses to refresh all.
 
-This widget uses the API of [all the blocks](https://alltheblocks.net), big thanks for doing the heavy lifting and providing the data for easy access.
+This widget uses the API of [alltheblocks.net](https://alltheblocks.net), big thanks for doing the heavy lifting and providing the data for easy access.
 
 This is a beta version and is developed in my free time, please keep that in mind. 
 
