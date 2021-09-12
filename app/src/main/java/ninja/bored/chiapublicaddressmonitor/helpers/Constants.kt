@@ -4,6 +4,7 @@ import ninja.bored.chiapublicaddressmonitor.BuildConfig
 import ninja.bored.chiapublicaddressmonitor.model.CurrencyConversionInfo
 
 object Constants {
+    const val ADDRESS_IDENTIFIER_LENGTH: Int = 3
     const val TIME_THRESHOLD_FOR_FIAT_CONVERSION: Int = 15
     const val BIG_AMOUNT_THRESHOLD = 10000
     const val defaultUpdateTime: Int = 3600
@@ -25,7 +26,7 @@ object Constants {
     const val BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH: String = "/address/"
     const val BASE_API_URL: String = "https://public-api.chiaexplorer.com/0.1/balance/"
     const val CHIA_EXPLORER_API_KEY_HEADER_NAME: String = "x-api-key"
-    const val CHIA_EXPLORER_API_KEY: String = BuildConfig.CHIA_EXPLORER_API_KEY
+    const val CHIA_EXPLORER_API_KEY: String = "NOT used anymore" // BuildConfig.CHIA_EXPLORER_API_KEY
     const val CHIA_CONVERSIONS_BASE_API_URL: String = "https://cmccache.bored.ninja/price"
     const val CHIA_CONVERSIONS_API_KEY_HEADER_NAME: String = "api-key"
     const val CHIA_CONVERSIONS_API_KEY: String = BuildConfig.CHIA_CONVERSIONS_API_KEY

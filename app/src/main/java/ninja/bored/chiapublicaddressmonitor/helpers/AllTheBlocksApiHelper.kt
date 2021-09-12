@@ -10,7 +10,6 @@ import java.util.Date
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.model.AllTheBlocksApiResponse
-import ninja.bored.chiapublicaddressmonitor.model.ChiaExplorerAddressResponse
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import ninja.bored.chiapublicaddressmonitor.model.WidgetDataDao
 import okhttp3.Call
@@ -50,7 +49,7 @@ object AllTheBlocksApiHelper {
     }
 
     fun getCurrencyIdentifierFromAddress(address: String): String? {
-        val addressIdentifier = address.substring(0, 3)
+        val addressIdentifier = address.substring(0, Constants.ADDRESS_IDENTIFIER_LENGTH)
         return Constants.ALL_THE_BLOCKS_CURRENCIES[addressIdentifier]
     }
 

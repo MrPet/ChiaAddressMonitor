@@ -6,7 +6,7 @@ With this widget, you can always check your chia [blockchain™](https://www.chi
 
 The Widget will be refreshed by the widget api, this can result in irregular updates but will not drain your battery. If you need a quick update you can refresh the widget manually in the app. Just pull the list of addresses to refresh all.
 
-This widget uses the API of [chiaexplorer](https://www.chiaexplorer.com), big thanks for doing the heavy lifting and providing the data for easy access.
+This widget uses the API of [all the blocks](https://alltheblocks.net), big thanks for doing the heavy lifting and providing the data for easy access.
 
 This is a beta version and is developed in my free time, please keep that in mind. 
 
@@ -18,7 +18,7 @@ This is a beta version and is developed in my free time, please keep that in min
 Code contributions are very welcome. 
 
 ### Getting started
-Everything should work out of the box if you use android studio. You only need a [chiaexplorer api token](https://www.chiaexplorer.com/pro/login). Your need to add following line to your local.properties file:
+Everything should work out of the box if you use android studio. 
 
 ## Spelling / Translations
 
