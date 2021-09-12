@@ -26,10 +26,6 @@ If you find spelling, grammar errors or strange formulations a pull request woul
 
 Translations are also very welcome. 
 
-```
-CHIA_EXPLORER_API_KEY="Your Chia explorer Api Key"
-```
-
 ## Bug Reports / Feature requests
 ### Found a Bug?
 Please [report](https://github.com/MrPet/ChiaAddressMonitor/issues) it as detailed as Possible, with android version and launcher used. A screenshot will help to reproduce and fix the bug.
