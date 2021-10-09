@@ -56,6 +56,6 @@ object Constants {
         CurrencyCode.USD to CurrencyConversionInfo(CurrencyCode.USD, Precision.FIAT, null)
     )
 
-    const val UPDATE_WORKER_INTERVAL_IN_MINUTES: Long = 120L
+    const val UPDATE_WORKER_INTERVAL_IN_MINUTES: Long = 15L
     const val UPDATE_WORKER_NAME: String = "widget_update_worker"
 }

@@ -76,30 +76,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/enable_notifications_text" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/use_gross_balance_text"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="@string/use_gross_balance_description"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/use_gross_balance"
-        app:layout_constraintEnd_toStartOf="@+id/use_gross_balance"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enable_notifications_text" />
+<!--    <androidx.appcompat.widget.AppCompatTextView-->
+<!--        android:id="@+id/use_gross_balance_text"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_gravity="center_vertical"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:text="@string/use_gross_balance_description"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/use_gross_balance"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/use_gross_balance"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/enable_notifications_text" />-->
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/use_gross_balance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/use_gross_balance_text" />
+<!--    <androidx.appcompat.widget.SwitchCompat-->
+<!--        android:id="@+id/use_gross_balance"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="end"-->
+<!--        android:layout_marginEnd="24dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@id/use_gross_balance_text" />-->
 
 
 
@@ -143,7 +143,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/use_gross_balance_text" />
+        app:layout_constraintTop_toBottomOf="@id/address_has_notification" />
 
     <Spinner
         android:id="@+id/chia_convertion_spinner"
@@ -181,17 +181,31 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        android:id="@+id/to_notification_settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="?android:colorButtonNormal"
+        android:text="@string/android_notifcation_settingns"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chia_address_synonym_text_input_layout" />
+
+    <Button
         android:id="@+id/save_address_settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         android:backgroundTint="?colorPrimary"
         android:text="@string/save_widget_settings"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
 
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chia_address_synonym_text_input_layout"
+        app:layout_constraintTop_toBottomOf="@+id/to_notification_settings_button"
         app:layout_constraintVertical_bias="0.949" />
 
 

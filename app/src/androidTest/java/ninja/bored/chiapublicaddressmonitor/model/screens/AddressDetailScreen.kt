@@ -16,7 +16,8 @@ object AddressDetailScreen : KScreen<AddressDetailScreen>() {
     val addressDetailFragmentHeader = KTextView { withId(R.id.address_detail_fragment_header) }
     val copyAddressButton = KButton { withId(R.id.copy_address_button) }
     val addressHasNotification = KSwitch { withId(R.id.address_has_notification) }
-    val useGrossBalance = KSwitch { withId(R.id.use_gross_balance) }
+
+    // val useGrossBalance = KSwitch { withId(R.id.use_gross_balance) }
     val chiaConvertionSpinner =
         KSpinner(builder = { withId(R.id.chia_convertion_spinner) }, itemTypeBuilder = {
             itemType(::KSpinnerItem)

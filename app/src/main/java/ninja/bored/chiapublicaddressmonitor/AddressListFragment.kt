@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.adapter.ChiaAddressListAdapter
 import ninja.bored.chiapublicaddressmonitor.helpers.AllTheBlocksApiHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
 // https://developer.android.com/guide/topics/appwidgets/#Pinning
@@ -62,7 +63,7 @@ class AddressListFragment : Fragment() {
             swipeRefreshLayout.setOnRefreshListener {
                 database?.let { db ->
                     this.lifecycleScope.launch {
-                        Slh.refreshAllAddressWidgets(
+                        WidgetHelper.refreshAllAddressWidgets(
                             (addressListRecycler?.adapter as ChiaAddressListAdapter).getData(),
                             context,
                             db,

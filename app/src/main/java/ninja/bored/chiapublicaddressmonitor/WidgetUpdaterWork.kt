@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
 class WidgetUpdaterWork(appContext: Context, workerParams: WorkerParameters) :
@@ -19,17 +20,24 @@ class WidgetUpdaterWork(appContext: Context, workerParams: WorkerParameters) :
         // first get all widgets
         val database = ChiaWidgetRoomsDatabase.getInstance(this.applicationContext)
         // update conversions
-        Slh.refreshAllFiatConversionWidgets(
+        WidgetHelper.refreshAllFiatConversionWidgets(
             database.getWidgetFiatConversionSettingsDao().loadAll(),
             this.applicationContext
         )
 
         // refresh all Normal widgets
-        Slh.refreshAllAddressWidgets(
+        WidgetHelper.refreshAllAddressWidgets(
             database.getWidgetSettingsAndDataDao().loadAll(),
             this.applicationContext,
             database,
             false
+        )
+
+        // refresh all grouping widgets
+        WidgetHelper.refreshAllGroupedWidgets(
+            database.getWidgetAddressGroupSettingsWithAddressesDao().loadAll(),
+            this.applicationContext,
+            database
         )
 
         // done

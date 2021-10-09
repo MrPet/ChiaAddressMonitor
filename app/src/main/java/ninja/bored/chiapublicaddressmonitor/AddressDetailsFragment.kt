@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
+import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.AddressSettings
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
@@ -82,6 +83,14 @@ class AddressDetailsFragment : Fragment() {
         saveAddressSettingsButton.setOnClickListener {
             saveSettingsFromParentView(rootView)
         }
+
+        val toNotificationSettingsButton =
+            rootView.findViewById<Button>(R.id.to_notification_settings_button)
+        this.context?.let { theContext ->
+            toNotificationSettingsButton?.setOnClickListener {
+                Slh.openNotificationSettings(theContext)
+            }
+        }
         return rootView
     }
 
@@ -93,9 +102,9 @@ class AddressDetailsFragment : Fragment() {
             rootView.findViewById<SwitchCompat>(R.id.address_has_notification)
         notificationCheckbox.isChecked = chiaAddressSettings.showNotification
 
-        val grossBalanceCheckbox =
-            rootView.findViewById<SwitchCompat>(R.id.use_gross_balance)
-        grossBalanceCheckbox.isChecked = chiaAddressSettings.useGrossBalance
+//        val grossBalanceCheckbox =
+//            rootView.findViewById<SwitchCompat>(R.id.use_gross_balance)
+//        grossBalanceCheckbox.isChecked = chiaAddressSettings.useGrossBalance
 
         val addressSynonym =
             rootView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
@@ -122,8 +131,6 @@ class AddressDetailsFragment : Fragment() {
             }
         }
 
-
-
         val chiaConversionSpinner: Spinner = rootView.findViewById(R.id.chia_convertion_spinner)
         // Create an ArrayAdapter using the string array and a default spinner layout
         val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.keys.toTypedArray()
@@ -146,8 +153,8 @@ class AddressDetailsFragment : Fragment() {
                 val notificationCheckbox =
                     parentView.findViewById<SwitchCompat>(R.id.address_has_notification)
 
-                val useGrossBalanceCheckbox =
-                    parentView.findViewById<SwitchCompat>(R.id.use_gross_balance)
+//                val useGrossBalanceCheckbox =
+//                    parentView.findViewById<SwitchCompat>(R.id.use_gross_balance)
 
                 val addressSynonym =
                     parentView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
@@ -165,7 +172,7 @@ class AddressDetailsFragment : Fragment() {
                     addressSynonymString,
                     Constants.defaultUpdateTime,
                     chiaConversionCurrencyString,
-                    useGrossBalanceCheckbox.isChecked
+                    false
                 )
                 val chiaAddressSettingsDao = db.getAddressSettingsDao()
                 this.lifecycleScope.launch {
