@@ -11,6 +11,7 @@ import java.util.Date
 import java.util.Locale
 import ninja.bored.chiapublicaddressmonitor.MainActivity
 import ninja.bored.chiapublicaddressmonitor.R
+import ninja.bored.chiapublicaddressmonitor.model.AddressSettings
 import ninja.bored.chiapublicaddressmonitor.model.ChiaLatestConversion
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetAddressGroupSettingsWithAddresses
@@ -28,12 +29,16 @@ object WidgetHelper {
     suspend fun updateWithWidgetData(
         currentWidgetData: WidgetData,
         context: Context,
-        appWidgetId: Int?
+        appWidgetId: Int?,
+        addressSettingsOverride: AddressSettings?
     ) {
         appWidgetId?.let {
             val database = ChiaWidgetRoomsDatabase.getInstance(context)
             val addressSettingsDao = database.getAddressSettingsDao()
-            val addressSettings = addressSettingsDao.getByAddress(currentWidgetData.chiaAddress)
+            val addressSettings = when (addressSettingsOverride) {
+                null -> addressSettingsDao.getByAddress(currentWidgetData.chiaAddress)
+                else -> addressSettingsOverride
+            }
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val allViews = RemoteViews(context.packageName, R.layout.chia_public_address_widget)
 
@@ -206,7 +211,8 @@ object WidgetHelper {
                 updateWithWidgetData(
                     newWidgetData,
                     context,
-                    widgetData.widgetSettings?.widgetID
+                    widgetData.widgetSettings?.widgetID,
+                    null
                 )
                 widgetData.widgetData?.let { oldWidgetData ->
                     NotificationHelper.checkIfNecessaryAndSendNotification(
@@ -248,7 +254,15 @@ object WidgetHelper {
                 updateWithWidgetData(
                     it,
                     context,
-                    groupedAddressSetting.widgetAddressGroupSettings.widgetID
+                    groupedAddressSetting.widgetAddressGroupSettings.widgetID,
+                    AddressSettings(
+                        it.chiaAddress,
+                        false,
+                        null,
+                        Constants.defaultUpdateTime,
+                        groupedAddressSetting.widgetAddressGroupSettings.currency,
+                        false
+                    )
                 )
             }
         }

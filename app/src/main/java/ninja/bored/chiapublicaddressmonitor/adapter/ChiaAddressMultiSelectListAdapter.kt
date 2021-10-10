@@ -3,6 +3,7 @@ package ninja.bored.chiapublicaddressmonitor.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
@@ -25,8 +26,10 @@ class ChiaAddressMultiSelectListAdapter(widgetSettingsAndData: List<WidgetSettin
         holder.itemView.setOnClickListener {
             it.isSelected = !it.isSelected
             if (it.isSelected) {
+                it.setBackgroundColor(context.getColor(R.color.chia))
                 selectedAddressesList.add(widgetData.chiaAddress)
             } else {
+                it.background = CardView(context).background
                 selectedAddressesList.remove(widgetData.chiaAddress)
             }
         }

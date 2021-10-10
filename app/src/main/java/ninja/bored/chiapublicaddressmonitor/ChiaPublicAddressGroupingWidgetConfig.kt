@@ -5,21 +5,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Spinner
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.adapter.ChiaAddressMultiSelectListAdapter
+import ninja.bored.chiapublicaddressmonitor.helpers.Constants
+import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
+import ninja.bored.chiapublicaddressmonitor.model.AddressSettings
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetAddressGroupSettingsWithAddresses
 import ninja.bored.chiapublicaddressmonitor.model.WidgetAddressGroupingSettings
 import ninja.bored.chiapublicaddressmonitor.model.WidgetAddressGroupingSettingsHasAddress
-import kotlin.coroutines.CoroutineContext
 
 class ChiaPublicAddressGroupingWidgetConfig : ComponentActivity(), CoroutineScope {
 
@@ -51,6 +56,15 @@ class ChiaPublicAddressGroupingWidgetConfig : ComponentActivity(), CoroutineScop
         }
         val context = this
         // load from db
+        val chiaConversionSpinner: Spinner = findViewById(R.id.chia_convertion_spinner)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.keys.toTypedArray()
+        ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, chiaConversionKeys)
+            .also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                chiaConversionSpinner.adapter = adapter
+            }
+
         launch {
             ChiaWidgetRoomsDatabase.getInstance(context).also { chiaWidgetRoomsDb ->
                 widgetDB = chiaWidgetRoomsDb
@@ -94,7 +108,9 @@ class ChiaPublicAddressGroupingWidgetConfig : ComponentActivity(), CoroutineScop
         super.onDestroy()
     }
 
-    fun saveSettings() {
+    private fun saveSettings() {
+        val context = this
+        val chiaConversionSpinner: Spinner = findViewById(R.id.chia_convertion_spinner)
         addressListRecycler?.let { listRecycler ->
             listRecycler.adapter?.let {
                 if (it is ChiaAddressMultiSelectListAdapter) {
@@ -109,11 +125,31 @@ class ChiaPublicAddressGroupingWidgetConfig : ComponentActivity(), CoroutineScop
                             )
                         }
                         widgetDB?.let { db ->
-                            WidgetAddressGroupSettingsWithAddresses(
-                                WidgetAddressGroupingSettings(appWidgetID, "XCH"),
-                                addressList
-                            ).insertUpdate(db)
-
+                            val addressGroupSettingsWithAddresses =
+                                WidgetAddressGroupSettingsWithAddresses(
+                                    WidgetAddressGroupingSettings(
+                                        appWidgetID,
+                                        chiaConversionSpinner.selectedItem.toString()
+                                    ),
+                                    addressList
+                                )
+                            addressGroupSettingsWithAddresses.insertUpdate(db)
+                            WidgetHelper.getSummedWidgetData(db, addressGroupSettingsWithAddresses)
+                                ?.let { widgetDataHelper ->
+                                    WidgetHelper.updateWithWidgetData(
+                                        widgetDataHelper,
+                                        context,
+                                        addressGroupSettingsWithAddresses.widgetAddressGroupSettings.widgetID,
+                                        AddressSettings(
+                                            widgetDataHelper.chiaAddress,
+                                            false,
+                                            null,
+                                            Constants.defaultUpdateTime,
+                                            addressGroupSettingsWithAddresses.widgetAddressGroupSettings.currency,
+                                            false
+                                        )
+                                    )
+                                }
                             doneWithEverythingAndWentWell(appWidgetID)
                         }
                     }

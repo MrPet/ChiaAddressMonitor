@@ -67,6 +67,8 @@
     <string name="chia_exchange_rate_widget_config_description">This widget will update every two hours. The exchange rate is from the https://coinmarketcap.com/ API. It can differ from specific exchanges.</string>
     <string name="use_gross_balance_description">Show address in gross balance. This will ignore all outgoing transactions. Intended for farmers who would like to see how much they mined in total.</string>
     <string name="android_notifcation_settingns">Android notification settings</string>
+    <string name="chia_address_grouping_widget_config_description">Please click the addresses you would like to group</string>
+    <string name="chia_address_grouping_widget_config_title">Address grouping widget</string>
 
 
 </resources>

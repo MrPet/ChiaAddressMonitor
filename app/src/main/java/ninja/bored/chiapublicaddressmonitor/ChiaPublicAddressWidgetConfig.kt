@@ -20,6 +20,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.AllTheBlocksApiHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettings
 
@@ -153,10 +154,11 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         }
 
         widgetData?.let {
-            Slh.updateWithWidgetData(
+            WidgetHelper.updateWithWidgetData(
                 widgetData,
                 context,
-                appWidgetID
+                appWidgetID,
+                null
             )
         }
     }

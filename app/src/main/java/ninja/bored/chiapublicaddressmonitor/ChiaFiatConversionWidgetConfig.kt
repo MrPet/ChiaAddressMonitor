@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
-import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetFiatConversionSettings
 
@@ -130,7 +130,7 @@ class ChiaFiatConversionWidgetConfig : Activity(), CoroutineScope {
     ) {
         val appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(this)
         val context = this
-        Slh.updateFiatWidgetWithSettings(
+        WidgetHelper.updateFiatWidgetWithSettings(
             widgetFiatConversionSettings,
             context,
             appWidgetID,

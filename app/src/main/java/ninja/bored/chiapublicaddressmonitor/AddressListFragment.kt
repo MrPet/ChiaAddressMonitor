@@ -63,11 +63,20 @@ class AddressListFragment : Fragment() {
             swipeRefreshLayout.setOnRefreshListener {
                 database?.let { db ->
                     this.lifecycleScope.launch {
+                        WidgetHelper.refreshAllFiatConversionWidgets(
+                            db.getWidgetFiatConversionSettingsDao().loadAll(),
+                            context
+                        )
                         WidgetHelper.refreshAllAddressWidgets(
                             (addressListRecycler?.adapter as ChiaAddressListAdapter).getData(),
                             context,
                             db,
                             true
+                        )
+                        WidgetHelper.refreshAllGroupedWidgets(
+                            db.getWidgetAddressGroupSettingsWithAddressesDao().loadAll(),
+                            context,
+                            db
                         )
                         swipeRefreshLayout.isRefreshing = false
                     }

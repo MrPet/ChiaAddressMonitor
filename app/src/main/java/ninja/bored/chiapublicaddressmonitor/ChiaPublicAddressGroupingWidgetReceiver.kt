@@ -7,51 +7,17 @@ import android.util.Log
 import android.widget.RemoteViews
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import ninja.bored.chiapublicaddressmonitor.helpers.Constants
 import ninja.bored.chiapublicaddressmonitor.helpers.NotificationHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
+import ninja.bored.chiapublicaddressmonitor.model.AddressSettings
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
 class ChiaPublicAddressGroupingWidgetReceiver : AppWidgetProvider() {
     companion object {
         private const val TAG = "WidgetGroupReceiver"
     }
-
-//    override fun onReceive(context: Context?, intent: Intent?) {
-//
-//        Log.d(TAG, "onReceive")
-//        addressFromReceive = intent?.extras?.getString(Constants.ADDRESS_EXTRA)
-//        val receivedAppWidgetID =
-//            intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID)
-//
-//        Log.d(TAG, "receivedAppWidgetID $receivedAppWidgetID")
-//        val receivedAddress = addressFromReceive
-//        Log.d(TAG, "receivedAddress $receivedAddress")
-//        context?.let {
-//            if (
-//                receivedAddress != null &&
-//                receivedAppWidgetID != null &&
-//                receivedAppWidgetID != INVALID_APPWIDGET_ID
-//            ) {
-//                val database = ChiaWidgetRoomsDatabase.getInstance(context)
-//                val widgetSettings = WidgetSettings(receivedAppWidgetID, receivedAddress)
-//                val widgetSettingsDao = database.getWidgetSettingsDao()
-//                GlobalScope.launch {
-//                    widgetSettingsDao.insertUpdate(widgetSettings)
-//                    val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-//                    onUpdate(context, appWidgetManager, intArrayOf(receivedAppWidgetID))
-//                }
-//                Toast.makeText(context, R.string.chia_widget_added, Toast.LENGTH_LONG).show()
-//            } else {
-//                // doesn't concern me
-//                if (receivedAppWidgetID != null && receivedAppWidgetID != INVALID_APPWIDGET_ID) {
-//                    val appWidgetManager = AppWidgetManager.getInstance(context.applicationContext)
-//                    onUpdate(context, appWidgetManager, intArrayOf(receivedAppWidgetID))
-//                }
-//                super.onReceive(context, intent)
-//            }
-//        }
-//    }
 
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
         super.onDeleted(context, appWidgetIds)
@@ -105,7 +71,15 @@ class ChiaPublicAddressGroupingWidgetReceiver : AppWidgetProvider() {
                                 WidgetHelper.updateWithWidgetData(
                                     widgetDataHelper,
                                     context,
-                                    appWidgetId
+                                    appWidgetId,
+                                    AddressSettings(
+                                        widgetDataHelper.chiaAddress,
+                                        false,
+                                        null,
+                                        Constants.defaultUpdateTime,
+                                        addressGroupingSettings?.widgetAddressGroupSettings?.currency,
+                                        false
+                                    )
                                 )
                             } else {
                                 allViews.setTextViewText(
