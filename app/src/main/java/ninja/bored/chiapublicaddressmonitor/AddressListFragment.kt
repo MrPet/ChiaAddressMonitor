@@ -177,7 +177,7 @@ class AddressListFragment : Fragment() {
                 ) { dialog, text ->
                     val textString = text.toString()
                     val inputField = dialog.getInputField()
-                    if (Slh.isChiaAddressValid(textString.trim())) {
+                    if (Slh.isChiaOrForkAddressValid(textString.trim())) {
                         dialog.setActionButtonEnabled(WhichButton.POSITIVE, true)
                     } else {
                         inputField.error = getString(R.string.chia_address_input_error_wrong)

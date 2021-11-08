@@ -69,6 +69,7 @@
     <string name="android_notifcation_settingns">Android notification settings</string>
     <string name="chia_address_grouping_widget_config_description">Please click the addresses you would like to group</string>
     <string name="chia_address_grouping_widget_config_title">Address grouping widget</string>
+    <string name="chia_info_grouped_preview_description">You cann group addresses in one widget.</string>
 
 
 </resources>

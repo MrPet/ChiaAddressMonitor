@@ -43,14 +43,9 @@ object AllTheBlocksApiHelper {
     fun buildUrlFromAddress(address: String): String {
 
         return Constants.BASE_ALL_THE_BLOCKS_API_URL +
-                getCurrencyIdentifierFromAddress(address) +
+                Slh.getCurrencyIdentifierFromAddress(address) +
                 Constants.BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH +
                 address
-    }
-
-    fun getCurrencyIdentifierFromAddress(address: String): String? {
-        val addressIdentifier = address.substring(0, Constants.ADDRESS_IDENTIFIER_LENGTH)
-        return Constants.ALL_THE_BLOCKS_CURRENCIES[addressIdentifier]
     }
 
     /**
