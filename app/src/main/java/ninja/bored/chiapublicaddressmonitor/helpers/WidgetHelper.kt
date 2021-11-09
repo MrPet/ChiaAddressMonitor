@@ -77,7 +77,12 @@ object WidgetHelper {
             allViews.setOnClickPendingIntent(R.id.widgetRootLayout, pendingIntent)
             allViews.setTextViewText(R.id.chia_amount_holder, amountText)
 
-            allViews.setTextViewText(R.id.chia_amount_title_holder, currencyCode)
+            allViews.setTextViewText(
+                R.id.chia_amount_title_holder, when (currencyCode) {
+                    Constants.CurrencyCode.XCH -> Slh.getCurrencySymbolFromAddress(currentWidgetData.chiaAddress)
+                    else -> currencyCode
+                }
+            )
 
             val sdf = SimpleDateFormat(Constants.SHORT_DATE_TIME_FORMAT, Locale.getDefault())
 

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddressDetailsFragment">
+
+
+    <TextView
+        android:id="@+id/address_detail_fragment_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:focusable="true"
+        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeMinTextSize="2sp"
+        app:autoSizeStepGranularity="3sp"
+        app:autoSizeTextType="uniform"
+        android:maxLines="2"
+        app:layout_constraintEnd_toStartOf="@+id/copy_address_button"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/copy_address_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/copyAddressDescription"
+        android:src="@drawable/outline_content_copy_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/address_fragment_detail_header_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:linksClickable="true"
+        android:autoLink="web"
+        android:text="@string/chia_widget_config_description"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/address_has_notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/address_detail_fragment_header"
+        />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/enable_notifications_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="@string/notification_activate_for_address"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/address_has_notification"
+        app:layout_constraintEnd_toStartOf="@+id/address_has_notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/address_fragment_detail_header_text" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/address_has_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/enable_notifications_text" />
+
+<!--    <androidx.appcompat.widget.AppCompatTextView-->
+<!--        android:id="@+id/use_gross_balance_text"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_gravity="center_vertical"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:text="@string/use_gross_balance_description"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/use_gross_balance"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/use_gross_balance"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/enable_notifications_text" />-->
+
+<!--    <androidx.appcompat.widget.SwitchCompat-->
+<!--        android:id="@+id/use_gross_balance"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="end"-->
+<!--        android:layout_marginEnd="24dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@id/use_gross_balance_text" />-->
+
+
+
+ <!--   <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/chia_address_show_in_mojo_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="@string/show_widget_in_mojo"
+        app:layout_constraintBottom_toBottomOf="@id/chia_address_show_in_mojo"
+        app:layout_constraintEnd_toStartOf="@+id/chia_address_show_in_mojo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/enable_notifications_text" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/chia_address_show_in_mojo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/chia_address_show_in_mojo_text"
+
+        />-->
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/chia_address_synonym_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/chia_address_synonym_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enable_notifications_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/chia_address_synonym_text_input_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:inputType="textAutoCorrect"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/to_notification_settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="?android:colorButtonNormal"
+        android:text="@string/android_notifcation_settingns"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chia_address_synonym_text_input_layout" />
+
+    <Button
+        android:id="@+id/save_address_settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="?colorPrimary"
+        android:text="@string/save_widget_settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/to_notification_settings_button"
+        app:layout_constraintVertical_bias="0.949" />
+
+
+    <!--    app:layout_constraintStart_toEndOf="@+id/back_button"-->
+    <!--    <Button-->
+    <!--        android:id="@+id/back_button"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginBottom="24dp"-->
+    <!--        android:backgroundTint="?colorPrimary"-->
+    <!--        android:text="@string/back"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.29"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/chia_address_synonym_text_input_layout"-->
+    <!--        app:layout_constraintVertical_bias="0.949" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

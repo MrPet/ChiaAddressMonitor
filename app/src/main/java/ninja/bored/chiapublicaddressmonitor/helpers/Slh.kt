@@ -49,24 +49,27 @@ object Slh {
         return false
     }
 
-    fun getCurrencyIdentifierFromAddress(address: String): String? {
+    fun getCurrencyIdentifierFromAddress(address: String?): String? {
         return getCoinClassFromAddress(address)?.allTheBlocksCoinUrlShort
     }
 
-    fun getCurrencySymbolFromAddress(address: String): String? {
+    fun getCurrencySymbolFromAddress(address: String?): String? {
         return getCoinClassFromAddress(address)?.coinCurrencySymbol
     }
 
-    fun getCurrencyDisplayNameFromAddress(address: String): String? {
+    fun getCurrencyDisplayNameFromAddress(address: String?): String? {
         return getCoinClassFromAddress(address)?.coinDisplayName
     }
 
-    private fun getCoinClassFromAddress(address: String): CoinInfo? {
+    private fun getCoinClassFromAddress(address: String?): CoinInfo? {
         return Constants.ALL_THE_BLOCKS_CURRENCIES[getCurrencyAddressPrefix(address)]
     }
 
-    private fun getCurrencyAddressPrefix(address: String): Any {
-        return address.substring(0, address.indexOf("1"))
+    private fun getCurrencyAddressPrefix(address: String?): Any? {
+        address?.let {
+            return address.substring(0, address.indexOf("1"))
+        }
+        return null
     }
 
     fun formatChiaDecimal(chiaAmount: Double, precision: String?): String? {

@@ -11,8 +11,8 @@
     <string name="chia_widget_config_description">This widget will periodically check the balance of the public address. We use https://alltheblocks.net to get accurate information about your address balance.</string>
     <string name="save_widget_settings">Save</string>
     <string name="chia_address_input_error_wrong">The address seems to be wrong, please check your input. You can find your address in the "Wallet" tab of your Chia UI</string>
-    <string name="recycler_item_amount_and_date">%s XCH @%s</string>
-    <string name="recycler_item_chia_address">Chia address</string>
+    <string name="recycler_item_amount_and_date">%s %s @%s</string>
+    <string name="recycler_item_chia_address">%s address</string>
     <string name="loading">Loading …</string>
     <string name="chia_widget_added">Widget added</string>
     <string name="add_address">add</string>
@@ -56,7 +56,7 @@
     <string name="library_all_the_blocks_libraryWebsite"        tools:keep="@string/library_all_the_blocks_libraryWebsite">https://alltheblocks.net</string>
 
     <string name="notification_activate_for_address">Enable notifications for this address</string>
-    <string name="chia_address_synonym_hint">Chia address synonym</string>
+    <string name="chia_address_synonym_hint">%s address synonym</string>
     <string name="saved_address_settings">Saved address settings</string>
     <string name="add_widget_to_dashboard">Add this address as widget</string>
     <string name="show_widget_in_mojo">Show widget in this currency. (Mojo is one trillionth of xch. Use this to track very small amounts on the address)</string>
@@ -70,6 +70,8 @@
     <string name="chia_address_grouping_widget_config_description">Please click the addresses you would like to group</string>
     <string name="chia_address_grouping_widget_config_title">Address grouping widget</string>
     <string name="chia_info_grouped_preview_description">You cann group addresses in one widget.</string>
+    <string name="unnknownCoin">Unknown</string>
+    <string name="can_ony_add_one_type_of_coin">You can only add addressess of the same coin</string>
 
 
 </resources>

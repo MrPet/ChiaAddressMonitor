@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import java.text.DateFormat
 import ninja.bored.chiapublicaddressmonitor.AddressDetailsFragment
 import ninja.bored.chiapublicaddressmonitor.ChiaPublicAddressWidgetReceiver
 import ninja.bored.chiapublicaddressmonitor.R
@@ -22,7 +23,6 @@ import ninja.bored.chiapublicaddressmonitor.helpers.Constants
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
-import java.text.DateFormat
 
 open class ChiaAddressListAdapter(private val widgetSettingsAndData: List<WidgetSettingsAndData>) :
     RecyclerView.Adapter<ChiaAddressListViewHolder>() {
@@ -49,6 +49,7 @@ open class ChiaAddressListAdapter(private val widgetSettingsAndData: List<Widget
                     chiaAmount,
                     Constants.Precision.TOTAL
                 ),
+                Slh.getCurrencySymbolFromAddress(widgetSettingsAndData.addressSettings?.chiaAddress),
                 localDateFormat.format(widgetSettingsAndData.widgetData.updateDate)
             )
         } else {
@@ -61,7 +62,18 @@ open class ChiaAddressListAdapter(private val widgetSettingsAndData: List<Widget
             }
         }
 
-        widgetSettingsAndData.addressSettings?.chiaAddressSynonym?.let {
+        if (widgetSettingsAndData.addressSettings?.chiaAddressSynonym == null) {
+            var coinName =
+                Slh.getCurrencyDisplayNameFromAddress(widgetSettingsAndData.addressSettings?.chiaAddress)
+            if (coinName == null) {
+                coinName = holder.recyclerItemHeader?.context?.getString(R.string.unnknownCoin)
+            }
+
+            holder.recyclerItemHeader?.text = holder.recyclerItemHeader?.context?.getString(
+                R.string.recycler_item_chia_address,
+                coinName
+            )
+        } else {
             holder.recyclerItemHeader?.text =
                 widgetSettingsAndData.addressSettings.chiaAddressSynonym
         }
