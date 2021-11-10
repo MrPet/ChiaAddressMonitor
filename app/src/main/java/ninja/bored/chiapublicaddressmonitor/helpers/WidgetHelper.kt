@@ -283,8 +283,10 @@ object WidgetHelper {
         var summedChiaAmount = 0.0
         var summedChiaGrossAmount = 0.0
         var allAddressesHadData = addressGroupingSettings != null
+        var chiaAddress = "multi1"
         addressGroupingSettings?.widgetAddresses?.forEach addressForEach@{
             // load this stuff
+            chiaAddress = it.chiaAddress
             val currentWidgetData = widgetDataDao.getByAddress(it.chiaAddress)
             if (currentWidgetData != null) {
                 summedChiaAmount += currentWidgetData.chiaAmount
@@ -296,7 +298,7 @@ object WidgetHelper {
         }
         return when (allAddressesHadData) {
             true -> WidgetData(
-                "multi",
+                chiaAddress,
                 summedChiaAmount,
                 Date(),
                 summedChiaGrossAmount
