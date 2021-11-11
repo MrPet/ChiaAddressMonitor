@@ -123,7 +123,7 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
     fun saveSettings() {
         chiaAddressEditText?.let {
             val chiaAddress = it.text.toString()
-            if (Slh.isChiaAddressValid(chiaAddress.trim())) {
+            if (Slh.isChiaOrForkAddressValid(chiaAddress.trim())) {
                 val widgetSettings = WidgetSettings(appWidgetID, chiaAddress.trim())
                 val chiaWidgetSettingsDao = widgetDB?.getWidgetSettingsDao()
                 launch {
