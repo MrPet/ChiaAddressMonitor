@@ -30,8 +30,8 @@
 
     <string name="balance_positive_changed_channel_name">Received Chia</string>
     <string name="balance_positive_changed_channel_description">You received Chia, that is amazing</string>
-    <string name="address_balance_changed_notification_header">You received %s XCH</string>
-    <string name="address_balance_changed_notification_text">Your balance for %s changed from %s XCH to %s XCH</string>
+    <string name="address_balance_changed_notification_header">You received %s %s</string>
+    <string name="address_balance_changed_notification_text">Your balance for %s changed from %s %s to %s %s</string>
 
     <string name="balance_negative_changed_channel_name">Sent Chia</string>
     <string name="balance_negative_changed_channel_description">You sent some Chia, bought more space for your space farm?</string>

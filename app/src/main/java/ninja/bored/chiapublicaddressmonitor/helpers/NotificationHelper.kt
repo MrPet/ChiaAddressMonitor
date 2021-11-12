@@ -99,13 +99,16 @@ object NotificationHelper {
                         R.string.address_balance_changed_notification_header,
                         Slh.formatChiaDecimal(
                             newWidgetData.chiaAmount - oldChiaAmount, Constants.Precision.TOTAL
-                        )
+                        ),
+                        Slh.getCurrencySymbolFromAddress(newWidgetData.chiaAddress)
                     ),
                     context.getString(
                         R.string.address_balance_changed_notification_text,
                         addressStringOrSynonym,
                         Slh.formatChiaDecimal(oldChiaAmount, Constants.Precision.TOTAL),
-                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL)
+                        Slh.getCurrencySymbolFromAddress(newWidgetData.chiaAddress),
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL),
+                        Slh.getCurrencySymbolFromAddress(newWidgetData.chiaAddress)
                     ),
                     Constants.NOTIFICATION_ID_POSITIVE_CHANGE,
                     context
