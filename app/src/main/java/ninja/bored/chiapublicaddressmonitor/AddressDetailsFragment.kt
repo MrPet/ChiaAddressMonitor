@@ -185,9 +185,9 @@ class AddressDetailsFragment : Fragment() {
                 val addressSynonym =
                     parentView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
 
-                val chiaConversionSpinner: Spinner =
+                val chiaConversionSpinner: Spinner? =
                     parentView.findViewById(R.id.chia_convertion_spinner)
-                val chiaConversionCurrencyString = chiaConversionSpinner.selectedItem.toString()
+                val chiaConversionCurrencyString = chiaConversionSpinner?.selectedItem.toString()
 
                 val addressSynonymString = when (addressSynonym.text.toString().trim()) {
                     "" -> null
