@@ -65,9 +65,12 @@ object Slh {
         return Constants.ALL_THE_BLOCKS_CURRENCIES[getCurrencyAddressPrefix(address)]
     }
 
-    private fun getCurrencyAddressPrefix(address: String?): Any? {
+    fun getCurrencyAddressPrefix(address: String?): Any? {
         address?.let {
-            return address.substring(0, address.indexOf("1"))
+            val addressIndex = address.indexOf("1")
+            if (addressIndex >= 0) {
+                return address.substring(0, addressIndex)
+            }
         }
         return null
     }

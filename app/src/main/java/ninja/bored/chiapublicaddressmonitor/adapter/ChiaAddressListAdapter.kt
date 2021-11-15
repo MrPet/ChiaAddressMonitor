@@ -49,7 +49,7 @@ open class ChiaAddressListAdapter(private val widgetSettingsAndData: List<Widget
                     chiaAmount,
                     Constants.Precision.TOTAL
                 ),
-                Slh.getCurrencySymbolFromAddress(widgetSettingsAndData.addressSettings?.chiaAddress),
+                Slh.getCurrencySymbolFromAddress(widgetSettingsAndData.widgetData.chiaAddress),
                 localDateFormat.format(widgetSettingsAndData.widgetData.updateDate)
             )
         } else {
@@ -64,7 +64,7 @@ open class ChiaAddressListAdapter(private val widgetSettingsAndData: List<Widget
 
         if (widgetSettingsAndData.addressSettings?.chiaAddressSynonym == null) {
             var coinName =
-                Slh.getCurrencyDisplayNameFromAddress(widgetSettingsAndData.addressSettings?.chiaAddress)
+                Slh.getCurrencyDisplayNameFromAddress(widgetSettingsAndData.widgetData?.chiaAddress)
             if (coinName == null) {
                 coinName = holder.recyclerItemHeader?.context?.getString(R.string.unnknownCoin)
             }

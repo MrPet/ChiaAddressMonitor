@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,8 +58,9 @@ class AddressDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        Log.d("HANS", Slh.getCurrencyIdentifierFromAddress(chiaAddress).toString())
         val rootView = when {
-            Slh.getCurrencySymbolFromAddress(chiaAddress) == Constants.CHIA_ADDRESS_PREFIX -> inflater.inflate(
+            Slh.getCurrencyAddressPrefix(chiaAddress) == Constants.CHIA_ADDRESS_PREFIX -> inflater.inflate(
                 R.layout.fragment_address_details,
                 container,
                 false
