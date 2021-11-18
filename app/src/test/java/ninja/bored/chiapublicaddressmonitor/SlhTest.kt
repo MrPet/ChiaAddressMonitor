@@ -253,6 +253,7 @@ class SlhTest : TestCase() {
             "vag1r24g5qascmy4c7qgngac0j7vmgc5g3qm5wwrsddwe4neq5k2znlstuj03z",
             "vag1g59swdk0ad4tws6gfwlfa5emu7273slv9ycl704dwnq4fugch3rqusevyz",
             "vag1zsgcfvwv0vzye4y8jv7ct80ed5trfx246eqxdy5se5qngj84n3vqcqxztx",
+            "vag1q4jwje4vmve976gpz6q20ysecgp6cdngp3sx3tu0smrqc0gywq6s4tfdxl",
             "xbtc16wujpg0zkkd8j89squ5k5q0q6nn9rrrvng7s6vqrvr0rr2zuqtqqxdxssd",
             "xbtc1fqz74jj6chr6a29xlt78wjfj5ycg43247eptl2jndeph87hddams4u5m9f",
             "xbtc1sjvr50fvh80tdpcuhplpwgc5g88kd304ttlullf975tfmfkw3uysazd9qp",
@@ -336,6 +337,13 @@ class SlhTest : TestCase() {
 
         bigAddressArray.forEach {
             assertTrue("This is a valid address: $it", Slh.isChiaOrForkAddressValid(it))
+        }
+    }
+
+    @Test
+    fun getCurrencySymbolFromAddresss() {
+        bigAddressArray.forEach {
+            assertNotNull("Symbold not found for: $it", Slh.getCurrencySymbolFromAddress(it))
         }
     }
 
