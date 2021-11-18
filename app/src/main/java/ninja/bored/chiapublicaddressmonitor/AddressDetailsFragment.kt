@@ -189,7 +189,10 @@ class AddressDetailsFragment : Fragment() {
 
                 val chiaConversionSpinner: Spinner? =
                     parentView.findViewById(R.id.chia_convertion_spinner)
-                val chiaConversionCurrencyString = chiaConversionSpinner?.selectedItem.toString()
+                val chiaConversionCurrencyString = when(chiaConversionSpinner?.selectedItem) {
+                    null -> Constants.CurrencyCode.XCH
+                    else -> chiaConversionSpinner.selectedItem.toString()
+                }
 
                 val addressSynonymString = when (addressSynonym.text.toString().trim()) {
                     "" -> null
