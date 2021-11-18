@@ -15,8 +15,12 @@ object NotificationHelper {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager: NotificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
             // negative
             val importance = NotificationManager.IMPORTANCE_DEFAULT
+
             val negativeChannel = NotificationChannel(
                 Constants.NOTIFICATION_CHANNEL_NEGATIVE_CHANGE,
                 context.getString(R.string.balance_negative_changed_channel_name),
@@ -26,8 +30,6 @@ object NotificationHelper {
                     context.getString(R.string.balance_negative_changed_channel_description)
             }
             // Register the channel with the system
-            val notificationManager: NotificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(negativeChannel)
 
             // positive
@@ -59,13 +61,14 @@ object NotificationHelper {
             .setSmallIcon(R.drawable.ic_chia_address_widget)
             .setContentTitle(contentTitle)
             .setContentText(contentText)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setOnlyAlertOnce(false)
+//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setStyle(
                 NotificationCompat.BigTextStyle()
                     .bigText(contentText)
             )
             .setColor(context.getColor(R.color.chia))
-            .setAutoCancel(true)
+            .setAutoCancel(false)
 
         with(NotificationManagerCompat.from(context)) {
             notify(notificationID, builder.build())
@@ -96,13 +99,16 @@ object NotificationHelper {
                         R.string.address_balance_changed_notification_header,
                         Slh.formatChiaDecimal(
                             newWidgetData.chiaAmount - oldChiaAmount, Constants.Precision.TOTAL
-                        )
+                        ),
+                        Slh.getCurrencySymbolFromAddress(newWidgetData.chiaAddress)
                     ),
                     context.getString(
                         R.string.address_balance_changed_notification_text,
                         addressStringOrSynonym,
                         Slh.formatChiaDecimal(oldChiaAmount, Constants.Precision.TOTAL),
-                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL)
+                        Slh.getCurrencySymbolFromAddress(newWidgetData.chiaAddress),
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL),
+                        Slh.getCurrencySymbolFromAddress(newWidgetData.chiaAddress)
                     ),
                     Constants.NOTIFICATION_ID_POSITIVE_CHANGE,
                     context

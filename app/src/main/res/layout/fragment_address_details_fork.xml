@@ -129,33 +129,6 @@
 
         />-->
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/chia_address_show_in_mojo_text"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="@string/show_widget_in_mojo"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/address_has_notification" />
-
-    <Spinner
-        android:id="@+id/chia_convertion_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chia_address_show_in_mojo_text" />
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/chia_address_synonym_text_input_layout"
@@ -167,16 +140,15 @@
         android:hint="@string/chia_address_synonym_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chia_convertion_spinner">
+        app:layout_constraintTop_toBottomOf="@+id/enable_notifications_text">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/chia_address_synonym_text_input_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textAutoCorrect"
-            android:maxLines="1"
             android:layout_marginTop="16dp"
-            />
+            android:inputType="textAutoCorrect"
+            android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

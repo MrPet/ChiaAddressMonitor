@@ -25,6 +25,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:exported="true"
+            android:name="com.mikepenz.aboutlibraries.ui.LibsActivity"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
 
         <activity
             android:exported="true"
@@ -33,11 +37,6 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:exported="true"
-            android:name="com.mikepenz.aboutlibraries.ui.LibsActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
 
         <receiver
             android:exported="true"
@@ -67,6 +66,25 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_chia_fiat_conversion" />
+        </receiver>
+
+        <activity
+            android:exported="true"
+            android:name=".ChiaPublicAddressGroupingWidgetConfig">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:exported="true"
+            android:name=".ChiaPublicAddressGroupingWidgetReceiver">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_chia_address_grouping_balance" />
         </receiver>
 
 

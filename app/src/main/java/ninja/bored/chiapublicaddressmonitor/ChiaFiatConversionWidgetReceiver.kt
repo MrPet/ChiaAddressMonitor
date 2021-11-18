@@ -8,6 +8,7 @@ import android.util.Log
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
 class ChiaFiatConversionWidgetReceiver : AppWidgetProvider() {
@@ -69,7 +70,7 @@ class ChiaFiatConversionWidgetReceiver : AppWidgetProvider() {
                             chiaLatestConversionDao.getLatestForCurrency(
                                 widgetFiatConversionSettings.conversionCurrency
                             )?.let { chiaLatestConversionFromDb ->
-                                Slh.updateFiatWidgetWithData(
+                                WidgetHelper.updateFiatWidgetWithData(
                                     chiaLatestConversionFromDb,
                                     context,
                                     appWidgetManager,

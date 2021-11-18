@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="ninja.bored.chiapublicaddressmonitor.ChiaPublicAddressGroupingWidgetConfig"
+    android:initialLayout="@layout/chia_public_address_widget"
+    android:minWidth="40dp"
+    android:minHeight="40dp"
+    android:previewImage="@drawable/chia_info_grouped_preview"
+    android:resizeMode="vertical|horizontal"
+    android:updatePeriodMillis="7200000"
+    android:widgetCategory="home_screen"
+    android:description="@string/chia_info_grouped_preview_description"
+    />

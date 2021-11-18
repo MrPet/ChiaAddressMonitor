@@ -29,6 +29,7 @@ object DbVersion {
     const val VERSION_6 = 6
     const val VERSION_7 = 7
     const val VERSION_8 = 8
+    const val VERSION_9 = 9
 }
 
 @Database(
@@ -37,9 +38,11 @@ object DbVersion {
         WidgetData::class,
         AddressSettings::class,
         WidgetFiatConversionSettings::class,
-        ChiaLatestConversion::class
+        ChiaLatestConversion::class,
+        WidgetAddressGroupingSettings::class,
+        WidgetAddressGroupingSettingsHasAddress::class,
     ],
-    version = DbVersion.VERSION_8
+    version = DbVersion.VERSION_9
 )
 @TypeConverters(WidgetDatabaseConverter::class)
 abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
@@ -49,6 +52,9 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
     abstract fun getAddressSettingsDao(): AddressSettingsDao
     abstract fun getChiaLatestConversionDao(): ChiaLatestConversionDao
     abstract fun getWidgetFiatConversionSettingsDao(): WidgetFiatConversionSettingsDao
+    abstract fun getWidgetAddressGroupingSettingsDao(): WidgetAddressGroupingSettingsDao
+    abstract fun getWidgetAddressGroupingSettingsHasAddressDao(): WidgetAddressGroupingSettingsHasAddressDao
+    abstract fun getWidgetAddressGroupSettingsWithAddressesDao(): WidgetAddressGroupSettingsWithAddressesDao
 
     companion object {
         @Volatile
@@ -146,6 +152,29 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                                     }
                                 }
 
+                            val MIGRATION_8_9 =
+                                object : Migration(DbVersion.VERSION_8, DbVersion.VERSION_9) {
+                                    override fun migrate(database: SupportSQLiteDatabase) {
+                                        database.execSQL(
+                                            """
+                                        CREATE TABLE IF NOT EXISTS 
+                                        `widget_address_grouping_settings` 
+                                        (`widgetID` INTEGER NOT NULL, `currency` TEXT NOT NULL, 
+                                        PRIMARY KEY(`widgetID`))
+                                        """
+                                        )
+                                        database.execSQL(
+                                            """
+                                        CREATE TABLE IF NOT EXISTS 
+                                        `widget_address_grouping_settings_has_address`
+                                        (`widgetID` INTEGER NOT NULL, 
+                                        `chia_address` TEXT NOT NULL, 
+                                        PRIMARY KEY(`chia_address`, `widgetID`))
+                                        """
+                                        )
+                                    }
+                                }
+
                     instance = Room.databaseBuilder(
                         context,
                         ChiaWidgetRoomsDatabase::class.java, "chia-address-widget-db"
@@ -155,7 +184,8 @@ abstract class ChiaWidgetRoomsDatabase : RoomDatabase() {
                             MIGRATION_4_5,
                             MIGRATION_5_6,
                             MIGRATION_6_7,
-                            MIGRATION_7_8
+                            MIGRATION_7_8,
+                            MIGRATION_8_9
                             )
 //                        .fallbackToDestructiveMigration()
                         .build()

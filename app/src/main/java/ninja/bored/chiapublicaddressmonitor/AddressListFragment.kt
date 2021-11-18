@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.adapter.ChiaAddressListAdapter
 import ninja.bored.chiapublicaddressmonitor.helpers.AllTheBlocksApiHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
 // https://developer.android.com/guide/topics/appwidgets/#Pinning
@@ -62,11 +63,20 @@ class AddressListFragment : Fragment() {
             swipeRefreshLayout.setOnRefreshListener {
                 database?.let { db ->
                     this.lifecycleScope.launch {
-                        Slh.refreshAllAddressWidgets(
+                        WidgetHelper.refreshAllFiatConversionWidgets(
+                            db.getWidgetFiatConversionSettingsDao().loadAll(),
+                            context
+                        )
+                        WidgetHelper.refreshAllAddressWidgets(
                             (addressListRecycler?.adapter as ChiaAddressListAdapter).getData(),
                             context,
                             db,
                             true
+                        )
+                        WidgetHelper.refreshAllGroupedWidgets(
+                            db.getWidgetAddressGroupSettingsWithAddressesDao().loadAll(),
+                            context,
+                            db
                         )
                         swipeRefreshLayout.isRefreshing = false
                     }
@@ -167,7 +177,7 @@ class AddressListFragment : Fragment() {
                 ) { dialog, text ->
                     val textString = text.toString()
                     val inputField = dialog.getInputField()
-                    if (Slh.isChiaAddressValid(textString.trim())) {
+                    if (Slh.isChiaOrForkAddressValid(textString.trim())) {
                         dialog.setActionButtonEnabled(WhichButton.POSITIVE, true)
                     } else {
                         inputField.error = getString(R.string.chia_address_input_error_wrong)

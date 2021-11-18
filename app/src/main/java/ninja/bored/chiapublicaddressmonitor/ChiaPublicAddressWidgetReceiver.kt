@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
 import ninja.bored.chiapublicaddressmonitor.helpers.NotificationHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettings
 
@@ -111,10 +112,11 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
                                 val oldWidgetData = dataDao.getByAddress(widgetSettings.chiaAddress)
                                 if (oldWidgetData != null) {
                                     Log.d(TAG, "got widgetData $oldWidgetData")
-                                    Slh.updateWithWidgetData(
+                                    WidgetHelper.updateWithWidgetData(
                                         oldWidgetData,
                                         context,
-                                        appWidgetId
+                                        appWidgetId,
+                                        null
                                     )
                                 } else {
                                     allViews.setTextViewText(

@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +19,10 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
+import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.AddressSettings
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
@@ -55,7 +58,16 @@ class AddressDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_address_details, container, false)
+        Log.d("HANS", Slh.getCurrencyIdentifierFromAddress(chiaAddress).toString())
+        val rootView = when {
+            Slh.getCurrencyAddressPrefix(chiaAddress) == Constants.CHIA_ADDRESS_PREFIX -> inflater.inflate(
+                R.layout.fragment_address_details,
+                container,
+                false
+            )
+            else -> inflater.inflate(R.layout.fragment_address_details_fork, container, false)
+        }
+
         chiaAddress?.let { cChiaAddress ->
             database?.let { db ->
                 this.lifecycleScope.launch {
@@ -77,10 +89,26 @@ class AddressDetailsFragment : Fragment() {
                 }
             }
         }
+
         val saveAddressSettingsButton =
             rootView.findViewById<Button>(R.id.save_address_settings_button)
         saveAddressSettingsButton.setOnClickListener {
             saveSettingsFromParentView(rootView)
+        }
+
+        val addressInputHolder =
+            rootView.findViewById<TextInputLayout>(R.id.chia_address_synonym_text_input_layout)
+        addressInputHolder?.hint = getString(
+            R.string.chia_address_synonym_hint,
+            Slh.getCurrencyDisplayNameFromAddress(chiaAddress)
+        )
+
+        val toNotificationSettingsButton =
+            rootView.findViewById<Button>(R.id.to_notification_settings_button)
+        this.context?.let { theContext ->
+            toNotificationSettingsButton?.setOnClickListener {
+                Slh.openNotificationSettings(theContext)
+            }
         }
         return rootView
     }
@@ -93,9 +121,9 @@ class AddressDetailsFragment : Fragment() {
             rootView.findViewById<SwitchCompat>(R.id.address_has_notification)
         notificationCheckbox.isChecked = chiaAddressSettings.showNotification
 
-        val grossBalanceCheckbox =
-            rootView.findViewById<SwitchCompat>(R.id.use_gross_balance)
-        grossBalanceCheckbox.isChecked = chiaAddressSettings.useGrossBalance
+//        val grossBalanceCheckbox =
+//            rootView.findViewById<SwitchCompat>(R.id.use_gross_balance)
+//        grossBalanceCheckbox.isChecked = chiaAddressSettings.useGrossBalance
 
         val addressSynonym =
             rootView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
@@ -122,20 +150,27 @@ class AddressDetailsFragment : Fragment() {
             }
         }
 
-
-
-        val chiaConversionSpinner: Spinner = rootView.findViewById(R.id.chia_convertion_spinner)
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.keys.toTypedArray()
-        ArrayAdapter(rootView.context, R.layout.support_simple_spinner_dropdown_item, chiaConversionKeys)
-        .also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            chiaConversionSpinner.adapter = adapter
-            if (chiaAddressSettings.conversionCurrency != null &&
-                chiaConversionKeys.contains(chiaAddressSettings.conversionCurrency)
-            ) {
-                chiaConversionSpinner.setSelection(chiaConversionKeys.indexOf(chiaAddressSettings.conversionCurrency))
-            }
+        rootView.findViewById<Spinner>(R.id.chia_convertion_spinner)?.let { chiaConversionSpinner ->
+            // Create an ArrayAdapter using the string array and a default spinner layout
+            val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.keys.toTypedArray()
+            ArrayAdapter(
+                rootView.context,
+                R.layout.support_simple_spinner_dropdown_item,
+                chiaConversionKeys
+            )
+                .also { adapter ->
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    chiaConversionSpinner.adapter = adapter
+                    if (chiaAddressSettings.conversionCurrency != null &&
+                        chiaConversionKeys.contains(chiaAddressSettings.conversionCurrency)
+                    ) {
+                        chiaConversionSpinner.setSelection(
+                            chiaConversionKeys.indexOf(
+                                chiaAddressSettings.conversionCurrency
+                            )
+                        )
+                    }
+                }
         }
     }
 
@@ -146,14 +181,18 @@ class AddressDetailsFragment : Fragment() {
                 val notificationCheckbox =
                     parentView.findViewById<SwitchCompat>(R.id.address_has_notification)
 
-                val useGrossBalanceCheckbox =
-                    parentView.findViewById<SwitchCompat>(R.id.use_gross_balance)
+//                val useGrossBalanceCheckbox =
+//                    parentView.findViewById<SwitchCompat>(R.id.use_gross_balance)
 
                 val addressSynonym =
                     parentView.findViewById<TextInputEditText>(R.id.chia_address_synonym_text_input_edit_text)
 
-                val chiaConversionSpinner: Spinner = parentView.findViewById(R.id.chia_convertion_spinner)
-                val chiaConversionCurrencyString = chiaConversionSpinner.selectedItem.toString()
+                val chiaConversionSpinner: Spinner? =
+                    parentView.findViewById(R.id.chia_convertion_spinner)
+                val chiaConversionCurrencyString = when(chiaConversionSpinner?.selectedItem) {
+                    null -> Constants.CurrencyCode.XCH
+                    else -> chiaConversionSpinner.selectedItem.toString()
+                }
 
                 val addressSynonymString = when (addressSynonym.text.toString().trim()) {
                     "" -> null
@@ -165,7 +204,7 @@ class AddressDetailsFragment : Fragment() {
                     addressSynonymString,
                     Constants.defaultUpdateTime,
                     chiaConversionCurrencyString,
-                    useGrossBalanceCheckbox.isChecked
+                    false
                 )
                 val chiaAddressSettingsDao = db.getAddressSettingsDao()
                 this.lifecycleScope.launch {
@@ -188,7 +227,8 @@ class AddressDetailsFragment : Fragment() {
          * @param chiaAddress
          * @return A new instance of fragment AddressDetailsFragment.
          */
-        @JvmStatic fun newInstance(chiaAddress: String) =
+        @JvmStatic
+        fun newInstance(chiaAddress: String) =
             AddressDetailsFragment().apply {
                 arguments = Bundle().apply { putString(ARG_CHIA_ADDRESS, chiaAddress) }
             }
