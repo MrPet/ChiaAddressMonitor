@@ -27,7 +27,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.adapter.ChiaAddressListAdapter
 import ninja.bored.chiapublicaddressmonitor.helpers.AllTheBlocksApiHelper
-import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.helpers.ForkHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 
@@ -177,7 +177,7 @@ class AddressListFragment : Fragment() {
                 ) { dialog, text ->
                     val textString = text.toString()
                     val inputField = dialog.getInputField()
-                    if (Slh.isChiaOrForkAddressValid(textString.trim())) {
+                    if (ForkHelper.isChiaOrForkAddressValid(textString.trim())) {
                         dialog.setActionButtonEnabled(WhichButton.POSITIVE, true)
                     } else {
                         inputField.error = getString(R.string.chia_address_input_error_wrong)

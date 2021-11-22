@@ -22,6 +22,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
+import ninja.bored.chiapublicaddressmonitor.helpers.ForkHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.AddressSettings
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
@@ -58,9 +59,9 @@ class AddressDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        Log.d("HANS", Slh.getCurrencyIdentifierFromAddress(chiaAddress).toString())
+        Log.d("HANS", ForkHelper.getCurrencyIdentifierFromAddress(chiaAddress).toString())
         val rootView = when {
-            Slh.getCurrencyAddressPrefix(chiaAddress) == Constants.CHIA_ADDRESS_PREFIX -> inflater.inflate(
+            ForkHelper.getCurrencyAddressPrefix(chiaAddress) == Constants.CHIA_ADDRESS_PREFIX -> inflater.inflate(
                 R.layout.fragment_address_details,
                 container,
                 false
@@ -100,7 +101,7 @@ class AddressDetailsFragment : Fragment() {
             rootView.findViewById<TextInputLayout>(R.id.chia_address_synonym_text_input_layout)
         addressInputHolder?.hint = getString(
             R.string.chia_address_synonym_hint,
-            Slh.getCurrencyDisplayNameFromAddress(chiaAddress)
+            ForkHelper.getCurrencyDisplayNameFromAddress(chiaAddress)
         )
 
         val toNotificationSettingsButton =
@@ -189,7 +190,7 @@ class AddressDetailsFragment : Fragment() {
 
                 val chiaConversionSpinner: Spinner? =
                     parentView.findViewById(R.id.chia_convertion_spinner)
-                val chiaConversionCurrencyString = when(chiaConversionSpinner?.selectedItem) {
+                val chiaConversionCurrencyString = when (chiaConversionSpinner?.selectedItem) {
                     null -> Constants.CurrencyCode.XCH
                     else -> chiaConversionSpinner.selectedItem.toString()
                 }

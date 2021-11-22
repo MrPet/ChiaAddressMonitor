@@ -7,6 +7,7 @@ import java.util.Date
 import junit.framework.TestCase
 import ninja.bored.chiapublicaddressmonitor.helpers.AllTheBlocksApiHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.ChiaExplorerApiHelper
+import ninja.bored.chiapublicaddressmonitor.helpers.ForkHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.ChiaExplorerAddressResponse
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
@@ -288,6 +289,7 @@ class SlhTest : TestCase() {
             "ach1wejs6jepzevvm8tl8vvpu3zs8gpujerhvfrftc87qwht935kwukqdzhdxg",
             "ach10qyddqdjnesenhq43csdplemnnh7psvldd0f8zjrwe2trkv4505qtdplev",
             "ach128tfx0n3rl2wjesh6yz86jp8qpxsyga3hy2l7fla32r74tvtu7pqf3alwj",
+            "xshib1elxntk4hg8yln62t75mm288lquaj7cdvlgt34j9d4jhvnjjfz26qzns4lr",
             "ach128tfx0n3rl2wjesh6yz86jp8qpxsyga3hy2l7fla32r74tvtu7pqf3alwj"
         )
     }
@@ -328,7 +330,8 @@ class SlhTest : TestCase() {
     fun testGetCurrencyIdentifierFromAddress() {
         assertEquals(
             "chia",
-            Slh.getCurrencyIdentifierFromAddress("xch1away45w2acy8cqgcjxnne8aket33y49tt437gjjk86y7fanstw7qyewsrf")
+            ForkHelper.getCurrencyIdentifierFromAddress(
+                "xch1away45w2acy8cqgcjxnne8aket33y49tt437gjjk86y7fanstw7qyewsrf")
         )
     }
 
@@ -336,14 +339,14 @@ class SlhTest : TestCase() {
     fun testIsChiaOrForkAddressValid() {
 
         bigAddressArray.forEach {
-            assertTrue("This is a valid address: $it", Slh.isChiaOrForkAddressValid(it))
+            assertTrue("This is a valid address: $it", ForkHelper.isChiaOrForkAddressValid(it))
         }
     }
 
     @Test
     fun getCurrencySymbolFromAddresss() {
         bigAddressArray.forEach {
-            assertNotNull("Symbold not found for: $it", Slh.getCurrencySymbolFromAddress(it))
+            assertNotNull("Symbold not found for: $it", ForkHelper.getCurrencySymbolFromAddress(it))
         }
     }
 

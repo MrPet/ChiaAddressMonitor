@@ -43,7 +43,7 @@ object AllTheBlocksApiHelper {
     fun buildUrlFromAddress(address: String): String {
 
         return Constants.BASE_ALL_THE_BLOCKS_API_URL +
-                Slh.getCurrencyIdentifierFromAddress(address) +
+                ForkHelper.getCurrencyIdentifierFromAddress(address) +
                 Constants.BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH +
                 address
     }
@@ -110,9 +110,13 @@ object AllTheBlocksApiHelper {
         allTheBlocksApiResponse: AllTheBlocksApiResponse,
         date: Date
     ): WidgetData {
+        var divider = ForkHelper.getNetBalanceDividerFromAddress(address)
+        if (divider == null) {
+            divider = Constants.NET_BALANCE_DIVIDER
+        }
         val dividedNetBalance = when (allTheBlocksApiResponse.balance) {
             0L -> allTheBlocksApiResponse.balance.toDouble()
-            else -> allTheBlocksApiResponse.balance.div(Constants.NET_BALANCE_DIVIDER)
+            else -> allTheBlocksApiResponse.balance.div(divider)
         }
         return WidgetData(
             address,

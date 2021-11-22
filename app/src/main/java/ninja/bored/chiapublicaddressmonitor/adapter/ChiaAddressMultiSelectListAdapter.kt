@@ -1,13 +1,12 @@
 package ninja.bored.chiapublicaddressmonitor.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import ninja.bored.chiapublicaddressmonitor.R
-import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.helpers.ForkHelper
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
 
@@ -29,8 +28,8 @@ class ChiaAddressMultiSelectListAdapter(widgetSettingsAndData: List<WidgetSettin
         holder.itemView.setOnClickListener {
 
             if (selectedAddressesList.size == 0 ||
-                Slh.getCurrencyIdentifierFromAddress(selectedAddressesList.first())
-                    ?.equals(Slh.getCurrencyIdentifierFromAddress(widgetData.chiaAddress)) == true
+                ForkHelper.getCurrencyIdentifierFromAddress(selectedAddressesList.first())
+                    ?.equals(ForkHelper.getCurrencyIdentifierFromAddress(widgetData.chiaAddress)) == true
             ) {
                 it.isSelected = !it.isSelected
                 if (it.isSelected) {

@@ -29,8 +29,7 @@ object ChiaExplorerApiHelper {
         showConnectionProblems: Boolean
     ): WidgetData? {
         Log.d(ChiaToFiatConversionApiHelper.TAG, "getting widget data from Api")
-        val currentWidgetDataUpdate =
-            ChiaExplorerApiHelper.receiveWidgetDataFromApi(chiaAddress)
+        val currentWidgetDataUpdate = receiveWidgetDataFromApi(chiaAddress)
         if (currentWidgetDataUpdate != null) {
             widgetDataDao.insertUpdate(currentWidgetDataUpdate)
         } else if (showConnectionProblems) {
@@ -104,13 +103,18 @@ object ChiaExplorerApiHelper {
         chiaExplorerAddressResponse: ChiaExplorerAddressResponse,
         date: Date
     ): WidgetData {
+        var divider = ForkHelper.getNetBalanceDividerFromAddress(address)
+        if (divider == null) {
+            divider = Constants.NET_BALANCE_DIVIDER
+        }
+        Log.d(TAG, "divider$divider")
         val dividedNetBalance = when (chiaExplorerAddressResponse.netBalance) {
             0.0 -> chiaExplorerAddressResponse.netBalance
-            else -> chiaExplorerAddressResponse.netBalance.div(Constants.NET_BALANCE_DIVIDER)
+            else -> chiaExplorerAddressResponse.netBalance.div(divider)
         }
         val dividedGrossBalance = when (chiaExplorerAddressResponse.grossBalance) {
             0.0 -> chiaExplorerAddressResponse.grossBalance
-            else -> chiaExplorerAddressResponse.grossBalance.div(Constants.NET_BALANCE_DIVIDER)
+            else -> chiaExplorerAddressResponse.grossBalance.div(divider)
         }
         return WidgetData(
             address,

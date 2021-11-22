@@ -19,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.AllTheBlocksApiHelper
-import ninja.bored.chiapublicaddressmonitor.helpers.Slh
+import ninja.bored.chiapublicaddressmonitor.helpers.ForkHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettings
@@ -123,7 +123,7 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
     fun saveSettings() {
         chiaAddressEditText?.let {
             val chiaAddress = it.text.toString()
-            if (Slh.isChiaOrForkAddressValid(chiaAddress.trim())) {
+            if (ForkHelper.isChiaOrForkAddressValid(chiaAddress.trim())) {
                 val widgetSettings = WidgetSettings(appWidgetID, chiaAddress.trim())
                 val chiaWidgetSettingsDao = widgetDB?.getWidgetSettingsDao()
                 launch {

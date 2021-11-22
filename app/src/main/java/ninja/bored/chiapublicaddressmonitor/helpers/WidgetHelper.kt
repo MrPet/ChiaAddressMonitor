@@ -79,7 +79,7 @@ object WidgetHelper {
 
             allViews.setTextViewText(
                 R.id.chia_amount_title_holder, when (currencyCode) {
-                    Constants.CurrencyCode.XCH -> Slh.getCurrencySymbolFromAddress(currentWidgetData.chiaAddress)
+                    Constants.CurrencyCode.XCH -> ForkHelper.getCurrencySymbolFromAddress(currentWidgetData.chiaAddress)
                     else -> currencyCode
                 }
             )
