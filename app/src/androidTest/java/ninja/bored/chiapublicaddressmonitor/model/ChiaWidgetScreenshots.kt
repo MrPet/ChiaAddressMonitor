@@ -73,18 +73,18 @@ class ChiaWidgetScreenshots : DocLocScreenshotTestCase(
 //                captureScreenshot(it.description)
 //            }
 
-            chiaConvertionSpinner {
-                step("${++stepCounter}. open Spinner") {
-                    open()
-                    captureScreenshot(it.description)
-                }
+//            chiaConvertionSpinner {
+//                step("${++stepCounter}. open Spinner") {
+//                    open()
+//                    captureScreenshot(it.description)
+//                }
 //                step("${++stepCounter}. choose spinner item") {
 //                    childAt<KSpinnerItem>(2) {
 //                        this.click()
 //                        captureScreenshot(it.description)
 //                    }
 //                }
-            }
+//            }
         }
     }
 }

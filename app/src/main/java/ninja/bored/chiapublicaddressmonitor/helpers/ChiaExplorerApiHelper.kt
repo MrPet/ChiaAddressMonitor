@@ -107,7 +107,6 @@ object ChiaExplorerApiHelper {
         if (divider == null) {
             divider = Constants.NET_BALANCE_DIVIDER
         }
-        Log.d(TAG, "divider$divider")
         val dividedNetBalance = when (chiaExplorerAddressResponse.netBalance) {
             0.0 -> chiaExplorerAddressResponse.netBalance
             else -> chiaExplorerAddressResponse.netBalance.div(divider)
