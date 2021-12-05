@@ -23,7 +23,7 @@ data class WidgetAddressGroupSettingsWithAddresses(
     @Relation(parentColumn = "widgetID", entityColumn = "widgetID")
     val widgetAddresses: List<WidgetAddressGroupingSettingsHasAddress>
 ) {
-    suspend fun insertUpdate(database: ChiaWidgetRoomsDatabase) {
+    fun insertUpdate(database: ChiaWidgetRoomsDatabase) {
         val widgetAddressGroupingSettingsDao = database.getWidgetAddressGroupingSettingsDao()
         widgetAddressGroupingSettingsDao.insertUpdate(widgetAddressGroupSettings)
         val widgetAddressGroupingSettingsHasAddressDao =
@@ -39,25 +39,25 @@ data class WidgetAddressGroupSettingsWithAddresses(
 interface WidgetAddressGroupSettingsWithAddressesDao {
     @Transaction
     @Query("SELECT * FROM widget_address_grouping_settings WHERE widgetID = :widgetID")
-    suspend fun getWidgetAddressGroupWithAddresses(widgetID: Int): WidgetAddressGroupSettingsWithAddresses?
+    fun getWidgetAddressGroupWithAddresses(widgetID: Int): WidgetAddressGroupSettingsWithAddresses?
 
     @Transaction
     @Query("SELECT * FROM widget_address_grouping_settings")
-    suspend fun loadAll(): List<WidgetAddressGroupSettingsWithAddresses>?
+    fun loadAll(): List<WidgetAddressGroupSettingsWithAddresses>?
 }
 
 @Dao
 interface WidgetAddressGroupingSettingsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUpdate(widgetSettings: WidgetAddressGroupingSettings)
+    fun insertUpdate(widgetSettings: WidgetAddressGroupingSettings)
 
     @Delete
-    suspend fun delete(widgetSettings: WidgetAddressGroupingSettings)
+    fun delete(widgetSettings: WidgetAddressGroupingSettings)
 
     @Transaction
     @Query("SELECT * FROM widget_address_grouping_settings WHERE widgetID = :widgetID")
-    suspend fun getByID(widgetID: Int): WidgetAddressGroupingSettings?
+    fun getByID(widgetID: Int): WidgetAddressGroupingSettings?
 }
 
 @Entity(
@@ -72,14 +72,14 @@ data class WidgetAddressGroupingSettingsHasAddress(
 @Dao
 interface WidgetAddressGroupingSettingsHasAddressDao {
     @Delete
-    suspend fun delete(widgetAddressGroupSettingAddresses: WidgetAddressGroupingSettingsHasAddress)
+    fun delete(widgetAddressGroupSettingAddresses: WidgetAddressGroupingSettingsHasAddress)
 
     @Query("DELETE FROM widget_address_grouping_settings_has_address WHERE widgetID = :widgetID")
-    suspend fun deleteWithWidgetID(widgetID: Int)
+    fun deleteWithWidgetID(widgetID: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUpdate(widgetAddressGroupSettingAddresses: WidgetAddressGroupingSettingsHasAddress)
+    fun insertUpdate(widgetAddressGroupSettingAddresses: WidgetAddressGroupingSettingsHasAddress)
 
     @Query("SELECT * FROM widget_address_grouping_settings_has_address WHERE widgetID = :widgetID")
-    suspend fun getByWidgetID(widgetID: Int): List<WidgetAddressGroupingSettingsHasAddress>?
+    fun getByWidgetID(widgetID: Int): List<WidgetAddressGroupingSettingsHasAddress>?
 }

@@ -15,7 +15,6 @@
         android:layout_height="0dp"
         android:layout_weight="0.3"
         android:gravity="center"
-        android:text="@string/chia_amount"
         android:textColor="@color/chia"
         android:textSize="14sp"
         android:textStyle="bold"

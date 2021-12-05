@@ -118,13 +118,16 @@ object NotificationHelper {
                     Constants.NOTIFICATION_CHANNEL_NEGATIVE_CHANGE,
                     context.getString(
                         R.string.address_balance_changed_negative_notification_header,
-                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL)
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL),
+                        ForkHelper.getCurrencySymbolFromAddress(newWidgetData.chiaAddress)
                     ),
                     context.getString(
                         R.string.address_balance_changed_negative_notification_text,
                         addressStringOrSynonym,
                         Slh.formatChiaDecimal(oldChiaAmount, Constants.Precision.TOTAL),
-                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL)
+                        ForkHelper.getCurrencySymbolFromAddress(newWidgetData.chiaAddress),
+                        Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL),
+                        ForkHelper.getCurrencySymbolFromAddress(newWidgetData.chiaAddress)
                     ),
                     Constants.NOTIFICATION_ID_NEGATIVE_CHANGE,
                     context

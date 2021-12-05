@@ -55,7 +55,6 @@ class AddressListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
         this.context?.let { context ->
             val addAddressButton = view.findViewById<FloatingActionButton>(R.id.addAddressButton)

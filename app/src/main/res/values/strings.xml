@@ -2,12 +2,10 @@
     <string name="app_name">Chia Address Monitor</string>
     <!-- Strings used for fragments for navigation -->
     <string name="address_list_label">Chia Address List</string>
-    <string name="chia_amount">XCH</string>
-    <string name="mojo_amount">MOJO</string>
     <string name="chia_amount_placeholder">%s</string>
     <string name="last_refresh_placeholder">%s</string>
     <string name="chia_widget_config_title">Chia public address widget configuration</string>
-    <string name="public_address_hint">Public address (xch…)</string>
+    <string name="public_address_hint">Public Chia or Fork address starting with xch, vag, xdg, hdd, etc.</string>
     <string name="chia_widget_config_description">This widget will periodically check the balance of the public address. We use https://alltheblocks.net to get accurate information about your address balance.</string>
     <string name="save_widget_settings">Save</string>
     <string name="chia_address_input_error_wrong">The address seems to be wrong, please check your input. You can find your address in the "Wallet" tab of your Chia UI</string>
@@ -28,15 +26,15 @@
     <string name="connectionProblems">Error connecting to Server, please check your internet connection or try again later.</string>
     <string name="progress_bar">Progressbar … loading</string>
 
-    <string name="balance_positive_changed_channel_name">Received Chia</string>
-    <string name="balance_positive_changed_channel_description">You received Chia, that is amazing</string>
+    <string name="balance_positive_changed_channel_name">Received coins</string>
+    <string name="balance_positive_changed_channel_description">You received coins, that is amazing</string>
     <string name="address_balance_changed_notification_header">You received %s %s</string>
     <string name="address_balance_changed_notification_text">Your balance for %s changed from %s %s to %s %s</string>
 
-    <string name="balance_negative_changed_channel_name">Sent Chia</string>
-    <string name="balance_negative_changed_channel_description">You sent some Chia, bought more space for your space farm?</string>
-    <string name="address_balance_changed_negative_notification_header">Your sent %s XCH</string>
-    <string name="address_balance_changed_negative_notification_text">Your balance for %s changed from %s XCH to %s XCH </string>
+    <string name="balance_negative_changed_channel_name">Sent coins</string>
+    <string name="balance_negative_changed_channel_description">You sent some coins, bought more space for your space farm?</string>
+    <string name="address_balance_changed_negative_notification_header">Your sent %s %s</string>
+    <string name="address_balance_changed_negative_notification_text">Your balance for %s changed from %s %s to %s %s </string>
 
     <!-- custom lib -->
 <!--    <string name="define_plu_chia_explorer" tools:keep="@string/define_plu_chia_explorer">year;owner</string>-->
@@ -55,6 +53,14 @@
     <string name="library_all_the_blocks_libraryVersion"        tools:keep="@string/library_all_the_blocks_libraryVersion">0.1</string>
     <string name="library_all_the_blocks_libraryWebsite"        tools:keep="@string/library_all_the_blocks_libraryWebsite">https://alltheblocks.net</string>
 
+    <string name="define_plu_font_awesome"                      tools:keep="@string/define_plu_all_the_blocks">year;owner</string>
+    <string name="library_font_awesome_author"                  tools:keep="@string/library_font_awesome_author">fontawesome.com</string>
+    <string name="library_font_awesome_authorWebsite"           tools:keep="@string/library_font_awesome_authorWebsite">https://fontawesome.com/license</string>
+    <string name="library_font_awesome_libraryName"             tools:keep="@string/library_font_awesome_libraryName">Font Awesome</string>
+    <string name="library_font_awesome_libraryDescription"      tools:keep="@string/library_font_awesome_libraryDescription">The internet\'s most popular icon toolkit has been redesigned and built from scratch. On top of this, features like icon font ligatures, an SVG framework, official NPM packages for popular frontend libraries like React, and access to a new CDN.</string>
+    <string name="library_font_awesome_libraryVersion"          tools:keep="@string/library_font_awesome_libraryVersion">5</string>
+    <string name="library_font_awesome_libraryWebsite"          tools:keep="@string/library_font_awesome_libraryWebsite">https://fontawesome.com</string>
+
     <string name="notification_activate_for_address">Enable notifications for this address</string>
     <string name="chia_address_synonym_hint">%s address synonym</string>
     <string name="saved_address_settings">Saved address settings</string>
@@ -71,7 +77,10 @@
     <string name="chia_address_grouping_widget_config_title">Address grouping widget</string>
     <string name="chia_info_grouped_preview_description">You cann group addresses in one widget.</string>
     <string name="unnknownCoin">Unknown</string>
-    <string name="can_ony_add_one_type_of_coin">You can only add addressess of the same coin</string>
-
+    <string name="can_ony_add_one_type_of_coin">You can only add addresses of the same coin</string>
+    <string name="address_list">Address list</string>
+    <string name="supported_forks">Supported forks</string>
+    <string name="fork_list_header_title">All supported forks</string>
+    <string name="fork_list_header_text">For all address balances the api of https://alltheblocks.net is used. This app would not be possible without.</string>
 
 </resources>

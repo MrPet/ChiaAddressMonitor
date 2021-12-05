@@ -22,14 +22,14 @@ data class WidgetData(
 interface WidgetDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUpdate(widgetData: WidgetData)
+    fun insertUpdate(widgetData: WidgetData)
 
     @Query("SELECT * FROM widget_data")
-    suspend fun getAll(): List<WidgetData>?
+    fun getAll(): List<WidgetData>?
 
     @Delete
-    suspend fun delete(widgetData: WidgetData)
+    fun delete(widgetData: WidgetData)
 
     @Query("SELECT * FROM widget_data WHERE chiaAddress = :chiaAddress")
-    suspend fun getByAddress(chiaAddress: String): WidgetData?
+    fun getByAddress(chiaAddress: String): WidgetData?
 }

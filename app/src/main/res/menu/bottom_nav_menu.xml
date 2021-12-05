@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/forks"
+        android:icon="@drawable/fork_icon"
+        android:title="@string/supported_forks"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/list"
+        android:icon="@drawable/baseline_list_24"
+        android:title="@string/address_list"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/license"
+        android:icon="@drawable/outline_info_24"
+        android:title="@string/licenses"
+        app:showAsAction="ifRoom" />
+</menu>

@@ -18,7 +18,6 @@
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
         android:gravity="bottom|center"
-        android:text="@string/chia_amount"
         android:textColor="@color/chia"
         android:textSize="14sp"
         android:textStyle="bold" />

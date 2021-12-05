@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?backgroundColor"
-    android:padding="13dp"
+    android:paddingTop="13dp"
+    android:paddingLeft="13dp"
+    android:paddingRight="13dp"
     tools:context="ninja.bored.chiapublicaddressmonitor.AddressListFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

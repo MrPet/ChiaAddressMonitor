@@ -25,6 +25,7 @@ object Constants {
     const val FORK_ADDRESS_LENGTH_WITHOUT_PREFIX: Int = 62 - CHIA_ADDRESS_PREFIX.length
     const val SHORT_DATE_TIME_FORMAT: String = "EEE, HH:mm"
     const val BASE_ALL_THE_BLOCKS_API_URL: String = "https://api.alltheblocks.net/"
+    const val BASE_ALL_THE_BLOCKS_URL: String = "https://alltheblocks.net/"
     val ALL_THE_BLOCKS_CURRENCIES = mapOf(
         "xch" to CoinInfo("chia", "XCH", "Chia", 1000000000000.0),
         "xfx" to CoinInfo("flax", "XFX", "Flax", 1000000000000.0),

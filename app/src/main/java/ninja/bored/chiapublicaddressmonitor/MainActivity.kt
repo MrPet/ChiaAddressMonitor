@@ -1,10 +1,9 @@
 package ninja.bored.chiapublicaddressmonitor
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mikepenz.aboutlibraries.LibsBuilder
 import ninja.bored.chiapublicaddressmonitor.helpers.NotificationHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
@@ -15,6 +14,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
+        findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.let { bottomNavigationListener ->
+            bottomNavigationListener.selectedItemId = R.id.list
+            bottomNavigationListener.setOnItemSelectedListener {
+                when (it.itemId) {
+                    R.id.license -> {
+                        setCurrentFragment(LibsBuilder().supportFragment())
+                    }
+                    R.id.list -> setCurrentFragment(AddressListFragment())
+                    R.id.forks -> setCurrentFragment(ForkFragment())
+                }
+                return@setOnItemSelectedListener true
+            }
+        }
     }
 
     override fun onResume() {
@@ -23,24 +35,10 @@ class MainActivity : AppCompatActivity() {
         Slh.setupWidgetUpdateWorker(this)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.default_menu, menu)
-        return true
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.license -> {
-                LibsBuilder().start(this)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+    private fun setCurrentFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.nav_host_fragment, fragment)
+            commit()
         }
-    }
+
 }

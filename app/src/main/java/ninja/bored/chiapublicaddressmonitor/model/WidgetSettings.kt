@@ -19,11 +19,11 @@ data class WidgetSettings(
 interface WidgetSettingsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUpdate(widgetSettings: WidgetSettings)
+    fun insertUpdate(widgetSettings: WidgetSettings)
 
     @Delete
-    suspend fun delete(widgetSettings: WidgetSettings)
+    fun delete(widgetSettings: WidgetSettings)
 
     @Query("SELECT * FROM widget_settings WHERE widgetID = :widgetID")
-    suspend fun getByID(widgetID: Int): WidgetSettings?
+    fun getByID(widgetID: Int): WidgetSettings?
 }
