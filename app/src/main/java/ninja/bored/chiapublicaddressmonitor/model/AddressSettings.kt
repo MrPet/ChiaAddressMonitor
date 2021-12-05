@@ -23,11 +23,11 @@ data class AddressSettings(
 @Dao
 interface AddressSettingsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUpdate(addressSettings: AddressSettings)
+    suspend fun insertUpdate(addressSettings: AddressSettings)
 
     @Delete
-    fun delete(addressSettings: AddressSettings)
+    suspend fun delete(addressSettings: AddressSettings)
 
     @Query("SELECT * FROM address_settings WHERE chiaAddress = :chiaAddress")
-    fun getByAddress(chiaAddress: String): AddressSettings?
+    suspend fun getByAddress(chiaAddress: String): AddressSettings?
 }

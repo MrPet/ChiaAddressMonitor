@@ -19,14 +19,14 @@ data class WidgetFiatConversionSettings(
 interface WidgetFiatConversionSettingsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUpdate(widgetFiatConversionSettings: WidgetFiatConversionSettings)
+    suspend fun insertUpdate(widgetFiatConversionSettings: WidgetFiatConversionSettings)
 
     @Delete
-    fun delete(widgetFiatConversionSettings: WidgetFiatConversionSettings)
+    suspend fun delete(widgetFiatConversionSettings: WidgetFiatConversionSettings)
 
     @Query("SELECT * FROM widget_fiat_conversion_settings WHERE widgetID = :widgetID")
-    fun getByID(widgetID: Int): WidgetFiatConversionSettings?
+    suspend fun getByID(widgetID: Int): WidgetFiatConversionSettings?
 
     @Query("SELECT * FROM widget_fiat_conversion_settings")
-    fun loadAll(): List<WidgetFiatConversionSettings>?
+    suspend fun loadAll(): List<WidgetFiatConversionSettings>?
 }

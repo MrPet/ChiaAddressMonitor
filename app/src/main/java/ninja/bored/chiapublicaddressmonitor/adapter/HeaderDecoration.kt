@@ -25,6 +25,7 @@ class HeaderDecoration(
     private val mColumns: Int
 ) :
     RecyclerView.ItemDecoration() {
+
     private var mShadowPaint: Paint? = null
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDraw(c, parent, state)
@@ -148,7 +149,8 @@ class HeaderDecoration(
 
         /**
          * Adds a parallax effect.
-         * @param parallax the multiplier to use, 0f would be the view standing still, 1f moves along with the first item.
+         * @param parallax the multiplier to use, 0f would be the view standing still,
+         * 1f moves along with the first item.
          * @return this builder
          */
         fun parallax(parallax: Float): Builder {
@@ -173,7 +175,7 @@ class HeaderDecoration(
 
         fun build(): HeaderDecoration {
             checkNotNull(mView) { "View must be set with either setView or inflate" }
-            return HeaderDecoration(mView!!, mHorizontal, mParallax, mShadowSize * 1.5f, mColumns)
+            return HeaderDecoration(mView!!, mHorizontal, mParallax, mShadowSize * shadowSizeMultiplier, mColumns)
         }
 
         fun columns(columns: Int): Builder {
@@ -183,6 +185,13 @@ class HeaderDecoration(
     }
 
     companion object {
+        const val shadowSizeMultiplier = 1.5f
+        const val shadowAlpha = 55
+        const val smallShadowAlpha = 55
+        const val zero = 0
+        const val zeroF = 0.0f
+        const val halfF = 0.5f
+        const val oneF = 1f
         fun with(context: Context): Builder {
             return Builder(context)
         }
@@ -206,13 +215,17 @@ class HeaderDecoration(
 
     init {
         if (mShadowSize > 0) {
-            Paint()?.let{ paint ->
+            Paint().let { paint ->
                 mShadowPaint = paint
                 paint.setShader(
                     if (mHorizontal) LinearGradient(
-                        mShadowSize, 0.0f, 0.0f, 0.0f, intArrayOf(
-                            Color.argb(55, 0, 0, 0), Color.argb(55, 0, 0, 0), Color.argb(3, 0, 0, 0)
-                        ), floatArrayOf(0f, .5f, 1f),
+                        mShadowSize, zeroF, zeroF, zeroF,
+                        intArrayOf(
+                            Color.argb(shadowAlpha, zero, zero, zero),
+                            Color.argb(shadowAlpha, zero, zero, zero),
+                            Color.argb(smallShadowAlpha, zero, zero, zero)
+                        ),
+                        floatArrayOf(zeroF, halfF, oneF),
                         Shader.TileMode.CLAMP
                     ) else LinearGradient(
                         0.0f,
@@ -220,11 +233,11 @@ class HeaderDecoration(
                         0.0f,
                         0.0f,
                         intArrayOf(
-                            Color.argb(55, 0, 0, 0),
-                            Color.argb(55, 0, 0, 0),
-                            Color.argb(3, 0, 0, 0)
+                            Color.argb(shadowAlpha, zero, zero, zero),
+                            Color.argb(shadowAlpha, zero, zero, zero),
+                            Color.argb(smallShadowAlpha, zero, zero, zero)
                         ),
-                        floatArrayOf(0f, .5f, 1f),
+                        floatArrayOf(zeroF, halfF, oneF),
                         Shader.TileMode.CLAMP
                     )
                 )

@@ -29,10 +29,10 @@ data class ChiaLatestConversion(
 interface ChiaLatestConversionDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUpdate(chiaLatestConversion: ChiaLatestConversion)
+    suspend fun insertUpdate(chiaLatestConversion: ChiaLatestConversion)
 
     @Delete
-    fun delete(chiaLatestConversion: ChiaLatestConversion)
+    suspend fun delete(chiaLatestConversion: ChiaLatestConversion)
 
     @Query(
         """
@@ -40,5 +40,5 @@ interface ChiaLatestConversionDao {
                     WHERE priceCurrency = :paraCurrency 
                 """
     )
-    fun getLatestForCurrency(paraCurrency: String): ChiaLatestConversion?
+    suspend fun getLatestForCurrency(paraCurrency: String): ChiaLatestConversion?
 }
