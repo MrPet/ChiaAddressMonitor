@@ -81,6 +81,7 @@
     <string name="address_list">Address list</string>
     <string name="supported_forks">Supported forks</string>
     <string name="fork_list_header_title">All supported forks</string>
-    <string name="fork_list_header_text">For all address balances the api of https://alltheblocks.net is used. This app would not be possible without.</string>
+    <string name="fork_list_header_text">For all address balances we utilizes the API of the https://alltheblocks.net to make sure the data is always accurate and updated.\nFor more information tap on the coin.</string>
+    <string name="open_fork_info">Open additional fork info in browser</string>
 
 </resources>

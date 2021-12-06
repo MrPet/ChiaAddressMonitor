@@ -1,12 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="ninja.bored.chiapublicaddressmonitor.ForkFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+   >
 
-    app:layoutManager="LinearLayoutManager"
-    tools:context=".ForkFragment"
-    tools:listitem="@layout/fragment_fork" />
+    <SearchView
+        android:id="@+id/fork_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/fork_info_text"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:autoLink="none"-->
+<!--        android:focusable="true"-->
+<!--        android:text="@string/fork_list_header_text"-->
+<!--        android:textIsSelectable="true"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/fork_search_bar"-->
+<!--        />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        app:layout_constrainedHeight="true"
+        android:name="ninja.bored.chiapublicaddressmonitor.ForkFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fork_search_bar"
+        tools:context=".ForkFragment"
+        tools:listitem="@layout/fragment_fork" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
