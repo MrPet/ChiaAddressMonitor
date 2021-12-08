@@ -3,16 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/drawable/fork_iconn.xml" value="0.4015625" />
         <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.346875" />
-        <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/activity_main.xml" value="0.13601823708206687" />
+        <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/chia_fiat_conversion_widget_option_activity.xml" value="0.3307291666666667" />
         <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/chia_public_address_grouping_widget_option_activity.xml" value="0.2863247863247863" />
         <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/chia_public_address_widget.xml" value="0.24444444444444444" />
         <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/chia_public_address_widget_option_activity.xml" value="0.2657407407407407" />
+        <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/content_main.xml" value="0.18743667679837892" />
+        <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/fork_list_header.xml" value="0.3854166666666667" />
         <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/fragment_address_details.xml" value="0.16084093211752787" />
+        <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/fragment_address_details_fork.xml" value="0.18743667679837892" />
         <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/fragment_address_list.xml" value="0.3307291666666667" />
+        <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/fragment_fork.xml" value="0.3854166666666667" />
+        <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/fragment_fork_list.xml" value="0.37135416666666665" />
         <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/recycler_item_chia_address_list.xml" value="0.2796875" />
         <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/layout/recycler_item_chia_address_select_list.xml" value="0.5541666666666667" />
+        <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3854166666666667" />
+        <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/menu/default_menu.xml" value="0.3854166666666667" />
         <entry key="..\:/data/repos/ChiaAddressMonitor/app/src/main/res/xml/widget_chia_address_grouping_balance.xml" value="0.3854166666666667" />
       </map>
     </option>
