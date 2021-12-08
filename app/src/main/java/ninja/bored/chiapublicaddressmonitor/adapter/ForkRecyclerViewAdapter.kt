@@ -2,7 +2,6 @@ package ninja.bored.chiapublicaddressmonitor.adapter
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +33,6 @@ class ForkRecyclerViewAdapter(
         val item = filteredValues[position]
         holder.contentView.text = "${item.coinDisplayName} (${item.coinCurrencySymbol})"
         holder.coinLineHolder.setOnClickListener {
-            Log.d("HANS", "CLICK!!!")
             val intent = Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse(Constants.BASE_ALL_THE_BLOCKS_URL + item.allTheBlocksCoinUrlShort)

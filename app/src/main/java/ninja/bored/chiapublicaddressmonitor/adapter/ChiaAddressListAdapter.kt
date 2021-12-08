@@ -15,7 +15,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import java.text.DateFormat
 import ninja.bored.chiapublicaddressmonitor.AddressDetailsFragment
 import ninja.bored.chiapublicaddressmonitor.ChiaPublicAddressWidgetReceiver
 import ninja.bored.chiapublicaddressmonitor.R
@@ -24,6 +23,7 @@ import ninja.bored.chiapublicaddressmonitor.helpers.ForkHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 import ninja.bored.chiapublicaddressmonitor.model.WidgetData
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettingsAndData
+import java.text.DateFormat
 
 open class ChiaAddressListAdapter(private val widgetSettingsAndData: List<WidgetSettingsAndData>) :
     RecyclerView.Adapter<ChiaAddressListViewHolder>() {
@@ -100,11 +100,11 @@ open class ChiaAddressListAdapter(private val widgetSettingsAndData: List<Widget
         holder.itemView.setOnClickListener {
             val newFragment =
                 AddressDetailsFragment.newInstance(widgetData.chiaAddress)
-            val transaction =
-                (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.nav_host_fragment, newFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+            (context as AppCompatActivity).supportFragmentManager.beginTransaction().apply {
+                replace(R.id.nav_host_fragment, newFragment)
+                addToBackStack(null)
+                commit()
+            }
         }
     }
 

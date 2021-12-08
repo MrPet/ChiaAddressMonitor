@@ -1,6 +1,7 @@
 package ninja.bored.chiapublicaddressmonitor
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,6 +30,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onResume() {
         super.onResume()
         NotificationHelper.createNotificationChannels(this)
@@ -40,5 +51,4 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.nav_host_fragment, fragment)
             commit()
         }
-
 }

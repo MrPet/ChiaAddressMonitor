@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import com.mikepenz.aboutlibraries.LibsBuilder
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -23,6 +22,7 @@ import ninja.bored.chiapublicaddressmonitor.helpers.ForkHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.WidgetHelper
 import ninja.bored.chiapublicaddressmonitor.model.ChiaWidgetRoomsDatabase
 import ninja.bored.chiapublicaddressmonitor.model.WidgetSettings
+import kotlin.coroutines.CoroutineContext
 
 class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
 
@@ -140,7 +140,6 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
     private suspend fun updateAppWidget(appWidgetID: Int, widgetSettings: WidgetSettings) {
         val context = this
 
-        Log.d("Hans", "getting data")
         val dataDao = widgetDB?.getWidgetDataDao()
         var widgetData = dataDao?.getByAddress(widgetSettings.chiaAddress)
         if (widgetData == null) {
