@@ -37,13 +37,21 @@ Please [open a new issue](https://github.com/MrPet/ChiaAddressMonitor/issues), t
 If you like the widget and would like to contribute in a other way, you can leave a positive review on google play and / or tell your fellow farmers about it.
 
 If you like the widget and are feeling very generous a donation to my chia address would help me to expand my farm or buy me a beer. 
+
 Chia: `xch1qhgp3ytyauptzyv5p48gnqpmkes6u2sf8llc7m3eurcpg3emg9yqzzptac`
+
 GreenDoge: `gdog1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qv9uc8j`
+
 SkyNet: `xnt1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qxtf6p4`
+
 Cunt: `vag1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qnesnj2`
+
 Covid: `cov1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qtx4jq6`
+
 DogeChia: `xdg1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qc9emlw`
+
 Chives: `xcc1qcz2n4ywjqnz3fgk2yx7zfprs9yw2rae45q8z4a3w2d3xse60husc8074v`
+
 HDDCoin: `hdd1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qq40ysk`
 
 
