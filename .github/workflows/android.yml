@@ -74,7 +74,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
       - name: Build Release AAB
-        run: ./gradle bundleRelase
+        run: ./gradlew bundleRelase
       - name: Sign AAB
         uses: r0adkll/sign-android-release@v1
         id: sign_app
