@@ -62,11 +62,12 @@ object NotificationHelper {
             .setContentTitle(contentTitle)
             .setContentText(contentText)
             .setOnlyAlertOnce(false)
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setStyle(
                 NotificationCompat.BigTextStyle()
                     .bigText(contentText)
             )
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setColor(context.getColor(R.color.chia))
             .setAutoCancel(false)
 

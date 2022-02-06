@@ -85,7 +85,8 @@ object Constants {
         "xnt" to CoinInfo("skynet", "XNT", "Skynet", 1000000000000.0),
         "xshib" to CoinInfo("shibgreen", "XSHIB", "SHIBgreen", 1000.0),
         "xeth" to CoinInfo("ethgreen", "XETH", "ETHgreen", 1000000000.0),
-        "rolls" to CoinInfo("rolls", "ROLLS", "PecanRolls", 1000000000000.0)
+        "rolls" to CoinInfo("rolls", "ROLLS", "PecanRolls", 1000000000000.0),
+        "llc" to CoinInfo("littlelambocoin", "LLC", "LittleLamboCoin", 1000.0)
     )
     const val BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH: String = "/address/"
     const val BASE_API_URL: String = "https://public-api.chiaexplorer.com/0.1/balance/"
