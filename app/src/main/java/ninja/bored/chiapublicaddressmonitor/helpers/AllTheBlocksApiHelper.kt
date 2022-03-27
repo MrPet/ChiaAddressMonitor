@@ -32,7 +32,10 @@ object AllTheBlocksApiHelper {
         val currentWidgetDataUpdate =
             receiveWidgetDataFromApi(chiaAddress)
         if (currentWidgetDataUpdate != null) {
-            widgetDataDao.insertUpdate(currentWidgetDataUpdate)
+            val oldWidgetData = widgetDataDao.getByAddress(chiaAddress)
+            if (oldWidgetData == null || oldWidgetData.updateDate.before(currentWidgetDataUpdate.updateDate)) {
+                widgetDataDao.insertUpdate(currentWidgetDataUpdate)
+            }
         } else if (showConnectionProblems) {
             Toast.makeText(context, R.string.connectionProblems, Toast.LENGTH_LONG)
                 .show()
@@ -55,6 +58,7 @@ object AllTheBlocksApiHelper {
         suspendCancellableCoroutine { continuation ->
             val allTheBlocksUrl = buildUrlFromAddress(address)
             Log.d(TAG, "calling api.alltheblocks.net: $allTheBlocksUrl")
+
             val request = Request.Builder()
                 .url(allTheBlocksUrl)
                 .build()
@@ -85,7 +89,10 @@ object AllTheBlocksApiHelper {
                                         parseApiResponseToWidgetData(
                                             address,
                                             it,
-                                            Date()
+                                            Date(
+                                                allTheBlocksAddressResult.timestampBalance *
+                                                    Constants.MILISECONDS_PER_SECOND
+                                            )
                                         )
                                     )
                                 )

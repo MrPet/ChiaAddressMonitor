@@ -7,6 +7,7 @@ import ninja.bored.chiapublicaddressmonitor.model.CoinInfo
 import ninja.bored.chiapublicaddressmonitor.model.CurrencyConversionInfo
 
 object Constants {
+    const val MILISECONDS_PER_SECOND: Int = 1000
     const val TIME_THRESHOLD_FOR_FIAT_CONVERSION: Int = 15
     const val BIG_AMOUNT_THRESHOLD = 10000
     const val defaultUpdateTime: Int = 3600
