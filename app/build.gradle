@@ -135,7 +135,7 @@ android {
         applicationId "ninja.bored.chiapublicaddressmonitor"
         minSdkVersion 24
         targetSdkVersion 31
-        buildToolsVersion = "30.0.2"
+        buildToolsVersion = "30.0.3"
         versionCode generateVersionCode()
         versionName "${majorVersion}.${minorVersion}.${versionCode}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

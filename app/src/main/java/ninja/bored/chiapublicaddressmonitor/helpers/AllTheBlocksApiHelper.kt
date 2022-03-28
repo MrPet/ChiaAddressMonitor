@@ -5,8 +5,6 @@ import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
-import java.io.IOException
-import java.util.Date
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ninja.bored.chiapublicaddressmonitor.R
 import ninja.bored.chiapublicaddressmonitor.model.AllTheBlocksApiResponse
@@ -17,6 +15,8 @@ import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import java.io.IOException
+import java.util.Date
 
 object AllTheBlocksApiHelper {
 
@@ -32,10 +32,7 @@ object AllTheBlocksApiHelper {
         val currentWidgetDataUpdate =
             receiveWidgetDataFromApi(chiaAddress)
         if (currentWidgetDataUpdate != null) {
-            val oldWidgetData = widgetDataDao.getByAddress(chiaAddress)
-            if (oldWidgetData == null || oldWidgetData.updateDate.before(currentWidgetDataUpdate.updateDate)) {
-                widgetDataDao.insertUpdate(currentWidgetDataUpdate)
-            }
+            widgetDataDao.insertUpdate(currentWidgetDataUpdate)
         } else if (showConnectionProblems) {
             Toast.makeText(context, R.string.connectionProblems, Toast.LENGTH_LONG)
                 .show()
@@ -46,9 +43,9 @@ object AllTheBlocksApiHelper {
     fun buildUrlFromAddress(address: String): String {
 
         return Constants.BASE_ALL_THE_BLOCKS_API_URL +
-                ForkHelper.getCurrencyIdentifierFromAddress(address) +
-                Constants.BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH +
-                address
+            ForkHelper.getCurrencyIdentifierFromAddress(address) +
+            Constants.BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH +
+            address
     }
 
     /**
@@ -84,18 +81,17 @@ object AllTheBlocksApiHelper {
                             response.body?.close()
                             allTheBlocksAddressResult?.let {
                                 Log.d(TAG, it.toString())
-                                continuation.resumeWith(
-                                    Result.success(
-                                        parseApiResponseToWidgetData(
-                                            address,
-                                            it,
-                                            Date(
-                                                allTheBlocksAddressResult.timestampBalance *
-                                                    Constants.MILISECONDS_PER_SECOND
+                                if (address == it.address && it.balance != null) {
+                                    continuation.resumeWith(
+                                        Result.success(
+                                            parseApiResponseToWidgetData(
+                                                address,
+                                                it,
+                                                Date()
                                             )
                                         )
                                     )
-                                )
+                                }
                             }
                         } catch (e: JsonParseException) {
                             // not good something bad happened
@@ -121,10 +117,13 @@ object AllTheBlocksApiHelper {
         if (divider == null) {
             divider = Constants.NET_BALANCE_DIVIDER
         }
+
         val dividedNetBalance = when (allTheBlocksApiResponse.balance) {
             0L -> allTheBlocksApiResponse.balance.toDouble()
+            null -> 0.toDouble()
             else -> allTheBlocksApiResponse.balance.div(divider)
         }
+
         return WidgetData(
             address,
             dividedNetBalance,
