@@ -7,6 +7,7 @@ import ninja.bored.chiapublicaddressmonitor.model.CoinInfo
 import ninja.bored.chiapublicaddressmonitor.model.CurrencyConversionInfo
 
 object Constants {
+    const val MILISECONDS_PER_SECOND: Int = 1000
     const val TIME_THRESHOLD_FOR_FIAT_CONVERSION: Int = 15
     const val BIG_AMOUNT_THRESHOLD = 10000
     const val defaultUpdateTime: Int = 3600
@@ -86,9 +87,15 @@ object Constants {
         "xshib" to CoinInfo("shibgreen", "XSHIB", "SHIBgreen", 1000.0),
         "xeth" to CoinInfo("ethgreen", "XETH", "ETHgreen", 1000000000.0),
         "rolls" to CoinInfo("rolls", "ROLLS", "PecanRolls", 1000000000000.0),
-        "llc" to CoinInfo("littlelambocoin", "LLC", "LittleLamboCoin", 1000.0)
+        "llc" to CoinInfo("littlelambocoin", "LLC", "LittleLamboCoin", 1000.0),
+        "bpx" to CoinInfo("bpx", "BPX", "BPX", 1000000000000.0),
+        "gl" to CoinInfo("gold", "GL", "Gold", 1000000000000.0),
+        "xjk" to CoinInfo("joker", "XJK", "Joker", 100000000.0),
+        "profit" to CoinInfo("profit", "PROFIT", "Profit", 1000000000000.0),
+        "eco" to CoinInfo("ecostake", "ECO", "Ecostake", 1000000000000.0)
     )
-    const val BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH: String = "/address/"
+
+    const val BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH: String = "/address/name/"
     const val BASE_API_URL: String = "https://public-api.chiaexplorer.com/0.1/balance/"
     const val CHIA_EXPLORER_API_KEY_HEADER_NAME: String = "x-api-key"
     const val CHIA_EXPLORER_API_KEY: String =
@@ -122,6 +129,6 @@ object Constants {
         CurrencyCode.USD to CurrencyConversionInfo(CurrencyCode.USD, Precision.FIAT, null)
     )
 
-    const val UPDATE_WORKER_INTERVAL_IN_MINUTES: Long = 15L
+    const val UPDATE_WORKER_INTERVAL_IN_MINUTES: Long = 60L
     const val UPDATE_WORKER_NAME: String = "widget_update_worker"
 }

@@ -33,7 +33,7 @@
 
     <string name="balance_negative_changed_channel_name">Sent coins</string>
     <string name="balance_negative_changed_channel_description">You sent some coins, bought more space for your space farm?</string>
-    <string name="address_balance_changed_negative_notification_header">Your sent %s %s</string>
+    <string name="address_balance_changed_negative_notification_header">You sent %s %s</string>
     <string name="address_balance_changed_negative_notification_text">Your balance for %s changed from %s %s to %s %s </string>
 
     <!-- custom lib -->

@@ -221,7 +221,7 @@ object WidgetHelper {
                 )
                 widgetData.widgetData?.let { oldWidgetData ->
                     NotificationHelper.checkIfNecessaryAndSendNotification(
-                        oldWidgetData.chiaAmount,
+                        oldWidgetData,
                         newWidgetData,
                         context
                     )

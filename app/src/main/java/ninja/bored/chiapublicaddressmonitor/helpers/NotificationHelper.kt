@@ -77,7 +77,7 @@ object NotificationHelper {
     }
 
     suspend fun checkIfNecessaryAndSendNotification(
-        oldChiaAmount: Double?,
+        oldChiaData: WidgetData?,
         newWidgetData: WidgetData,
         context: Context
     ) {
@@ -86,27 +86,28 @@ object NotificationHelper {
         val addressSettings = addressSettingsDao.getByAddress(newWidgetData.chiaAddress)
 
         if (addressSettings?.showNotification == true &&
-            oldChiaAmount != null &&
-            newWidgetData.chiaAmount != oldChiaAmount
+            oldChiaData != null &&
+            newWidgetData.chiaAmount != oldChiaData.chiaAmount &&
+            newWidgetData.updateDate.after(oldChiaData.updateDate)
         ) {
             val addressStringOrSynonym = when (addressSettings.chiaAddressSynonym) {
                 null -> newWidgetData.chiaAddress
                 else -> addressSettings.chiaAddressSynonym
             }
-            if (newWidgetData.chiaAmount > oldChiaAmount) {
+            if (newWidgetData.chiaAmount > oldChiaData.chiaAmount) {
                 sendNotification(
                     Constants.NOTIFICATION_CHANNEL_POSITIVE_CHANGE,
                     context.getString(
                         R.string.address_balance_changed_notification_header,
                         Slh.formatChiaDecimal(
-                            newWidgetData.chiaAmount - oldChiaAmount, Constants.Precision.TOTAL
+                            newWidgetData.chiaAmount - oldChiaData.chiaAmount, Constants.Precision.TOTAL
                         ),
                         ForkHelper.getCurrencySymbolFromAddress(newWidgetData.chiaAddress)
                     ),
                     context.getString(
                         R.string.address_balance_changed_notification_text,
                         addressStringOrSynonym,
-                        Slh.formatChiaDecimal(oldChiaAmount, Constants.Precision.TOTAL),
+                        Slh.formatChiaDecimal(oldChiaData.chiaAmount, Constants.Precision.TOTAL),
                         ForkHelper.getCurrencySymbolFromAddress(newWidgetData.chiaAddress),
                         Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL),
                         ForkHelper.getCurrencySymbolFromAddress(newWidgetData.chiaAddress)
@@ -125,7 +126,7 @@ object NotificationHelper {
                     context.getString(
                         R.string.address_balance_changed_negative_notification_text,
                         addressStringOrSynonym,
-                        Slh.formatChiaDecimal(oldChiaAmount, Constants.Precision.TOTAL),
+                        Slh.formatChiaDecimal(oldChiaData.chiaAmount, Constants.Precision.TOTAL),
                         ForkHelper.getCurrencySymbolFromAddress(newWidgetData.chiaAddress),
                         Slh.formatChiaDecimal(newWidgetData.chiaAmount, Constants.Precision.TOTAL),
                         ForkHelper.getCurrencySymbolFromAddress(newWidgetData.chiaAddress)
