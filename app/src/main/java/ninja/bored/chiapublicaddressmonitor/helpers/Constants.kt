@@ -91,7 +91,8 @@ object Constants {
         "bpx" to CoinInfo("bpx", "BPX", "BPX", 1000000000000.0),
         "gl" to CoinInfo("gold", "GL", "Gold", 1000000000000.0),
         "xjk" to CoinInfo("joker", "XJK", "Joker", 100000000.0),
-        "profit" to CoinInfo("profit", "PROFIT", "Profit", 1000000000000.0)
+        "profit" to CoinInfo("profit", "PROFIT", "Profit", 1000000000000.0),
+        "eco" to CoinInfo("ecostake", "ECO", "Ecostake", 1000000000000.0)
     )
 
     const val BASE_ALL_THE_BLOCKS_API_ADDRESS_PATH: String = "/address/name/"
