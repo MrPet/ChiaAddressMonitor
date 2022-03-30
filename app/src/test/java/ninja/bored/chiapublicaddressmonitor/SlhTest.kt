@@ -320,7 +320,7 @@ class SlhTest : TestCase() {
     @Test
     fun testBuildUrlFromAddress() {
         assertEquals(
-            "https://api.alltheblocks.net/chia/address/xch1away45w2acy8cqgcjxnne8aket33y49tt437gjjk86y7fanstw7qyewsrf",
+            "https://api.alltheblocks.net/chia/address/name/xch1away45w2acy8cqgcjxnne8aket33y49tt437gjjk86y7fanstw7qyewsrf",
             AllTheBlocksApiHelper
                 .buildUrlFromAddress("xch1away45w2acy8cqgcjxnne8aket33y49tt437gjjk86y7fanstw7qyewsrf")
         )
