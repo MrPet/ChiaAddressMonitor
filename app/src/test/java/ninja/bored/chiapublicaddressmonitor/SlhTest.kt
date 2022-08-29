@@ -290,7 +290,9 @@ class SlhTest : TestCase() {
             "ach10qyddqdjnesenhq43csdplemnnh7psvldd0f8zjrwe2trkv4505qtdplev",
             "ach128tfx0n3rl2wjesh6yz86jp8qpxsyga3hy2l7fla32r74tvtu7pqf3alwj",
             "xshib1elxntk4hg8yln62t75mm288lquaj7cdvlgt34j9d4jhvnjjfz26qzns4lr",
-            "ach128tfx0n3rl2wjesh6yz86jp8qpxsyga3hy2l7fla32r74tvtu7pqf3alwj"
+            "ach128tfx0n3rl2wjesh6yz86jp8qpxsyga3hy2l7fla32r74tvtu7pqf3alwj",
+            "xpt1gm2t8r48rrywvvn230skqk2rs9mzry3yjtjxlw2t8qdwrve3g70s3et9gs",
+            "hcx1knadrsuc835gg3av2hnf4ekn5hsunrcasvyayfa7p7r9jj3yakmqf3cmuv"
         )
     }
 
