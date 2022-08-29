@@ -130,11 +130,11 @@ def majorVersion = 0
 def minorVersion = 99
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     defaultConfig {
         applicationId "ninja.bored.chiapublicaddressmonitor"
         minSdkVersion 24
-        targetSdkVersion 31
+        targetSdkVersion 33
         buildToolsVersion = "30.0.3"
         versionCode generateVersionCode()
         versionName "${majorVersion}.${minorVersion}.${versionCode}"
@@ -203,15 +203,15 @@ dependencies {
     implementation 'androidx.slice:slice-core:1.0.0'
     implementation 'androidx.slice:slice-builders-ktx:1.0.0-alpha6'
 
-    def room_version = "2.4.1"
-    def espressoVersion = "3.5.0-alpha03"
+    def room_version = "2.4.3"
+    def espressoVersion = "3.5.0-alpha07"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
 
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
 
@@ -225,10 +225,10 @@ dependencies {
     implementation "com.mikepenz:aboutlibraries:$latest_about_libs_release"
 
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
