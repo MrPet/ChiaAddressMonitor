@@ -38,7 +38,7 @@ jobs:
           CHIA_CONVERSIONS_API_KEY: ${{ secrets.CHIA_CONVERSIONS_API_KEY }}
         run: echo CHIA_CONVERSIONS_API_KEY="\"$CHIA_CONVERSIONS_API_KEY\"" >> ./local.properties
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'adopt'
@@ -64,7 +64,7 @@ jobs:
           CHIA_CONVERSIONS_API_KEY: ${{ secrets.CHIA_CONVERSIONS_API_KEY }}
         run: echo CHIA_CONVERSIONS_API_KEY="\"$CHIA_CONVERSIONS_API_KEY\"" >> ./local.properties
       - name: set up JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'adopt'
