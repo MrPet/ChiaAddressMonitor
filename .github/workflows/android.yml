@@ -33,6 +33,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Setup Java
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
       - name: Set api key
         env:
           CHIA_EXPLORER_API_KEY: ${{ secrets.CHIA_EXPLORER_API_KEY }}
@@ -41,11 +46,6 @@ jobs:
         env:
           CHIA_CONVERSIONS_API_KEY: ${{ secrets.CHIA_CONVERSIONS_API_KEY }}
         run: echo CHIA_CONVERSIONS_API_KEY="\"$CHIA_CONVERSIONS_API_KEY\"" >> ./local.properties
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'adopt'
       - name: Instrumentation Tests
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
