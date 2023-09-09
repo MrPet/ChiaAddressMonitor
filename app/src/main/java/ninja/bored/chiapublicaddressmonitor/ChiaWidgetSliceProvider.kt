@@ -21,7 +21,7 @@ class ChiaWidgetSliceProvider : SliceProvider() {
         return sliceUri?.let { sliceUriF ->
             context?.let { contextF ->
                 list(contextF, sliceUriF, INFINITY) {
-                    this.row { title = "URI not found." }
+                    this.row { setTitle("URI not found.") }
                 }
             }
         }

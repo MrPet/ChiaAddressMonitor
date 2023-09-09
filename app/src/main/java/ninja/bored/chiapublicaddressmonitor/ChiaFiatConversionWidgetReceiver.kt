@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
@@ -30,6 +31,7 @@ class ChiaFiatConversionWidgetReceiver : AppWidgetProvider() {
         super.onReceive(context, intent)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
         super.onDeleted(context, appWidgetIds)
         if (context != null) {
@@ -47,6 +49,7 @@ class ChiaFiatConversionWidgetReceiver : AppWidgetProvider() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onUpdate(
         context: Context?,
         appWidgetManager: AppWidgetManager?,

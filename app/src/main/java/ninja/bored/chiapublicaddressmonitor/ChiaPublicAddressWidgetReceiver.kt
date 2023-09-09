@@ -8,6 +8,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.RemoteViews
 import android.widget.Toast
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import ninja.bored.chiapublicaddressmonitor.helpers.Constants
@@ -25,6 +26,7 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
         private const val TAG = "WidgetReceiver"
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onReceive(context: Context?, intent: Intent?) {
 
         Log.d(TAG, "onReceive")
@@ -61,6 +63,7 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
         super.onDeleted(context, appWidgetIds)
         if (context != null) {
@@ -76,6 +79,7 @@ class ChiaPublicAddressWidgetReceiver : AppWidgetProvider() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onUpdate(
         context: Context?,
         appWidgetManager: AppWidgetManager?,
