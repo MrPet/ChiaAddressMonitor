@@ -46,9 +46,9 @@ jobs:
           CHIA_CONVERSIONS_API_KEY: ${{ secrets.CHIA_CONVERSIONS_API_KEY }}
         run: echo CHIA_CONVERSIONS_API_KEY="\"$CHIA_CONVERSIONS_API_KEY\"" >> ./local.properties
       - name: Instrumentation Tests
-        uses: ReactiveCircus/android-emulator-runner@v2
+        uses: ReactiveCircus/android-emulator-runner@v3
         with:
-          api-level: 34
+          api-level: 33
           script: ./gradlew connectedAndroidTest
   build:
     needs: [ unit_tests, android_tests ]
