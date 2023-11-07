@@ -19,9 +19,15 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
           fetch-depth: 0  # a full history is required for pull request analysis
+      - name: Set api key
+        env:
+          CHIA_EXPLORER_API_KEY: ${{ secrets.CHIA_EXPLORER_API_KEY }}
+        run: echo CHIA_EXPLORER_API_KEY="\"$CHIA_EXPLORER_API_KEY\"" >> ./local.properties
+      - name: Set api coinbasecache key
+        env:
+          CHIA_CONVERSIONS_API_KEY: ${{ secrets.CHIA_CONVERSIONS_API_KEY }}
+        run: echo CHIA_CONVERSIONS_API_KEY="\"$CHIA_CONVERSIONS_API_KEY\"" >> ./local.properties
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2023.2
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-          CHIA_EXPLORER_API_KEY: ${{ secrets.CHIA_EXPLORER_API_KEY }}
-          CHIA_CONVERSIONS_API_KEY: ${{secrets.CHIA_CONVERSIONS_API_KEY}}
