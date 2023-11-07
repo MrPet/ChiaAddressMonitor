@@ -1,5 +1,6 @@
 [![Android CI](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/android.yml/badge.svg)](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/android.yml)
 [![Scan with Detekt](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/detekt-analysis.yml/badge.svg)](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/detekt-analysis.yml)
+[![Qodana](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/qodana.yml/badge.svg)](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/qodana.yml)
 # Chia address monitor & forks
 
 With this widget, you can always check your chia [blockchain™](https://www.chia.net) or Forks address balance. If you are like me you always like to know if your farm was lucky in the last hours.
