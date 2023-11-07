@@ -24,3 +24,4 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
           CHIA_EXPLORER_API_KEY: ${{ secrets.CHIA_EXPLORER_API_KEY }}
+          CHIA_CONVERSIONS_API_KEY: ${{secrets.CHIA_CONVERSIONS_API_KEY}}
