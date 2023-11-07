@@ -69,7 +69,7 @@ class ClearScreenshotsFromDevice extends DefaultTask {
     }
 
     @TaskAction
-    static ClearScreenshots() {
+    ClearScreenshots() {
         getDeviceListArray().each {
             clearScreenshotsForOneDevice(it)
         }
@@ -266,8 +266,8 @@ dependencies {
 //tasks.register('clearScreenshotsFromPC', ClearScreenshotsFromPC)
 //tasks.register('copyScreenshots', CopyScreenshotTask)
 //
-//tasks.whenTaskAdded { task ->
-//    if (task.name == 'connectedAndroidTest') {
+//tasks.configureEach { task ->
+//    if ('connectedAndroidTest' == (task.name as String)) {
 //        task.dependsOn 'clearScreenshotsFromDevice'
 //        task.dependsOn 'clearScreenshotsFromPC'
 //        task.finalizedBy 'copyScreenshots'
