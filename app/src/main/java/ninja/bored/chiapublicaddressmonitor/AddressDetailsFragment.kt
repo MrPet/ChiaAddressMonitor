@@ -154,7 +154,7 @@ class AddressDetailsFragment : Fragment() {
             val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.keys.toTypedArray()
             ArrayAdapter(
                 rootView.context,
-                R.layout.support_simple_spinner_dropdown_item,
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                 chiaConversionKeys
             )
                 .also { adapter ->

@@ -60,7 +60,7 @@ class ChiaPublicAddressGroupingWidgetConfig : ComponentActivity(), CoroutineScop
         chiaConversionSpinner.isEnabled = false
         // Create an ArrayAdapter using the string array and a default spinner layout
         val chiaConversionKeys = Constants.CHIA_CURRENCY_CONVERSIONS.keys.toTypedArray()
-        ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, chiaConversionKeys)
+        ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, chiaConversionKeys)
             .also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 chiaConversionSpinner.adapter = adapter
