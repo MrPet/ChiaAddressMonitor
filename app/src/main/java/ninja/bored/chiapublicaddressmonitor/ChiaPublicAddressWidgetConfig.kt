@@ -12,7 +12,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import com.mikepenz.aboutlibraries.LibsBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -102,7 +101,7 @@ class ChiaPublicAddressWidgetConfig : Activity(), CoroutineScope {
         // Handle item selection
         return when (item.itemId) {
             R.id.license -> {
-                LibsBuilder().start(this)
+                LicenseActivity.start(this)
                 true
             }
             else -> super.onOptionsItemSelected(item)

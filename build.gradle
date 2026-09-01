@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = '2.2.10'
-    ext.latest_about_libs_release = "8.8.5"
+    ext.kotlin_version = '2.4.10'
+    ext.latest_about_libs_release = "15.2.0"
     repositories {
         google()
         maven {
@@ -13,6 +13,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:9.3.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:$kotlin_version"
         classpath "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:$latest_about_libs_release"
         classpath 'org.ajoberstar:grgit:1.7.2'
 

@@ -25,9 +25,9 @@
         </activity>
 
         <activity
-            android:exported="true"
-            android:name="com.mikepenz.aboutlibraries.ui.LibsActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+            android:exported="false"
+            android:name=".LicenseActivity"
+            android:theme="@style/Theme.ChiaPublicAddressMonitor.NoActionBar" />
 
         <activity
             android:exported="true"

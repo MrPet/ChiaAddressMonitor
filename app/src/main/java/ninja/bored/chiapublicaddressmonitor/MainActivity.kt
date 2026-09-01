@@ -2,25 +2,36 @@ package ninja.bored.chiapublicaddressmonitor
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.mikepenz.aboutlibraries.LibsBuilder
 import ninja.bored.chiapublicaddressmonitor.helpers.NotificationHelper
 import ninja.bored.chiapublicaddressmonitor.helpers.Slh
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.coordinator)) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            findViewById<View>(R.id.toolbar)?.setPadding(0, systemBars.top, 0, 0)
+            findViewById<View>(R.id.bottomNavigationView)?.setPadding(0, 0, 0, systemBars.bottom)
+            insets
+        }
         findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.let { bottomNavigationListener ->
             bottomNavigationListener.selectedItemId = R.id.list
             bottomNavigationListener.setOnItemSelectedListener {
                 when (it.itemId) {
                     R.id.license -> {
-                        setCurrentFragment(LibsBuilder().supportFragment())
+                        setCurrentFragment(LicenseFragment())
                     }
                     R.id.list -> setCurrentFragment(AddressListFragment())
                     R.id.forks -> setCurrentFragment(ForkFragment())

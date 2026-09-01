@@ -11,7 +11,6 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
-import com.mikepenz.aboutlibraries.LibsBuilder
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -93,7 +92,7 @@ class ChiaFiatConversionWidgetConfig : Activity(), CoroutineScope {
         // Handle item selection
         return when (item.itemId) {
             R.id.license -> {
-                LibsBuilder().start(this)
+                LicenseActivity.start(this)
                 true
             }
             else -> super.onOptionsItemSelected(item)
