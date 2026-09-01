@@ -8,6 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,16 +30,23 @@ class LicenseActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            val context = LocalContext.current
-            val libs = remember(context) {
-                Libs.Builder().withContext(context).build()
+            LicenseTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    val context = LocalContext.current
+                    val libs = remember(context) {
+                        Libs.Builder().withContext(context).build()
+                    }
+                    LibrariesContainer(
+                        libraries = libs,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .safeDrawingPadding()
+                    )
+                }
             }
-            LibrariesContainer(
-                libraries = libs,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .safeDrawingPadding()
-            )
         }
     }
 }
