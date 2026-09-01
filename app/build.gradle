@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.mikepenz.aboutlibraries.plugin'
-    id 'com.google.devtools.ksp' version '1.8.10-1.0.9' apply true
+    id 'com.google.devtools.ksp' version '2.3.11' apply true
 }
 
 static def generateVersionCode() {
@@ -130,16 +130,19 @@ def majorVersion = 0
 def minorVersion = 99
 
 android {
-    compileSdk 34
+    compileSdk 36
+
     defaultConfig {
         applicationId "ninja.bored.chiapublicaddressmonitor"
         minSdkVersion 24
-        targetSdkVersion 34
-        buildToolsVersion = "34.0.0"
+        targetSdkVersion 36
         versionCode generateVersionCode()
         versionName "${majorVersion}.${minorVersion}.${versionCode}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        setProperty("archivesBaseName", "chia-address-monitor-$versionName")
+    }
+
+    base {
+        archivesName = "chia-address-monitor-${majorVersion}.${minorVersion}"
     }
 
     ksp {
@@ -192,6 +195,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
     namespace 'ninja.bored.chiapublicaddressmonitor'
 }
@@ -202,7 +206,7 @@ dependencies {
     implementation 'androidx.slice:slice-core:1.0.0'
     implementation 'androidx.slice:slice-builders-ktx:1.0.0-alpha08'
 
-    def room_version = "2.5.2"
+    def room_version = "2.8.4"
     def espressoVersion = "3.6.0-alpha01"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.core:core-ktx:1.12.0'
