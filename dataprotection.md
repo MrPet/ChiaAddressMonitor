@@ -74,8 +74,9 @@ layout: null
 <h2>2. Log Data & Analytics</h2>
 <p>The app does not use any third-party analytics trackers, crash reporting tools, or advertising frameworks that would collect your data.</p>
 
-<h2>3. Internet Access</h2>
-<p>The app requires internet access solely to query public blockchain APIs to fetch and display your requested Chia address balances. This data is processed locally on your device and is not sent to any of my servers.</p>
+<h2>3. Internet Access & Network Data Processing</h2>
+<p>The app requires internet access to query and display your public blockchain balances. When you add a public Chia (or fork) wallet address, the app transmits this public address to backend/blockchain APIs (such as AllTheBlocks) solely to request and retrieve the corresponding public balance and account information.</p>
+<p>Only the public wallet address you enter is transmitted to fetch public blockchain data. No personal data, private keys, device identifiers, or tracking data are collected, stored, or linked to your identity.</p>
 
 <h2>4. Changes to This Privacy Policy</h2>
 <p>I may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes.</p>
