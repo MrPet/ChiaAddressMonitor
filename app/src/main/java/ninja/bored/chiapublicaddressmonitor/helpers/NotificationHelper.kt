@@ -1,9 +1,13 @@
 package ninja.bored.chiapublicaddressmonitor.helpers
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import ninja.bored.chiapublicaddressmonitor.R
@@ -46,6 +50,7 @@ object NotificationHelper {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun sendNotification(
         channelID: String,
         contentTitle: String,
@@ -53,6 +58,15 @@ object NotificationHelper {
         notificationID: Int,
         context: Context
     ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
         // not the same
         val builder = NotificationCompat.Builder(
             context,
