@@ -1,6 +1,5 @@
 [![Android CI](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/android.yml/badge.svg)](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/android.yml)
 [![Scan with Detekt](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/detekt-analysis.yml/badge.svg)](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/detekt-analysis.yml)
-[![Qodana](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/qodana.yml/badge.svg)](https://github.com/MrPet/ChiaAddressMonitor/actions/workflows/qodana.yml)
 # Chia address monitor & forks
 
 With this widget, you can always check your chia [blockchain™](https://www.chia.net) or Forks address balance. If you are like me you always like to know if your farm was lucky in the last hours.
@@ -40,16 +39,6 @@ If you like the widget and would like to contribute in a other way, you can leav
 If you like the widget and are feeling very generous a donation to my chia address would help me to expand my farm or buy me a beer. 
 
 Chia: `xch1qhgp3ytyauptzyv5p48gnqpmkes6u2sf8llc7m3eurcpg3emg9yqzzptac`
-
-GreenDoge: `gdog1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qv9uc8j`
-
-SkyNet: `xnt1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qxtf6p4`
-
-Cunt: `vag1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qnesnj2`
-
-Covid: `cov1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qtx4jq6`
-
-DogeChia: `xdg1ncuhmufxgtvdygaduk9u2pg2lpg6l9tu37uzf7pexrq5ey7c3h3qc9emlw`
 
 Chives: `xcc1qcz2n4ywjqnz3fgk2yx7zfprs9yw2rae45q8z4a3w2d3xse60husc8074v`
 
